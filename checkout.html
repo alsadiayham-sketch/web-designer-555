@@ -357,6 +357,21 @@
                 button.textContent = originalText;
             }
         }
+        function checkReturnFromWhatsApp() {
+            const lastOrder = localStorage.getItem('zoom_last_order');
+            const cartData = JSON.parse(localStorage.getItem('zoom_cart') || '[]');
+            if (lastOrder && cartData.length === 0) {
+                window.location.href = 'confirmation.html';
+            }
+        }
+
+        document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'visible') checkReturnFromWhatsApp();
+        });
+
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) checkReturnFromWhatsApp();
+        });
     </script>
 </body>
 </html>
