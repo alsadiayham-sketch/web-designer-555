@@ -349,8 +349,16 @@
                 localStorage.setItem('zoom_last_order', JSON.stringify(order));
                 localStorage.setItem('zoom_cart', '[]');
                 if (window.db) db.collection('orders').doc(order.id).set(order).catch(function(e){ console.error(e); });
-                setTimeout(function() { window.location.href = 'confirmation.html'; }, 300);
-                window.location.href = whatsappUrl;
+                // Open WhatsApp via hidden link to avoid popup blockers
+                const a = document.createElement('a');
+                a.href = whatsappUrl;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                // Redirect to confirmation
+                setTimeout(function() { window.location.replace('confirmation.html'); }, 500);
             } catch (error) {
                 console.error(error);
                 alert('تعذر حفظ الطلب حالياً، حاولي مرة أخرى.');
