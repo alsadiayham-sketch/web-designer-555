@@ -76,16 +76,28 @@ function subscribeToStoreData() {
     });
     unsubscribers = [];
 
-    unsubscribers.push(db.collection('products').onSnapshot(function (snapshot) {
-        products = snapshot.docs.map(function (docSnap) {
-            return normalizeProduct(docSnap.data());
-        }).sort(function (a, b) { return a.id - b.id; });
-        syncCartWithProducts();
-        markStoreLoaded('products');
-    }, function () {
-        if (!storeLoadState.products) applyFallbackStoreData('تعذر تحميل المنتجات من فايرستور، تم استخدام البيانات الاحتياطية.');
-        else setStoreMessage('تعذر تحديث المنتجات حالياً.', 'error');
-    }));
+    // Phase 1: Load first 6 products fast
+    db.collection('products').orderBy('id').limit(6).get().then(function (snapshot) {
+        if (!snapshot.empty) {
+            products = snapshot.docs.map(function (docSnap) {
+                return normalizeProduct(docSnap.data());
+            }).sort(function (a, b) { return a.id - b.id; });
+            syncCartWithProducts();
+            markStoreLoaded('products');
+        }
+    }).catch(function () {}).then(function () {
+        // Phase 2: Subscribe to full collection for remaining products + real-time updates
+        unsubscribers.push(db.collection('products').onSnapshot(function (snapshot) {
+            products = snapshot.docs.map(function (docSnap) {
+                return normalizeProduct(docSnap.data());
+            }).sort(function (a, b) { return a.id - b.id; });
+            syncCartWithProducts();
+            markStoreLoaded('products');
+        }, function () {
+            if (!storeLoadState.products) applyFallbackStoreData('تعذر تحميل المنتجات من فايرستور، تم استخدام البيانات الاحتياطية.');
+            else setStoreMessage('تعذر تحديث المنتجات حالياً.', 'error');
+        }));
+    });
 
     unsubscribers.push(db.collection('discounts').onSnapshot(function (snapshot) {
         discounts = snapshot.docs.map(function (docSnap) {
