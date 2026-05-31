@@ -429,10 +429,13 @@ function flyToCart(imgElement, product) {
     var imgRect = imgElement.getBoundingClientRect();
     var cartRect = cartIcon.getBoundingClientRect();
 
-    // Create bubble element
+    // Create bubble element with product image
     var bubble = document.createElement('div');
     bubble.className = 'cart-bubble';
-    bubble.textContent = product.name;
+    var bubbleImg = document.createElement('img');
+    bubbleImg.src = product.image || imgElement.src || FALLBACK_IMAGE;
+    bubbleImg.alt = product.name;
+    bubble.appendChild(bubbleImg);
     document.body.appendChild(bubble);
 
     // Position at product center
