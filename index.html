@@ -349,6 +349,33 @@
 
                 mutationObserver.observe(document.body, { childList: true, subtree: true });
             });
+
+            // Hide navbar on scroll down, show on scroll up (mobile only)
+            (function () {
+                var lastScrollY = 0;
+                var navbar = document.getElementById('navbar');
+                var ticking = false;
+
+                window.addEventListener('scroll', function () {
+                    if (!ticking) {
+                        window.requestAnimationFrame(function () {
+                            if (window.innerWidth <= 768) {
+                                var currentScrollY = window.pageYOffset;
+                                if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                                    navbar.classList.add('nav-hidden');
+                                } else {
+                                    navbar.classList.remove('nav-hidden');
+                                }
+                                lastScrollY = currentScrollY;
+                            } else {
+                                navbar.classList.remove('nav-hidden');
+                            }
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                });
+            }());
         }());
     </script>
 </body>
