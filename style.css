@@ -1,23 +1,23 @@
 :root {
-    --bg: #0a0a0f;
-    --bg-soft: #11111a;
-    --surface: rgba(18, 18, 32, 0.78);
-    --surface-strong: rgba(24, 24, 40, 0.94);
-    --surface-light: rgba(255, 255, 255, 0.08);
-    --text: #f7f7fb;
-    --muted: #bbb9d6;
-    --hot-pink: #ff4fd8;
-    --electric-purple: #8b5cf6;
-    --cyan: #39d7ff;
-    --lime: #c8ff49;
-    --orange: #ff9f43;
-    --danger: #ff5d73;
-    --success: #57f287;
-    --border: rgba(255, 255, 255, 0.14);
-    --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
-    --glow-pink: 0 0 0 1px rgba(255, 79, 216, 0.45), 0 0 32px rgba(255, 79, 216, 0.24);
-    --glow-cyan: 0 0 0 1px rgba(57, 215, 255, 0.4), 0 0 30px rgba(57, 215, 255, 0.22);
-    --glow-lime: 0 0 0 1px rgba(200, 255, 73, 0.3), 0 0 24px rgba(200, 255, 73, 0.18);
+    --bg: #f8f9fc;
+    --bg-soft: #ffffff;
+    --surface: rgba(255, 255, 255, 0.82);
+    --surface-strong: rgba(255, 255, 255, 0.95);
+    --surface-light: rgba(0, 0, 0, 0.04);
+    --text: #1a1a2e;
+    --muted: #6b7094;
+    --hot-pink: #e91e8c;
+    --electric-purple: #7c3aed;
+    --cyan: #0ea5e9;
+    --lime: #65a30d;
+    --orange: #f97316;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --border: rgba(0, 0, 0, 0.08);
+    --shadow: 0 24px 80px rgba(0, 0, 0, 0.08);
+    --glow-pink: 0 0 0 1px rgba(233, 30, 140, 0.25), 0 0 24px rgba(233, 30, 140, 0.1);
+    --glow-cyan: 0 0 0 1px rgba(14, 165, 233, 0.25), 0 0 24px rgba(14, 165, 233, 0.1);
+    --glow-lime: 0 0 0 1px rgba(101, 163, 13, 0.2), 0 0 20px rgba(101, 163, 13, 0.08);
     --radius-sm: 16px;
     --radius-md: 24px;
     --radius-lg: 36px;
@@ -27,7 +27,7 @@
     --banner-height: 44px;
     --transition: 280ms cubic-bezier(.2, .8, .2, 1);
     --gradient-main: linear-gradient(135deg, var(--hot-pink), var(--electric-purple) 42%, var(--cyan));
-    --gradient-alt: linear-gradient(135deg, var(--lime), #84ffb9 35%, var(--cyan));
+    --gradient-alt: linear-gradient(135deg, var(--lime), #34d399 35%, var(--cyan));
 }
 
 * {
@@ -42,9 +42,9 @@ body {
     margin: 0;
     font-family: 'Tajawal', sans-serif;
     background:
-        radial-gradient(circle at 15% 20%, rgba(255, 79, 216, 0.16), transparent 26%),
-        radial-gradient(circle at 85% 15%, rgba(57, 215, 255, 0.14), transparent 24%),
-        radial-gradient(circle at 50% 80%, rgba(139, 92, 246, 0.18), transparent 28%),
+        radial-gradient(circle at 15% 20%, rgba(233, 30, 140, 0.06), transparent 26%),
+        radial-gradient(circle at 85% 15%, rgba(14, 165, 233, 0.06), transparent 24%),
+        radial-gradient(circle at 50% 80%, rgba(124, 58, 237, 0.06), transparent 28%),
         var(--bg);
     color: var(--text);
     min-height: 100vh;
@@ -113,7 +113,7 @@ div {
 .orb-1 {
     width: 320px;
     height: 320px;
-    background: rgba(255, 79, 216, 0.22);
+    background: rgba(233, 30, 140, 0.08);
     top: 6%;
     right: -60px;
 }
@@ -121,7 +121,7 @@ div {
 .orb-2 {
     width: 260px;
     height: 260px;
-    background: rgba(57, 215, 255, 0.18);
+    background: rgba(14, 165, 233, 0.07);
     bottom: 18%;
     left: -70px;
     animation-delay: -4s;
@@ -130,7 +130,7 @@ div {
 .orb-3 {
     width: 240px;
     height: 240px;
-    background: rgba(200, 255, 73, 0.16);
+    background: rgba(101, 163, 13, 0.06);
     bottom: 2%;
     right: 20%;
     animation-delay: -8s;
@@ -140,8 +140,8 @@ div {
     position: absolute;
     inset: 0;
     background-image:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+        linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px);
     background-size: 70px 70px;
     mask-image: radial-gradient(circle at center, black 40%, transparent 78%);
 }
@@ -154,8 +154,8 @@ div {
     height: var(--banner-height);
     background: linear-gradient(90deg, rgba(255,79,216,0.88), rgba(57,215,255,0.88), rgba(200,255,73,0.88));
     backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(255,255,255,0.26);
-    color: #0a0a0f;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    color: #1a1a2e;
     z-index: 60;
     overflow: hidden;
     font-weight: 900;
@@ -189,8 +189,8 @@ div {
     grid-template-columns: auto minmax(220px, 1fr) auto auto;
     gap: 16px;
     align-items: center;
-    background: rgba(13, 13, 23, 0.76);
-    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(0,0,0,0.06);
     border-radius: 999px;
     padding: 14px 18px;
     box-shadow: var(--shadow), var(--glow-cyan);
@@ -211,7 +211,7 @@ div {
     place-items: center;
     border-radius: 16px;
     background: linear-gradient(135deg, rgba(255,79,216,0.18), rgba(57,215,255,0.2));
-    border: 1px solid rgba(255,255,255,0.14);
+    border: 1px solid rgba(0,0,0,0.08);
     font-size: 1.1rem;
     animation: bounce 3.2s ease-in-out infinite;
 }
@@ -248,8 +248,8 @@ div {
 .nav-search input,
 .products-search input {
     width: 100%;
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.08);
     color: var(--text);
     border-radius: 999px;
     outline: none;
@@ -267,7 +267,7 @@ div {
 .size-select:focus {
     border-color: rgba(57, 215, 255, 0.7);
     box-shadow: 0 0 0 3px rgba(57, 215, 255, 0.16), 0 0 28px rgba(57, 215, 255, 0.18);
-    background: rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.04);
 }
 
 .search-icon {
@@ -299,7 +299,7 @@ div {
 
 .nav-links a:hover {
     color: var(--text);
-    background: rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.05);
     transform: translateY(-2px);
 }
 
@@ -316,8 +316,8 @@ div {
 .qty-selector button,
 .cart-item-qty button,
 .cart-item-remove {
-    border: 1px solid rgba(255,255,255,0.14);
-    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(0,0,0,0.05);
     color: var(--text);
     backdrop-filter: blur(18px);
 }
@@ -353,7 +353,7 @@ div {
     justify-content: center;
     border-radius: 999px;
     background: linear-gradient(135deg, var(--lime), #f5ff83);
-    color: #0a0a0f;
+    color: #1a1a2e;
     font-size: 0.82rem;
     font-weight: 900;
     box-shadow: 0 0 20px rgba(200,255,73,0.42);
@@ -374,8 +374,8 @@ div {
     display: none;
     flex-direction: column;
     gap: 10px;
-    background: rgba(13,13,23,0.92);
-    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(0,0,0,0.06);
     border-radius: 28px;
     padding: 16px;
     box-shadow: var(--shadow);
@@ -386,7 +386,7 @@ div {
 .mobile-menu a {
     padding: 14px 16px;
     border-radius: 18px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(0,0,0,0.03);
     color: var(--text);
     font-weight: 800;
 }
@@ -468,8 +468,8 @@ div {
     gap: 8px;
     padding: 10px 18px;
     border-radius: 999px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.16);
+    background: rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.06);
     box-shadow: var(--glow-cyan);
     font-size: 0.9rem;
     font-weight: 800;
@@ -491,7 +491,7 @@ div {
     letter-spacing: 0.02em;
     color: var(--text);
     text-shadow: 0 0 28px rgba(255,79,216,0.28), 0 0 44px rgba(57,215,255,0.18);
-    -webkit-text-stroke: 1px rgba(255,255,255,0.16);
+    -webkit-text-stroke: 1px rgba(0,0,0,0.06);
 }
 
 .hero-arabic {
@@ -518,7 +518,7 @@ div {
 
 .glass-card {
     background: var(--surface);
-    border: 1px solid rgba(255,255,255,0.11);
+    border: 1px solid rgba(0,0,0,0.06);
     box-shadow: var(--shadow);
     backdrop-filter: blur(18px);
 }
@@ -596,10 +596,10 @@ div {
 .btn-clear-cart,
 .pdp-size-btn,
 .social-btn.instagram {
-    background: rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.05);
     color: var(--text);
-    border: 1px solid rgba(255,255,255,0.14);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: inset 0 1px 0 rgba(0,0,0,0.03);
 }
 
 .hero-visual {
@@ -626,7 +626,7 @@ div {
 .hero-logo-img {
     max-height: 260px;
     object-fit: contain;
-    filter: drop-shadow(0 0 32px rgba(255,255,255,0.26));
+    filter: drop-shadow(0 0 32px rgba(0,0,0,0.08));
 }
 
 .hero-sticker {
@@ -642,7 +642,7 @@ div {
     top: 12%;
     right: 0;
     background: linear-gradient(135deg, rgba(200,255,73,0.95), rgba(133,255,185,0.95));
-    color: #0a0a0f;
+    color: #1a1a2e;
 }
 
 .sticker-2 {
@@ -693,7 +693,7 @@ div {
 }
 
 .wave-divider path {
-    fill: rgba(255,255,255,0.03);
+    fill: rgba(0,0,0,0.02);
 }
 
 .section-heading {
@@ -798,7 +798,7 @@ div {
     width: 68px;
     height: 68px;
     border-radius: 50%;
-    border: 4px solid rgba(255,255,255,0.12);
+    border: 4px solid rgba(0,0,0,0.06);
     border-top-color: var(--cyan);
     border-right-color: var(--hot-pink);
     animation: spin 1s linear infinite;
@@ -824,7 +824,7 @@ div {
 .pdp-modal,
 .cart-sidebar {
     background: var(--surface);
-    border: 1px solid rgba(255,255,255,0.11);
+    border: 1px solid rgba(0,0,0,0.06);
     backdrop-filter: blur(18px);
 }
 
@@ -894,7 +894,7 @@ div {
     border-radius: 24px;
     overflow: hidden;
     aspect-ratio: 1 / 1;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04));
+    background: linear-gradient(135deg, rgba(0,0,0,0.04), rgba(0,0,0,0.03));
     margin-bottom: 16px;
 }
 
@@ -948,8 +948,8 @@ div {
 .card-size-single,
 .hero-stat,
 .delivery-card strong {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.05);
     border-radius: 14px;
 }
 
@@ -1004,16 +1004,16 @@ div {
     width: 100%;
     padding: 12px 14px;
     border-radius: 18px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.05);
     color: var(--muted);
 }
 
 .size-select {
     width: 100%;
     min-height: 42px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.04);
     border-radius: 14px;
     color: var(--text);
     padding: 0 12px;
@@ -1037,7 +1037,7 @@ div {
     padding: 8px;
     border-radius: 18px;
     background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
 .qty-selector button,
@@ -1089,8 +1089,8 @@ div {
     padding: 38px 20px;
     border-radius: 28px;
     text-align: center;
-    background: rgba(255,255,255,0.05);
-    border: 1px dashed rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.03);
+    border: 1px dashed rgba(0,0,0,0.08);
     color: var(--muted);
 }
 
@@ -1166,7 +1166,7 @@ div {
     padding: 14px 16px;
     border-radius: 20px;
     background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(0,0,0,0.05);
     font-weight: 700;
 }
 
@@ -1363,7 +1363,7 @@ div {
     min-height: 320px;
     border-radius: 28px;
     overflow: hidden;
-    background: rgba(255,255,255,0.05);
+    background: rgba(0,0,0,0.03);
 }
 
 .pdp-info {
@@ -1402,7 +1402,7 @@ div {
 
 .pdp-size-btn.active {
     background: var(--gradient-alt);
-    color: #0a0a0f;
+    color: #1a1a2e;
     box-shadow: 0 0 24px rgba(200,255,73,0.18);
 }
 
@@ -1450,7 +1450,7 @@ div {
     display: flex;
     align-items: center;
     padding-bottom: 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
 .cart-header h3 {
@@ -1469,8 +1469,8 @@ div {
     align-items: flex-start;
     padding: 12px;
     border-radius: 22px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
 .cart-item + .cart-item {
@@ -1500,7 +1500,7 @@ div {
 
 .cart-footer {
     padding-top: 16px;
-    border-top: 1px solid rgba(255,255,255,0.08);
+    border-top: 1px solid rgba(0,0,0,0.05);
     display: grid;
     gap: 12px;
 }
@@ -1524,8 +1524,8 @@ div {
     gap: 12px;
     padding: 20px 24px;
     border-radius: 26px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.05);
     color: var(--muted);
 }
 
