@@ -1030,13 +1030,13 @@ nav a:hover::after {
 
 @keyframes cradleLeft {
   0%, 50%, 100% { transform: rotate(0deg); }
-  20% { transform: rotate(28deg); }
+  20% { transform: rotate(-28deg); }
   30% { transform: rotate(0deg); }
 }
 
 @keyframes cradleRight {
   0%, 50%, 100% { transform: rotate(0deg); }
-  70% { transform: rotate(-28deg); }
+  70% { transform: rotate(28deg); }
   80% { transform: rotate(0deg); }
 }
 
