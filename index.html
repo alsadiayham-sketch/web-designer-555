@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Store | متجري</title>
-    <meta name="description" content="حقائب، أساور، واكسسوارات بستايل عصري وتوصيل لكل فلسطين.">
+    <title>Zoom Store | زووم ستور</title>
+    <meta name="description" content="زووم ستور الفلسطيني للإكسسوارات والحقائب والأساور بستايل ناعم ولطيف مع توصيل لكل فلسطين.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="icon" href="logo.png">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="site-bg">
-        <span class="bg-orb orb-1"></span>
-        <span class="bg-orb orb-2"></span>
-        <span class="bg-orb orb-3"></span>
-        <span class="grid-glow"></span>
+<body id="top">
+    <div class="page-decor" aria-hidden="true">
+        <span class="floating-shape shape-heart">❤</span>
+        <span class="floating-shape shape-star">✦</span>
+        <span class="floating-shape shape-cloud">☁</span>
+        <span class="floating-shape shape-sparkle">✧</span>
+        <span class="floating-shape shape-bow">🎀</span>
     </div>
 
     <div class="discount-banner" id="discountBanner" style="display:none;">
@@ -25,106 +26,135 @@
 
     <nav class="navbar" id="navbar">
         <div class="container nav-container">
-            <a href="#" class="logo" aria-label="Home">
-                <img src="logo.png" alt="Logo" class="logo-img" id="logoImg">
+            <a href="#top" class="logo" aria-label="الصفحة الرئيسية">
+                <span class="logo-frame">
+                    <img src="logo.png" alt="Zoom Store" class="logo-img" id="logoImg">
+                </span>
                 <div class="logo-copy">
-                    <span id="logoText" class="logo-text">My Store</span>
-                    <span class="logo-subtitle">فلسطين</span>
+                    <span id="logoText" class="logo-text">Zoom Store</span>
+                    <span class="logo-subtitle">Palestinian Accessories ✦</span>
                 </div>
             </a>
 
             <div class="nav-search">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="navSearchInput" placeholder="ابحثي عن حقيبة، اسوارة، أو اكسسوار..." autocomplete="off">
+                <span class="search-icon">🔎</span>
+                <input type="text" id="navSearchInput" placeholder="ابحثي عن حقيبة، اسوارة أو اكسسوار..." autocomplete="off">
                 <div class="search-dropdown" id="navSearchDropdown"></div>
             </div>
 
             <ul class="nav-links">
                 <li><a href="#products">المنتجات</a></li>
-                <li><a href="#about">قصتنا</a></li>
+                <li><a href="#about">عن المتجر</a></li>
                 <li><a href="#delivery">التوصيل</a></li>
                 <li><a href="#contact">تواصل</a></li>
             </ul>
 
             <div class="nav-actions">
-                <div class="cart-icon" id="cartIcon" onclick="toggleCart()" aria-label="سلة التسوق">🛍️<span class="cart-badge" id="cartBadge" style="display:none;">0</span></div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="فتح القائمة">☰</button>
+                <div class="cart-icon" id="cartIcon" onclick="toggleCart()" aria-label="سلة التسوق">
+                    <span class="cart-icon-emoji">🛍️</span>
+                    <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="فتح القائمة">
+                    <span></span><span></span><span></span>
+                </button>
             </div>
         </div>
     </nav>
 
     <div class="mobile-menu" id="mobileMenu">
         <a href="#products" onclick="toggleMobileMenu()">المنتجات</a>
-        <a href="#about" onclick="toggleMobileMenu()">قصتنا</a>
+        <a href="#about" onclick="toggleMobileMenu()">عن المتجر</a>
         <a href="#delivery" onclick="toggleMobileMenu()">التوصيل</a>
         <a href="#contact" onclick="toggleMobileMenu()">تواصل</a>
     </div>
 
     <main>
-        <section class="hero section-shell" data-animate>
-            <div class="hero-overlay"></div>
+        <section class="hero section-shell">
+            <div class="hero-cloud hero-cloud-one" aria-hidden="true"></div>
+            <div class="hero-cloud hero-cloud-two" aria-hidden="true"></div>
+            <div class="hero-sparkles" aria-hidden="true">
+                <span>✦</span>
+                <span>❤</span>
+                <span>✧</span>
+                <span>☁</span>
+            </div>
             <div class="container hero-layout">
-                <div class="hero-content">
-                    <span class="hero-chip">🔥 ستايل فلسطيني • لمسة Gen-Z</span>
-                    <span class="hero-kicker" dir="ltr">@web_designer_5555</span>
-                    <h1 id="heroTitle">My Store</h1>
-                    <p class="hero-arabic">حقائب، أساور، واكسسوارات من طولكرم بطابع جريء ومبهج</p>
-                    <p class="hero-subtitle" id="heroSubtitle">حقائب، اساور، واكسسوارات بأسعار مميزة وتوصيل لكل فلسطين</p>
-                    <div class="hero-stats">
-                        <div class="hero-stat glass-card"><strong>⚡ سريع</strong><span>رد سريع وطلب أسهل</span></div>
-                        <div class="hero-stat glass-card"><strong>👜 ترندي</strong><span>قطع تخطف النظر</span></div>
-                        <div class="hero-stat glass-card"><strong>💖 محلي</strong><span>من قلب طولكرم</span></div>
+                <div class="hero-content" data-animate>
+                    <span class="section-chip">🎀 ستايل ناعم • تفاصيل فلسطينية • لمسة كيوت</span>
+                    <span class="hero-handle" dir="ltr">@web_designer_5555</span>
+                    <h1 id="heroTitle">Zoom Store</h1>
+                    <p class="hero-arabic">إكسسوارات فلسطينية حالمة بلمسة كاوايي لطيفة</p>
+                    <p class="hero-subtitle" id="heroSubtitle">حقائب، أساور، واكسسوارات بتفاصيل ناعمة وألوان باستيل وتغليف جميل يوصلك لكل فلسطين.</p>
+                    <div class="hero-badges">
+                        <div class="hero-badge soft-card">
+                            <strong>👜 حقائب لطيفة</strong>
+                            <span>قطع يومية وهدايا تحبّيها من أول نظرة</span>
+                        </div>
+                        <div class="hero-badge soft-card">
+                            <strong>🎁 تغليف جميل</strong>
+                            <span>ستايل ناعم مناسب للهدية والمفاجآت الحلوة</span>
+                        </div>
+                        <div class="hero-badge soft-card">
+                            <strong>🇵🇸 من فلسطين</strong>
+                            <span>اختيارات محلية بلمسة مبهجة وخدمة دافئة</span>
+                        </div>
                     </div>
                     <div class="hero-actions">
-                        <a href="#products" class="btn-primary">ابدئي التسوق</a>
-                        <a href="#contact" class="btn-secondary-outline">احجزي عبر واتساب</a>
+                        <a href="#products" class="btn-primary">ابدئي التسوق ✨</a>
+                        <a href="#contact" class="btn-secondary">راسلينا الآن 💌</a>
                     </div>
                 </div>
 
                 <div class="hero-visual" data-animate>
-                    <div class="hero-logo-shell glass-card">
-                        <img src="logo.png" id="heroLogo" alt="Logo" class="hero-logo-img">
+                    <div class="hero-card soft-card">
+                        <span class="hero-card-sticker sticker-top">new drop ✦</span>
+                        <img src="logo.png" id="heroLogo" alt="Zoom Store" class="hero-logo-img">
+                        <div class="hero-visual-copy">
+                            <h2>Soft &amp; Cute</h2>
+                            <p>متجر حقائب وإكسسوارات فلسطيني بستايل مريح، رومانسي، وملفت بطريقة لطيفة.</p>
+                        </div>
+                        <div class="hero-mini-tags">
+                            <span>🎀 bags</span>
+                            <span>🧿 bracelets</span>
+                            <span>✨ accessories</span>
+                        </div>
                     </div>
-                    <div class="hero-sticker sticker-1">💅 Trendy Picks</div>
-                    <div class="hero-sticker sticker-2">👜 New Drop</div>
-                    <div class="hero-sticker sticker-3">📦 توصيل لكل فلسطين</div>
-                    <span class="floating-emoji emoji-1">✨</span>
-                    <span class="floating-emoji emoji-2">🌈</span>
-                    <span class="floating-emoji emoji-3">💖</span>
-                    <span class="floating-emoji emoji-4">🧿</span>
+                    <div class="hero-floating note-one">☁ شحن لطيف</div>
+                    <div class="hero-floating note-two">❤ trendy picks</div>
+                    <div class="hero-floating note-three">✦ gift ready</div>
                 </div>
             </div>
-            <div class="wave-divider wave-divider-bottom" aria-hidden="true">
-                <svg viewBox="0 0 1440 160" preserveAspectRatio="none"><path d="M0,128L48,117.3C96,107,192,85,288,64C384,43,480,21,576,32C672,43,768,85,864,96C960,107,1056,85,1152,69.3C1248,53,1344,43,1392,37.3L1440,32L1440,160L1392,160C1344,160,1248,160,1152,160C1056,160,960,160,864,160C768,160,672,160,576,160C480,160,384,160,288,160C192,160,96,160,48,160L0,160Z"></path></svg>
+            <div class="section-wave wave-bottom" aria-hidden="true">
+                <svg viewBox="0 0 1440 150" preserveAspectRatio="none"><path d="M0,64L34.3,74.7C68.6,85,137,107,206,117.3C274.3,128,343,128,411,117.3C480,107,549,85,617,85.3C685.7,85,754,107,823,117.3C891.4,128,960,128,1029,117.3C1097.1,107,1166,85,1234,74.7C1302.9,64,1371,64,1406,64L1440,64L1440,150L1405.7,150C1371.4,150,1303,150,1234,150C1165.7,150,1097,150,1029,150C960,150,891,150,823,150C754.3,150,686,150,617,150C548.6,150,480,150,411,150C342.9,150,274,150,206,150C137.1,150,69,150,34,150L0,150Z"></path></svg>
             </div>
         </section>
 
-        <section id="products" class="filter-section section-shell" data-animate>
+        <section id="products" class="filter-section section-shell">
             <div class="container">
-                <div class="section-heading">
-                    <span class="section-chip">🛍️ Drop Zone</span>
-                    <h2 class="section-title">تشكيلة تخطف العين</h2>
-                    <p class="section-subtitle">فلترة ذكية، بحث سريع، وكروت منتجات متوهجة جاهزة للإضافة للسلة.</p>
+                <div class="section-heading" data-animate>
+                    <span class="section-chip">🛍️ منتجاتنا اللطيفة</span>
+                    <h2 class="section-title">اختاري قطعتك المفضلة</h2>
+                    <p class="section-subtitle">كل شيء هنا مرتب بلطف: بحث سريع، فلاتر واضحة، وكروت منتجات ناعمة تحافظ على تجربة الشراء نفسها بدون أي تغيير في الوظائف.</p>
                 </div>
 
                 <p class="store-notice" id="storeNotice" style="display:none;"></p>
 
-                <div class="products-toolbar glass-card">
+                <div class="products-toolbar soft-card" data-animate>
                     <div class="products-search">
-                        <span class="search-icon">🔎</span>
+                        <span class="search-icon">🔍</span>
                         <input type="text" id="productsSearchInput" placeholder="ابحثي باسم المنتج أو الماركة أو الفئة" autocomplete="off">
                         <div class="search-dropdown" id="productsSearchDropdown"></div>
                     </div>
 
                     <div class="filter-toggle-bar">
-                        <button class="filter-btn active" data-filter="all" onclick="filterProducts('all')">الكل</button>
-                        <button class="filter-btn status-btn" data-filter="special" onclick="filterProducts('special')">مميز ✨</button>
-                        <button class="filter-btn status-btn" data-filter="bestseller" onclick="filterProducts('bestseller')">الأكثر طلباً 🔥</button>
+                        <button class="filter-btn active" data-filter="all" onclick="filterProducts('all')">الكل 🌷</button>
+                        <button class="filter-btn status-btn" data-filter="special" onclick="filterProducts('special')">مميز ✦</button>
+                        <button class="filter-btn status-btn" data-filter="bestseller" onclick="filterProducts('bestseller')">الأكثر طلباً ❤</button>
                         <button class="filter-toggle-btn" onclick="toggleFilters()">الفلاتر ▼</button>
                     </div>
                 </div>
 
-                <div class="filter-panel glass-card" id="filterPanel" style="display:none;">
+                <div class="filter-panel soft-card" id="filterPanel" style="display:none;" data-animate>
                     <div class="filter-group">
                         <h4>الماركات</h4>
                         <div id="brandFilters"></div>
@@ -137,116 +167,127 @@
             </div>
         </section>
 
-        <section class="products-section section-shell" data-animate>
+        <section class="products-section section-shell">
             <div class="container products-shell">
-                <div class="store-loading glass-card" id="storeLoading">
+                <div class="store-loading soft-card" id="storeLoading">
                     <div class="spinner"></div>
-                    <p>جاري تحميل المنتجات...</p>
+                    <p>لحظة صغيرة... نرتّب المنتجات اللطيفة لكِ ✨</p>
                 </div>
                 <div class="products-grid" id="productsGrid"></div>
             </div>
         </section>
 
-        <section id="about" class="about-section section-shell" data-animate>
+        <div class="section-wave wave-soft" aria-hidden="true">
+            <svg viewBox="0 0 1440 140" preserveAspectRatio="none"><path d="M0,64L24,74.7C48,85,96,107,144,117.3C192,128,240,128,288,117.3C336,107,384,85,432,69.3C480,53,528,43,576,48C624,53,672,75,720,85.3C768,96,816,96,864,90.7C912,85,960,75,1008,74.7C1056,75,1104,85,1152,96C1200,107,1248,117,1296,112C1344,107,1392,85,1416,74.7L1440,64L1440,140L1416,140C1392,140,1344,140,1296,140C1248,140,1200,140,1152,140C1104,140,1056,140,1008,140C960,140,912,140,864,140C816,140,768,140,720,140C672,140,624,140,576,140C528,140,480,140,432,140C384,140,336,140,288,140C240,140,192,140,144,140C96,140,48,140,24,140L0,140Z"></path></svg>
+        </div>
+
+        <section id="about" class="about-section section-shell">
             <div class="container">
-                <div class="section-heading split-heading">
+                <div class="section-heading split-heading" data-animate>
                     <div>
-                        <span class="section-chip">💖 About the vibe</span>
-                        <h2 class="section-title">قصتنا مش بس متجر... ستايل كامل</h2>
+                        <span class="section-chip">☁ عن زووم ستور</span>
+                        <h2 class="section-title">مش بس متجر... تجربة ناعمة كاملة</h2>
                     </div>
-                    <p class="section-subtitle">زووم ستور من طولكرم يقدّم قطع يومية ومناسبة للهدية والإطلالة السريعة بلمسة مرحة وفاخرة.</p>
+                    <p class="section-subtitle">زووم ستور مساحة فلسطينية صغيرة لكن مليانة ذوق: حقائب، أساور، واكسسوارات بتفاصيل حلوة، اهتمام بالتغليف، ولمسة أنثوية دافئة في كل طلب.</p>
                 </div>
 
                 <div class="about-grid">
-                    <article class="about-card about-card-large glass-card" data-animate>
-                        <span class="sticker-pill">🇵🇸 From Tulkarm with love</span>
-                        <p id="aboutText">وجهتكِ لتنسيق إطلالة راقية تجمع بين الحقائب الراقية والاكسسوارات اليومية.<br><br>ننتقي لكِ قطعاً أصلية بتفاصيل أنيقة، مع خدمة سريعة واهتمام بكل طلب من أول رسالة حتى التسليم.</p>
+                    <article class="about-card about-story soft-card" data-animate>
+                        <span class="mini-chip">🇵🇸 فلسطيني • Cute • Giftable</span>
+                        <p id="aboutText">في زووم ستور نختار لكِ قطعاً تضيف لمسة فرح بسيطة على يومك: حقيبة جميلة، اسوارة ناعمة، أو اكسسوار صغير يكمّل اللوك. نهتم أن تكون التجربة لطيفة من أول تصفّح وحتى وصول الطلب لبابك.</p>
                     </article>
 
-                    <article class="about-card sticker-card" data-animate>
-                        <span class="card-emoji">&#x1F45C;</span>
-                        <h3>اختيارات ترندي</h3>
-                        <p>شنط، أساور، واكسسوارات ترفع أي لوك بثواني.</p>
+                    <article class="about-card profile-card soft-card" data-animate>
+                        <div class="profile-ring">
+                            <img src="profile.png" alt="صاحبة المتجر" class="profile-avatar">
+                        </div>
+                        <h3>وجه لطيف خلف التفاصيل</h3>
+                        <p>ذوق أنثوي، ترتيب جميل، وتواصل سريع يخليكِ تشعري أن الطلب معمول لكِ خصيصاً.</p>
                     </article>
 
-                    <article class="about-card sticker-card" data-animate>
-                        <span class="card-emoji">✨</span>
-                        <h3>تفاصيل تلمع</h3>
-                        <p>خامات أنيقة وتغليف يهتم بالانطباع الأول.</p>
+                    <article class="about-card sticker-card soft-card" data-animate>
+                        <span class="card-icon">🎀</span>
+                        <h3>قطع تهديها وتحبيها</h3>
+                        <p>ألوان ناعمة، خامات جميلة، وتفاصيل مناسبة للهدايا والإطلالات اليومية.</p>
                     </article>
 
-                    <article class="about-card feature-cloud glass-card" data-animate>
-                        <div class="feature"><span class="feature-icon">💎</span><span>أساور ستانلس ستيل مكفولة اللون</span></div>
-                        <div class="feature"><span class="feature-icon">🎀</span><span>قطع مناسبة للهدايا والإطلالات اليومية</span></div>
-                        <div class="feature"><span class="feature-icon">📲</span><span>طلب مباشر وسريع عبر واتساب وإنستغرام</span></div>
-                        <div class="feature"><span class="feature-icon">🚚</span><span>توصيل لكل فلسطين</span></div>
+                    <article class="about-card features-card soft-card" data-animate>
+                        <div class="feature"><span class="feature-icon">👜</span><span>حقائب واكسسوارات أنيقة بستايل عصري لطيف</span></div>
+                        <div class="feature"><span class="feature-icon">🧿</span><span>أساور وتفاصيل صغيرة تكمل اللوك بسرعة</span></div>
+                        <div class="feature"><span class="feature-icon">💌</span><span>تواصل مباشر وسهل عبر واتساب وإنستغرام</span></div>
+                        <div class="feature"><span class="feature-icon">🚚</span><span>توصيل لكل فلسطين مع تجربة مرتبة وواضحة</span></div>
                     </article>
                 </div>
-            </div>
-            <div class="wave-divider wave-divider-top" aria-hidden="true">
-                <svg viewBox="0 0 1440 160" preserveAspectRatio="none"><path d="M0,96L40,85.3C80,75,160,53,240,48C320,43,400,53,480,74.7C560,96,640,128,720,122.7C800,117,880,75,960,64C1040,53,1120,75,1200,90.7C1280,107,1360,117,1400,122.7L1440,128L1440,0L1400,0C1360,0,1280,0,1200,0C1120,0,1040,0,960,0C880,0,800,0,720,0C640,0,560,0,480,0C400,0,320,0,240,0C160,0,80,0,40,0L0,0Z"></path></svg>
             </div>
         </section>
 
-        <section class="brands-section section-shell" data-animate>
+        <section class="brands-section section-shell">
             <div class="container">
-                <div class="section-heading brands-heading">
-                    <span class="section-chip">🌟 Brands we love</span>
-                    <h2 class="section-title">ماركات تلفت من أول نظرة</h2>
-                    <p class="section-subtitle">اسحبي يمين ويسار واستكشفي التشكيلة المفضلة.</p>
+                <div class="section-heading brands-heading" data-animate>
+                    <span class="section-chip">✦ ماركات نحبها</span>
+                    <h2 class="section-title">ركن الماركات بأسلوب باستيل</h2>
+                    <p class="section-subtitle">شريط لطيف يمكنكِ تمريره واكتشاف العلامات المتوفرة بسهولة.</p>
                 </div>
-                <div class="brands-carousel glass-card">
+                <div class="brands-carousel soft-card" data-animate>
                     <div class="brands-grid" id="brandsGrid"></div>
                 </div>
             </div>
         </section>
 
-        <section id="delivery" class="delivery-section section-shell" data-animate>
+        <section id="delivery" class="delivery-section section-shell">
             <div class="container">
-                <div class="section-heading">
-                    <span class="section-chip">📦 Delivery glow-up</span>
-                    <h2 class="section-title">توصيل سريع وبستايل لطيف</h2>
-                    <p class="section-subtitle">كل خيار توصيل مصمم ليكون واضح، سريع، ومناسب لطلبك.</p>
+                <div class="section-heading" data-animate>
+                    <span class="section-chip">📦 التوصيل</span>
+                    <h2 class="section-title">يوصل الطلب بلطف وسرعة</h2>
+                    <p class="section-subtitle">رتبنا خيارات التوصيل في بطاقات ناعمة وواضحة حتى تختاري الأنسب لكِ خلال ثوانٍ.</p>
                 </div>
 
                 <div class="delivery-grid">
-                    <article class="delivery-card glass-card" data-animate>
-                        <span class="delivery-icon">📍</span>
-                        <h3>الضفة</h3>
-                        <p>توصيل خلال 1-3 أيام عمل</p>
+                    <article class="delivery-card soft-card" data-animate>
+                        <span class="delivery-icon">🌸</span>
+                        <h3>الضفة الغربية</h3>
+                        <p>خلال 1 - 3 أيام عمل مع متابعة مرتبة للطلب.</p>
                         <strong>₪20</strong>
                     </article>
-                    <article class="delivery-card glass-card" data-animate>
-                        <span class="delivery-icon">🚚</span>
+                    <article class="delivery-card soft-card" data-animate>
+                        <span class="delivery-icon">☁</span>
                         <h3>القدس</h3>
-                        <p>شحن مرتب وسريع وآمن</p>
+                        <p>توصيل آمن ومنظم مع تغليف جميل ومريح.</p>
                         <strong>₪30</strong>
                     </article>
-                    <article class="delivery-card glass-card" data-animate>
-                        <span class="delivery-icon">🌈</span>
+                    <article class="delivery-card soft-card" data-animate>
+                        <span class="delivery-icon">✨</span>
                         <h3>الداخل</h3>
-                        <p>تغطية لعدة مناطق مع متابعة مستمرة</p>
+                        <p>تنسيق مسبق وخدمة لطيفة حتى وصول القطع إليك.</p>
                         <strong>₪50</strong>
                     </article>
-                    <article class="delivery-card glass-card" data-animate>
-                        <span class="delivery-icon">🏬</span>
-                        <h3>استلام مجاني</h3>
-                        <p>استلام محلي بترتيب مسبق مع المتجر</p>
+                    <article class="delivery-card soft-card" data-animate>
+                        <span class="delivery-icon">🎁</span>
+                        <h3>استلام محلي</h3>
+                        <p>استلام مجاني بترتيب مسبق إذا كان ذلك الأنسب لكِ.</p>
                         <strong>Free</strong>
                     </article>
                 </div>
             </div>
         </section>
 
-        <section id="contact" class="contact-section section-shell" data-animate>
+        <section id="contact" class="contact-section section-shell">
             <div class="container">
-                <div class="contact-card glass-card">
-                    <span class="section-chip">💬 Let’s style your order</span>
-                    <h2 class="section-title">جاهزة لقطعتك الجديدة؟</h2>
-                    <p class="section-subtitle">راسلينا الآن، واحصلي على توصية سريعة أو اطلبي مباشرة.</p>
-                    <div class="social-links">
-                        <a href="https://wa.me/0599000000" class="social-btn whatsapp" target="_blank" id="whatsappLink"><span>📱 WhatsApp</span><small>اطلبي خلال دقائق</small></a>
-                        <a href="https://www.instagram.com/web_designer_5555" class="social-btn instagram" target="_blank" id="instagramLink"><span>📸 Instagram</span><small>شاهدي الجديد أولاً</small></a>
+                <div class="contact-card soft-card" data-animate>
+                    <div class="contact-copy">
+                        <span class="section-chip">💬 جاهزة لطلبك؟</span>
+                        <h2 class="section-title">خلّي الإكسسوار الجاي يوصل مع شوية فرح</h2>
+                        <p class="section-subtitle">إذا بدكِ مساعدة في الاختيار أو حابة تطلبي فوراً، راسلينا عبر واتساب أو إنستغرام. الحساب الرسمي يبقى كما هو: <strong dir="ltr">@web_designer_5555</strong>.</p>
+                    </div>
+                    <div class="contact-actions">
+                        <a href="https://wa.me/0599000000" class="social-btn whatsapp" target="_blank" id="whatsappLink">
+                            <span>📱 WhatsApp</span>
+                            <small>سؤال سريع أو طلب مباشر</small>
+                        </a>
+                        <a href="https://www.instagram.com/web_designer_5555" class="social-btn instagram" target="_blank" id="instagramLink">
+                            <span>📸 Instagram</span>
+                            <small dir="ltr">@web_designer_5555</small>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -257,7 +298,7 @@
         <div class="pdp-modal" onclick="event.stopPropagation()">
             <button class="pdp-close" onclick="closePDP()">✕</button>
             <div class="pdp-content">
-                <div class="pdp-image" id="pdpImage"></div>
+                <div class="pdp-image soft-card" id="pdpImage"></div>
                 <div class="pdp-info">
                     <span class="product-brand" id="pdpBrand"></span>
                     <h2 id="pdpName"></h2>
@@ -299,7 +340,7 @@
 
     <footer class="footer">
         <div class="container footer-content">
-            <p>© 2026 My Store — فلسطين ✨</p>
+            <p>© 2026 Zoom Store — فلسطين ✦</p>
             <span>حقائب • أساور • اكسسوارات</span>
         </div>
     </footer>
@@ -313,7 +354,8 @@
         (function () {
             var observer;
 
-            function markForReveal(scope) {
+            function registerReveal(scope) {
+                if (!observer) return;
                 (scope || document).querySelectorAll('[data-animate], .product-card, .brand-tile, .delivery-card, .about-card, .feature, .social-btn').forEach(function (el) {
                     if (el.dataset.revealReady === 'true') return;
                     el.dataset.revealReady = 'true';
@@ -329,53 +371,62 @@
                         observer.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.14, rootMargin: '0px 0px -40px 0px' });
+            }, {
+                threshold: 0.14,
+                rootMargin: '0px 0px -40px 0px'
+            });
 
             document.addEventListener('DOMContentLoaded', function () {
-                markForReveal(document);
+                registerReveal(document);
 
                 var mutationObserver = new MutationObserver(function (mutations) {
                     mutations.forEach(function (mutation) {
                         mutation.addedNodes.forEach(function (node) {
                             if (node.nodeType !== 1) return;
                             if (node.matches && (node.matches('.product-card, .brand-tile, .delivery-card, .about-card, .feature, .social-btn') || node.hasAttribute('data-animate'))) {
-                                markForReveal(node.parentNode || document);
+                                registerReveal(node.parentNode || document);
                             } else if (node.querySelectorAll) {
-                                markForReveal(node);
+                                registerReveal(node);
                             }
                         });
                     });
                 });
 
                 mutationObserver.observe(document.body, { childList: true, subtree: true });
-            });
 
-            // Hide navbar on scroll down, show on scroll up (mobile only)
-            (function () {
-                var lastScrollY = 0;
                 var navbar = document.getElementById('navbar');
+                var lastScrollY = window.scrollY;
                 var ticking = false;
+
+                function updateNavbar() {
+                    if (!navbar) return;
+                    if (window.innerWidth <= 768) {
+                        var currentScrollY = window.scrollY;
+                        if (currentScrollY > lastScrollY && currentScrollY > 120) {
+                            navbar.classList.add('nav-hidden');
+                        } else {
+                            navbar.classList.remove('nav-hidden');
+                        }
+                        lastScrollY = currentScrollY;
+                    } else {
+                        navbar.classList.remove('nav-hidden');
+                    }
+                    ticking = false;
+                }
 
                 window.addEventListener('scroll', function () {
                     if (!ticking) {
-                        window.requestAnimationFrame(function () {
-                            if (window.innerWidth <= 768) {
-                                var currentScrollY = window.pageYOffset;
-                                if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                                    navbar.classList.add('nav-hidden');
-                                } else {
-                                    navbar.classList.remove('nav-hidden');
-                                }
-                                lastScrollY = currentScrollY;
-                            } else {
-                                navbar.classList.remove('nav-hidden');
-                            }
-                            ticking = false;
-                        });
+                        window.requestAnimationFrame(updateNavbar);
                         ticking = true;
                     }
+                }, { passive: true });
+
+                window.addEventListener('resize', function () {
+                    if (window.innerWidth > 768 && navbar) {
+                        navbar.classList.remove('nav-hidden');
+                    }
                 });
-            }());
+            });
         }());
     </script>
 </body>
