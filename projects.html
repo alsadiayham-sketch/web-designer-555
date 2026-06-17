@@ -1496,7 +1496,10 @@
             if (p.dealType === 'buy') return sum + Math.max(0, (p.totalPrice || 0) - getTotalPaid(p));
             return sum;
         }, 0);
-        const active = projects.filter(p => p.status !== 'cancelled' && p.status !== 'completed').length;
+        const active = projects.filter(p => {
+            const s = (p.status || '').toLowerCase();
+            return s !== 'cancelled' && s !== 'completed';
+        }).length;
         const interested = projects.filter(p => p.interestLevel === 'interested' || p.interestLevel === 'negotiating').length;
 
         document.getElementById('statsGrid').innerHTML = `
@@ -2000,8 +2003,8 @@
 
     function getRentDueInsight(project) {
         if (!project || project.dealType !== 'rent') return null;
-        // Treat missing/undefined status as active
-        if (project.status === 'cancelled' || project.status === 'completed') return null;
+        const pStatus = (project.status || '').toLowerCase();
+        if (pStatus === 'cancelled' || pStatus === 'completed') return null;
         if (!project.rentDueDay) return null;
 
         const dueDay = Math.min(Math.max(Number(project.rentDueDay) || 1, 1), 28);
@@ -2480,7 +2483,8 @@
         const todayNorm = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0, 0, 0);
 
         projects.forEach(project => {
-            if (project.dealType !== 'rent' || project.status === 'cancelled' || project.status === 'completed') return;
+            const ps = (project.status || '').toLowerCase();
+            if (project.dealType !== 'rent' || ps === 'cancelled' || ps === 'completed') return;
             const dueDay = Math.min(Math.max(Number(project.rentDueDay) || 1, 1), 28);
             const startDate = parseDateValue(project.rentStartDate || project.createdAt);
             const firstDueDate = startDate ? getFirstApplicableDueDate(project) : date;
@@ -2522,7 +2526,8 @@
         const todayNorm = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0, 0, 0);
 
         projects.forEach(project => {
-            if (project.dealType !== 'rent' || project.status === 'cancelled' || project.status === 'completed') return;
+            const ps = (project.status || '').toLowerCase();
+            if (project.dealType !== 'rent' || ps === 'cancelled' || ps === 'completed') return;
             const dueDay = Math.min(Math.max(Number(project.rentDueDay) || 1, 1), 28);
             const startDate = parseDateValue(project.rentStartDate || project.createdAt);
             const firstDueDate = startDate ? getFirstApplicableDueDate(project) : new Date(year, month, dueDay, 12, 0, 0, 0);
