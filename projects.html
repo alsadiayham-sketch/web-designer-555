@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Tracker | Web Designer</title>
+    <link rel="icon" href="logo.png">
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        :root {
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --primary-light: #eef2ff;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --info: #3b82f6;
+            --info-light: #dbeafe;
+            --purple: #8b5cf6;
+            --purple-light: #ede9fe;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+            --shadow-lg: 0 4px 24px rgba(0,0,0,0.08);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 30%, #1e293b 100%);
+            padding: 20px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+        }
+
+        .login-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+        }
+
+        .login-icon svg { width: 32px; height: 32px; color: white; }
+
+        .login-title {
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        .form-group { margin-bottom: 16px; }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 6px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .form-input::placeholder { color: rgba(255,255,255,0.3); }
+
+        .login-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+        .btn-sm { padding: 8px 14px; font-size: 12px; border-radius: 8px; }
+        .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+        .btn-ghost:hover { background: var(--bg); }
+        .btn-success { background: var(--success-light); color: #065f46; }
+        .btn-success:hover { background: #a7f3d0; }
+        .btn-danger { background: var(--danger-light); color: #991b1b; }
+        .btn-danger:hover { background: #fecaca; }
+        .btn-info { background: var(--primary-light); color: var(--primary); }
+        .btn-info:hover { background: #c7d2fe; }
+
+        /* Dashboard */
+        .dashboard { display: none; }
+        .dashboard.active { display: block; }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+        }
+
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .header-logo svg { width: 20px; height: 20px; color: white; }
+
+        .header-title { font-size: 18px; font-weight: 700; }
+        .header-user { font-size: 12px; color: var(--text-muted); }
+
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .stat-icon svg { width: 22px; height: 22px; color: white; }
+        .stat-icon.green { background: linear-gradient(135deg, #10b981, #059669); }
+        .stat-icon.amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .stat-icon.blue { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+        .stat-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+
+        .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+        .stat-value { font-size: 20px; font-weight: 700; color: var(--text); }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            outline: none;
+            background: var(--card);
+            transition: var(--transition);
+        }
+
+        .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+
+        .search-box svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: var(--text-light);
+        }
+
+        .filter-select {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            background: var(--card);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .filter-select:focus { border-color: var(--primary); }
+
+        /* Project Cards */
+        .project-list { display: flex; flex-direction: column; gap: 12px; }
+
+        .project-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .project-card:hover { box-shadow: var(--shadow-lg); }
+        .project-card.cancelled { border-color: #fecaca; background: #fef2f2; }
+        .project-card.completed { border-color: #a7f3d0; background: #f0fdf4; }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            cursor: pointer;
+            flex-wrap: wrap;
+        }
+
+        .project-name {
+            font-weight: 700;
+            font-size: 15px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .project-name small {
+            display: block;
+            font-weight: 400;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-gray { background: #f1f5f9; color: #475569; }
+        .badge-blue { background: #dbeafe; color: #1d4ed8; }
+        .badge-green { background: #d1fae5; color: #065f46; }
+        .badge-amber { background: #fef3c7; color: #92400e; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .badge-purple { background: #ede9fe; color: #6d28d9; }
+        .badge-sky { background: #e0f2fe; color: #0369a1; }
+        .badge-emerald { background: #d1fae5; color: #065f46; }
+
+        .project-price {
+            font-weight: 700;
+            font-size: 15px;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .project-price small {
+            font-weight: 400;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .expand-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+
+        .expand-btn:hover { color: var(--text); }
+
+        .project-details {
+            display: none;
+            padding: 0 20px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .project-card.expanded .project-details { display: block; padding-top: 16px; }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .detail-section h4 {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .detail-section p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .detail-section p strong { color: var(--text); }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            transition: width 0.5s ease;
+        }
+
+        .payment-list { max-height: 120px; overflow-y: auto; }
+
+        .payment-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            padding: 4px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .project-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .project-meta-info { font-size: 11px; color: var(--text-light); }
+
+        .project-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            background: var(--card);
+        }
+
+        .empty-state svg { width: 48px; height: 48px; color: var(--text-light); margin-bottom: 16px; }
+        .empty-state h3 { font-size: 18px; margin-bottom: 6px; }
+        .empty-state p { font-size: 14px; color: var(--text-muted); }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: var(--card);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 640px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 48px rgba(0,0,0,0.2);
+            padding: 28px;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .modal-title { font-size: 18px; font-weight: 700; }
+
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .modal-close:hover { background: var(--bg); color: var(--text); }
+
+        fieldset {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        legend {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            padding: 0 8px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-grid .full { grid-column: 1 / -1; }
+
+        .form-group-dash label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .form-group-dash input,
+        .form-group-dash select,
+        .form-group-dash textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-group-dash input:focus,
+        .form-group-dash select:focus,
+        .form-group-dash textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+        }
+
+        .form-group-dash textarea { resize: vertical; min-height: 60px; }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-group label { font-size: 13px; color: var(--text); }
+
+        .payment-summary {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 16px;
+        }
+
+        .payment-summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 3px 0;
+        }
+
+        .payment-summary-row .label { color: var(--text-muted); }
+        .payment-summary-row .value { font-weight: 600; }
+        .payment-summary-row .value.green { color: var(--success); }
+        .payment-summary-row .value.amber { color: var(--warning); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 16px; }
+            .header { padding: 12px 16px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .project-header { padding: 12px 14px; }
+            .filters { gap: 8px; }
+            .modal { padding: 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-box">
+            <div class="login-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <h1 class="login-title">Project Tracker</h1>
+            <p class="login-subtitle">Web Design Projects Management</p>
+            <div id="loginError" class="login-error">Invalid credentials. Please try again.</div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="loginUsername" class="form-input" placeholder="Enter username" autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="loginPassword" class="form-input" placeholder="Enter password" autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top:16px">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                    Sign In
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard">
+        <header class="header">
+            <div class="header-inner">
+                <div class="header-brand">
+                    <div class="header-logo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    </div>
+                    <div>
+                        <div class="header-title">Project Tracker</div>
+                        <div class="header-user">Logged in as <strong id="currentUser"></strong></div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary btn-sm" onclick="openProjectForm()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        New Project
+                    </button>
+                    <button class="btn btn-ghost btn-sm" onclick="logout()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+            <!-- Stats -->
+            <div class="stats-grid" id="statsGrid"></div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="searchInput" placeholder="Search projects, clients, domains...">
+                </div>
+                <select class="filter-select" id="filterStatus">
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+                <select class="filter-select" id="filterDeal">
+                    <option value="all">All Deals</option>
+                    <option value="buy">Buy</option>
+                    <option value="rent">Rent</option>
+                </select>
+                <select class="filter-select" id="filterContact">
+                    <option value="all">All Contact</option>
+                    <option value="not_contacted">Not Contacted</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="replied">Replied</option>
+                    <option value="no_reply">No Reply</option>
+                </select>
+            </div>
+
+            <!-- Project List -->
+            <div class="project-list" id="projectList"></div>
+        </div>
+    </div>
+
+    <!-- Project Form Modal -->
+    <div class="modal-overlay" id="projectModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">New Project</h3>
+                <button class="modal-close" onclick="closeProjectForm()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <form id="projectForm" onsubmit="saveProject(event)">
+                <input type="hidden" id="editId">
+
+                <fieldset>
+                    <legend>Project Info</legend>
+                    <div class="form-grid">
+                        <div class="form-group-dash">
+                            <label>Project Name *</label>
+                            <input type="text" id="fName" required placeholder="e.g. Coffee Shop Website">
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Project URL</label>
+                            <input type="url" id="fUrl" placeholder="https://...">
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Status</label>
+                            <select id="fStatus">
+                                <option value="active">Active</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Client Info</legend>
+                    <div class="form-grid">
+                        <div class="form-group-dash">
+                            <label>Client Name</label>
+                            <input type="text" id="fClient" placeholder="John Doe">
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Phone</label>
+                            <input type="tel" id="fPhone" placeholder="05x-xxx-xxxx">
+                        </div>
+                        <div class="form-group-dash full">
+                            <label>Email</label>
+                            <input type="email" id="fEmail" placeholder="client@email.com">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Communication</legend>
+                    <div class="form-grid">
+                        <div class="form-group-dash">
+                            <label>Contact Status</label>
+                            <select id="fContact">
+                                <option value="not_contacted">Not Contacted</option>
+                                <option value="contacted">Contacted</option>
+                                <option value="replied">Replied</option>
+                                <option value="no_reply">No Reply</option>
+                            </select>
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Interest Level</label>
+                            <select id="fInterest">
+                                <option value="unknown">Unknown</option>
+                                <option value="interested">Interested</option>
+                                <option value="not_interested">Not Interested</option>
+                                <option value="negotiating">Negotiating</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Domain</legend>
+                    <div class="form-grid">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="fHasDomain">
+                            <label for="fHasDomain">Client has a domain</label>
+                        </div>
+                        <div class="form-group-dash" id="domainNameGroup" style="display:none">
+                            <label>Domain Name</label>
+                            <input type="text" id="fDomain" placeholder="example.com">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Deal & Pricing</legend>
+                    <div class="form-grid">
+                        <div class="form-group-dash">
+                            <label>Deal Type</label>
+                            <select id="fDealType" onchange="toggleDealFields()">
+                                <option value="buy">Buy (One-time)</option>
+                                <option value="rent">Rent (Monthly)</option>
+                            </select>
+                        </div>
+                        <div class="form-group-dash" id="totalPriceGroup">
+                            <label>Total Price (ILS)</label>
+                            <input type="number" id="fTotalPrice" placeholder="0" min="0">
+                        </div>
+                        <div class="form-group-dash" id="paymentStatusGroup">
+                            <label>Payment Status</label>
+                            <select id="fPaymentStatus">
+                                <option value="not_started">No Payment Yet</option>
+                                <option value="partial">Partial Payment</option>
+                                <option value="full">Paid in Full</option>
+                                <option value="overdue">Overdue</option>
+                            </select>
+                        </div>
+                        <div class="form-group-dash" id="monthlyRentGroup" style="display:none">
+                            <label>Monthly Rent (ILS)</label>
+                            <input type="number" id="fMonthlyRent" placeholder="0" min="0">
+                        </div>
+                        <div class="form-group-dash" id="rentDueGroup" style="display:none">
+                            <label>Rent Due Day (of month)</label>
+                            <input type="number" id="fRentDue" placeholder="1" min="1" max="28">
+                        </div>
+                        <div class="form-group-dash" id="rentStartGroup" style="display:none">
+                            <label>Rent Start Date</label>
+                            <input type="date" id="fRentStart">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Notes</legend>
+                    <div class="form-group-dash">
+                        <textarea id="fNotes" placeholder="Any additional info..." rows="3"></textarea>
+                    </div>
+                </fieldset>
+
+                <div style="display:flex;gap:12px;margin-top:20px">
+                    <button type="submit" class="btn btn-primary" style="flex:1">Save Project</button>
+                    <button type="button" class="btn btn-ghost" onclick="closeProjectForm()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal-overlay" id="paymentModal">
+        <div class="modal" style="max-width:500px">
+            <div class="modal-header">
+                <h3 class="modal-title">Record Payment — <span id="paymentProjectName"></span></h3>
+                <button class="modal-close" onclick="closePaymentModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="payment-summary" id="paymentSummary"></div>
+            <form id="paymentForm" onsubmit="savePayment(event)">
+                <input type="hidden" id="paymentProjectId">
+                <div class="form-grid">
+                    <div class="form-group-dash">
+                        <label>Amount (ILS)</label>
+                        <input type="number" id="pAmount" required min="1" placeholder="0">
+                    </div>
+                    <div class="form-group-dash">
+                        <label>Date</label>
+                        <input type="date" id="pDate" required>
+                    </div>
+                    <div class="form-group-dash full">
+                        <label>Note (optional)</label>
+                        <input type="text" id="pNote" placeholder="e.g. First installment, cash">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success" style="width:100%;margin-top:16px">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    Record Payment
+                </button>
+            </form>
+            <div id="paymentHistory" style="margin-top:20px"></div>
+        </div>
+    </div>
+
+    <script>
+    // ─── Config ──────────────────────────────────────────────────────────────
+    const VALID_USERS = [
+        { username: 'ayham', password: '12344' },
+        { username: 'dana', password: '12344' },
+        { username: 'akram', password: '12344' }
+    ];
+    const SESSION_KEY = 'wd_projects_session';
+    const COLLECTION = 'web_projects';
+
+    // Firebase init
+    const firebaseConfig = {
+        apiKey: 'AIzaSyAIsq4QV6wxwMb8phPa3tU14p2NRSXvTdY',
+        authDomain: 'dimaboutique-b4f16.firebaseapp.com',
+        projectId: 'dimaboutique-b4f16',
+        storageBucket: 'dimaboutique-b4f16.firebasestorage.app',
+        messagingSenderId: '438611658146',
+        appId: '1:438611658146:web:83b1a97cfc42bd12aadefb'
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const projectsRef = db.collection('projects').doc('web_designer').collection(COLLECTION);
+
+    // ─── State ───────────────────────────────────────────────────────────────
+    let currentUser = null;
+    let projects = [];
+    let unsubscribe = null;
+
+    // ─── Auth ────────────────────────────────────────────────────────────────
+    function checkSession() {
+        const saved = sessionStorage.getItem(SESSION_KEY);
+        if (saved && VALID_USERS.some(u => u.username === saved)) {
+            login(saved);
+        }
+    }
+
+    function login(username) {
+        currentUser = username;
+        sessionStorage.setItem(SESSION_KEY, username);
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').classList.add('active');
+        document.getElementById('currentUser').textContent = username;
+        startListening();
+    }
+
+    function logout() {
+        sessionStorage.removeItem(SESSION_KEY);
+        currentUser = null;
+        if (unsubscribe) unsubscribe();
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('dashboard').classList.remove('active');
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = document.getElementById('loginUsername').value.toLowerCase().trim();
+        const password = document.getElementById('loginPassword').value;
+        const user = VALID_USERS.find(u => u.username === username && u.password === password);
+        if (user) {
+            document.getElementById('loginError').style.display = 'none';
+            login(user.username);
+        } else {
+            document.getElementById('loginError').style.display = 'block';
+        }
+    });
+
+    // ─── Firestore ───────────────────────────────────────────────────────────
+    function startListening() {
+        unsubscribe = projectsRef.onSnapshot(snapshot => {
+            projects = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            projects.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+            renderAll();
+        });
+    }
+
+    // ─── Rendering ───────────────────────────────────────────────────────────
+    function renderAll() {
+        renderStats();
+        renderProjects();
+    }
+
+    function renderStats() {
+        const totalReceived = projects.reduce((sum, p) => sum + getTotalPaid(p), 0);
+        const pendingRevenue = projects.reduce((sum, p) => {
+            if (p.dealType === 'buy') return sum + Math.max(0, (p.totalPrice || 0) - getTotalPaid(p));
+            return sum;
+        }, 0);
+        const active = projects.filter(p => p.status === 'active').length;
+        const interested = projects.filter(p => p.interestLevel === 'interested' || p.interestLevel === 'negotiating').length;
+
+        document.getElementById('statsGrid').innerHTML = `
+            <div class="stat-card">
+                <div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                <div><div class="stat-label">Total Received</div><div class="stat-value">${formatCurrency(totalReceived)}</div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+                <div><div class="stat-label">Pending Revenue</div><div class="stat-value">${formatCurrency(pendingRevenue)}</div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+                <div><div class="stat-label">Active Projects</div><div class="stat-value">${active}</div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                <div><div class="stat-label">Interested Clients</div><div class="stat-value">${interested}</div></div>
+            </div>
+        `;
+    }
+
+    function getFilteredProjects() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const status = document.getElementById('filterStatus').value;
+        const deal = document.getElementById('filterDeal').value;
+        const contact = document.getElementById('filterContact').value;
+
+        return projects.filter(p => {
+            if (status !== 'all' && p.status !== status) return false;
+            if (deal !== 'all' && p.dealType !== deal) return false;
+            if (contact !== 'all' && p.contactStatus !== contact) return false;
+            if (search) {
+                const q = search;
+                return (p.name || '').toLowerCase().includes(q) ||
+                       (p.clientName || '').toLowerCase().includes(q) ||
+                       (p.clientEmail || '').toLowerCase().includes(q) ||
+                       (p.clientPhone || '').includes(q) ||
+                       (p.domainName || '').toLowerCase().includes(q);
+            }
+            return true;
+        });
+    }
+
+    function renderProjects() {
+        const filtered = getFilteredProjects();
+        const container = document.getElementById('projectList');
+
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    <h3>No projects found</h3>
+                    <p>${projects.length === 0 ? 'Create your first project to get started.' : 'Try adjusting your filters.'}</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = filtered.map(p => renderProjectCard(p)).join('');
+    }
+
+    function renderProjectCard(p) {
+        const contactBadge = getContactBadge(p.contactStatus);
+        const interestBadge = getInterestBadge(p.interestLevel);
+        const paid = getTotalPaid(p);
+        const rem = p.dealType === 'buy' ? Math.max(0, (p.totalPrice || 0) - paid) : 0;
+        const progress = (p.totalPrice || 0) > 0 ? Math.min(100, (paid / p.totalPrice) * 100) : 0;
+        const statusClass = p.status === 'cancelled' ? 'cancelled' : p.status === 'completed' ? 'completed' : '';
+
+        let priceHtml = '';
+        if (p.dealType === 'buy') {
+            priceHtml = `<div class="project-price">${formatCurrency(p.totalPrice || 0)}</div>`;
+        } else {
+            priceHtml = `<div class="project-price">${formatCurrency(p.monthlyRent || 0)}<small>/mo</small></div>`;
+        }
+
+        let paymentBadge = '';
+        if (p.dealType === 'buy') {
+            const ps = getPaymentBadge(p.paymentStatus);
+            paymentBadge = `<span class="badge ${ps.cls}">${ps.label}</span>`;
+        }
+
+        const domainBadge = p.hasDomain
+            ? '<span class="badge badge-green">Has Domain</span>'
+            : '<span class="badge badge-gray">No Domain</span>';
+
+        const dealBadge = p.dealType === 'buy'
+            ? '<span class="badge badge-sky">Buy</span>'
+            : '<span class="badge badge-purple">Rent</span>';
+
+        // Details section
+        let detailsHtml = `
+            <div class="project-details">
+                <div class="details-grid">
+                    <div class="detail-section">
+                        <h4>Client</h4>
+                        ${p.clientPhone ? `<p>📞 ${p.clientPhone}</p>` : ''}
+                        ${p.clientEmail ? `<p>✉️ ${p.clientEmail}</p>` : ''}
+                        ${p.hasDomain && p.domainName ? `<p>🌐 ${p.domainName}</p>` : ''}
+                        ${!p.clientPhone && !p.clientEmail ? '<p>No contact info</p>' : ''}
+                    </div>
+                    <div class="detail-section">
+                        <h4>${p.dealType === 'buy' ? 'Payment Progress' : 'Rent Info'}</h4>
+                        ${p.dealType === 'buy' ? `
+                            <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+                            <p>Paid: <strong style="color:var(--success)">${formatCurrency(paid)}</strong></p>
+                            <p>Remaining: <strong style="color:var(--warning)">${formatCurrency(rem)}</strong></p>
+                        ` : `
+                            <p>Monthly: <strong>${formatCurrency(p.monthlyRent || 0)}</strong></p>
+                            <p>Due day: <strong>${p.rentDueDay || 1}</strong> of each month</p>
+                            ${p.rentStartDate ? `<p>Started: <strong>${formatDate(p.rentStartDate)}</strong></p>` : ''}
+                        `}
+                    </div>
+                    <div class="detail-section">
+                        <h4>Recent Payments</h4>
+                        ${(p.payments || []).length === 0 ? '<p>No payments recorded</p>' : `
+                            <div class="payment-list">
+                                ${(p.payments || []).slice(-5).reverse().map(pay => `
+                                    <div class="payment-item">
+                                        <span style="color:var(--success);font-weight:600">${formatCurrency(pay.amount)}</span>
+                                        <span>${pay.note ? pay.note + ' — ' : ''}${formatDate(pay.date)}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `}
+                    </div>
+                </div>
+                ${p.notes ? `<div style="margin-top:12px;padding:10px 14px;background:var(--bg);border-radius:8px;font-size:13px;color:var(--text-muted)">${escapeHtml(p.notes)}</div>` : ''}
+                <div class="project-meta">
+                    <div class="project-meta-info">Created by <strong>${p.createdBy || '—'}</strong> on ${formatDate(p.createdAt)}${p.updatedAt && p.updatedAt !== p.createdAt ? ' · Updated ' + formatDate(p.updatedAt) : ''}</div>
+                    <div class="project-actions">
+                        <button class="btn btn-success btn-sm" onclick="openPaymentModal('${p.id}')">💰 Add Payment</button>
+                        <button class="btn btn-info btn-sm" onclick="editProject('${p.id}')">✏️ Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteProject('${p.id}')">🗑️ Delete</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        return `
+            <div class="project-card ${statusClass}" id="card-${p.id}">
+                <div class="project-header" onclick="toggleCard('${p.id}')">
+                    <div class="project-name">
+                        ${escapeHtml(p.name)}${p.projectUrl ? ` <a href="${p.projectUrl}" target="_blank" onclick="event.stopPropagation()" style="color:var(--primary);font-size:12px">🔗</a>` : ''}
+                        <small>${escapeHtml(p.clientName || 'No client')}</small>
+                    </div>
+                    <span class="badge ${contactBadge.cls}">${contactBadge.label}</span>
+                    <span class="badge ${interestBadge.cls}">${interestBadge.label}</span>
+                    ${dealBadge}
+                    ${paymentBadge}
+                    ${domainBadge}
+                    ${priceHtml}
+                    <button class="expand-btn" onclick="event.stopPropagation();toggleCard('${p.id}')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                </div>
+                ${detailsHtml}
+            </div>
+        `;
+    }
+
+    function toggleCard(id) {
+        const card = document.getElementById('card-' + id);
+        if (card) card.classList.toggle('expanded');
+    }
+
+    // ─── Badge Helpers ───────────────────────────────────────────────────────
+    function getContactBadge(status) {
+        const map = {
+            not_contacted: { label: '⏸ Not Contacted', cls: 'badge-gray' },
+            contacted: { label: '📞 Contacted', cls: 'badge-blue' },
+            replied: { label: '✅ Replied', cls: 'badge-green' },
+            no_reply: { label: '⚠️ No Reply', cls: 'badge-amber' }
+        };
+        return map[status] || map.not_contacted;
+    }
+
+    function getInterestBadge(level) {
+        const map = {
+            unknown: { label: '❓ Unknown', cls: 'badge-gray' },
+            interested: { label: '👍 Interested', cls: 'badge-emerald' },
+            not_interested: { label: '👎 Not Interested', cls: 'badge-red' },
+            negotiating: { label: '🤝 Negotiating', cls: 'badge-purple' }
+        };
+        return map[level] || map.unknown;
+    }
+
+    function getPaymentBadge(status) {
+        const map = {
+            not_started: { label: '💤 No Payment', cls: 'badge-gray' },
+            partial: { label: '⏳ Partial', cls: 'badge-amber' },
+            full: { label: '✅ Paid in Full', cls: 'badge-green' },
+            overdue: { label: '🚨 Overdue', cls: 'badge-red' }
+        };
+        return map[status] || map.not_started;
+    }
+
+    // ─── Helpers ─────────────────────────────────────────────────────────────
+    function getTotalPaid(project) {
+        return (project.payments || []).reduce((sum, p) => sum + (p.amount || 0), 0);
+    }
+
+    function formatCurrency(amount) {
+        return '₪' + (amount || 0).toLocaleString();
+    }
+
+    function formatDate(dateStr) {
+        if (!dateStr) return '—';
+        try {
+            return new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+        } catch { return dateStr; }
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function generateId() {
+        return Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+    }
+
+    // ─── Project Form ────────────────────────────────────────────────────────
+    function openProjectForm(project) {
+        document.getElementById('modalTitle').textContent = project ? 'Edit Project' : 'New Project';
+        document.getElementById('editId').value = project ? project.id : '';
+        document.getElementById('fName').value = project ? project.name : '';
+        document.getElementById('fUrl').value = project ? (project.projectUrl || '') : '';
+        document.getElementById('fStatus').value = project ? project.status : 'active';
+        document.getElementById('fClient').value = project ? (project.clientName || '') : '';
+        document.getElementById('fPhone').value = project ? (project.clientPhone || '') : '';
+        document.getElementById('fEmail').value = project ? (project.clientEmail || '') : '';
+        document.getElementById('fContact').value = project ? project.contactStatus : 'not_contacted';
+        document.getElementById('fInterest').value = project ? project.interestLevel : 'unknown';
+        document.getElementById('fHasDomain').checked = project ? project.hasDomain : false;
+        document.getElementById('fDomain').value = project ? (project.domainName || '') : '';
+        document.getElementById('fDealType').value = project ? project.dealType : 'buy';
+        document.getElementById('fTotalPrice').value = project ? (project.totalPrice || '') : '';
+        document.getElementById('fPaymentStatus').value = project ? project.paymentStatus : 'not_started';
+        document.getElementById('fMonthlyRent').value = project ? (project.monthlyRent || '') : '';
+        document.getElementById('fRentDue').value = project ? (project.rentDueDay || '') : '';
+        document.getElementById('fRentStart').value = project ? (project.rentStartDate || '') : '';
+        document.getElementById('fNotes').value = project ? (project.notes || '') : '';
+
+        toggleDomainField();
+        toggleDealFields();
+        document.getElementById('projectModal').classList.add('active');
+    }
+
+    function closeProjectForm() {
+        document.getElementById('projectModal').classList.remove('active');
+    }
+
+    function editProject(id) {
+        const project = projects.find(p => p.id === id);
+        if (project) openProjectForm(project);
+    }
+
+    async function saveProject(e) {
+        e.preventDefault();
+        const id = document.getElementById('editId').value;
+        const now = new Date().toISOString();
+
+        const data = {
+            name: document.getElementById('fName').value.trim(),
+            projectUrl: document.getElementById('fUrl').value.trim(),
+            status: document.getElementById('fStatus').value,
+            clientName: document.getElementById('fClient').value.trim(),
+            clientPhone: document.getElementById('fPhone').value.trim(),
+            clientEmail: document.getElementById('fEmail').value.trim(),
+            contactStatus: document.getElementById('fContact').value,
+            interestLevel: document.getElementById('fInterest').value,
+            hasDomain: document.getElementById('fHasDomain').checked,
+            domainName: document.getElementById('fDomain').value.trim(),
+            dealType: document.getElementById('fDealType').value,
+            totalPrice: Number(document.getElementById('fTotalPrice').value) || 0,
+            paymentStatus: document.getElementById('fPaymentStatus').value,
+            monthlyRent: Number(document.getElementById('fMonthlyRent').value) || 0,
+            rentDueDay: Number(document.getElementById('fRentDue').value) || 1,
+            rentStartDate: document.getElementById('fRentStart').value,
+            notes: document.getElementById('fNotes').value.trim(),
+            updatedAt: now
+        };
+
+        try {
+            if (id) {
+                await projectsRef.doc(id).update(data);
+            } else {
+                data.createdAt = now;
+                data.createdBy = currentUser;
+                data.payments = [];
+                await projectsRef.add(data);
+            }
+            closeProjectForm();
+        } catch (err) {
+            alert('Error saving project: ' + err.message);
+        }
+    }
+
+    async function deleteProject(id) {
+        if (!confirm('Are you sure you want to delete this project?')) return;
+        try {
+            await projectsRef.doc(id).delete();
+        } catch (err) {
+            alert('Error deleting: ' + err.message);
+        }
+    }
+
+    // ─── Payment Modal ───────────────────────────────────────────────────────
+    function openPaymentModal(id) {
+        const project = projects.find(p => p.id === id);
+        if (!project) return;
+
+        document.getElementById('paymentProjectId').value = id;
+        document.getElementById('paymentProjectName').textContent = project.name;
+        document.getElementById('pAmount').value = '';
+        document.getElementById('pDate').value = new Date().toISOString().split('T')[0];
+        document.getElementById('pNote').value = '';
+
+        const paid = getTotalPaid(project);
+        const rem = Math.max(0, (project.totalPrice || 0) - paid);
+
+        document.getElementById('paymentSummary').innerHTML = `
+            <div class="payment-summary-row"><span class="label">Total Price:</span><span class="value">${formatCurrency(project.totalPrice)}</span></div>
+            <div class="payment-summary-row"><span class="label">Already Paid:</span><span class="value green">${formatCurrency(paid)}</span></div>
+            <div class="payment-summary-row"><span class="label">Remaining:</span><span class="value amber">${formatCurrency(rem)}</span></div>
+        `;
+
+        let historyHtml = '';
+        if ((project.payments || []).length > 0) {
+            historyHtml = `<h4 style="font-size:13px;font-weight:600;margin-bottom:8px">Payment History</h4>`;
+            historyHtml += (project.payments || []).slice().reverse().map(p => `
+                <div class="payment-item">
+                    <span style="color:var(--success);font-weight:600">${formatCurrency(p.amount)}</span>
+                    <span>${p.note ? escapeHtml(p.note) + ' — ' : ''}${formatDate(p.date)}</span>
+                </div>
+            `).join('');
+        }
+        document.getElementById('paymentHistory').innerHTML = historyHtml;
+
+        document.getElementById('paymentModal').classList.add('active');
+    }
+
+    function closePaymentModal() {
+        document.getElementById('paymentModal').classList.remove('active');
+    }
+
+    async function savePayment(e) {
+        e.preventDefault();
+        const id = document.getElementById('paymentProjectId').value;
+        const project = projects.find(p => p.id === id);
+        if (!project) return;
+
+        const newPayment = {
+            id: generateId(),
+            amount: Number(document.getElementById('pAmount').value),
+            date: document.getElementById('pDate').value,
+            note: document.getElementById('pNote').value.trim()
+        };
+
+        const payments = [...(project.payments || []), newPayment];
+        const totalPaid = payments.reduce((sum, p) => sum + (p.amount || 0), 0);
+        let paymentStatus = 'partial';
+        if (totalPaid === 0) paymentStatus = 'not_started';
+        else if (totalPaid >= (project.totalPrice || 0)) paymentStatus = 'full';
+
+        try {
+            await projectsRef.doc(id).update({
+                payments: payments,
+                paymentStatus: paymentStatus,
+                updatedAt: new Date().toISOString()
+            });
+            closePaymentModal();
+        } catch (err) {
+            alert('Error recording payment: ' + err.message);
+        }
+    }
+
+    // ─── Toggle Helpers ──────────────────────────────────────────────────────
+    function toggleDealFields() {
+        const dealType = document.getElementById('fDealType').value;
+        const isBuy = dealType === 'buy';
+        document.getElementById('totalPriceGroup').style.display = isBuy ? '' : '';
+        document.getElementById('paymentStatusGroup').style.display = isBuy ? '' : 'none';
+        document.getElementById('monthlyRentGroup').style.display = isBuy ? 'none' : '';
+        document.getElementById('rentDueGroup').style.display = isBuy ? 'none' : '';
+        document.getElementById('rentStartGroup').style.display = isBuy ? 'none' : '';
+
+        // Change label for totalPrice in rent mode
+        const priceLabel = document.querySelector('#totalPriceGroup label');
+        if (priceLabel) priceLabel.textContent = isBuy ? 'Total Price (ILS)' : 'Initial Setup Price (ILS)';
+    }
+
+    function toggleDomainField() {
+        document.getElementById('domainNameGroup').style.display = document.getElementById('fHasDomain').checked ? '' : 'none';
+    }
+
+    document.getElementById('fHasDomain').addEventListener('change', toggleDomainField);
+
+    // ─── Filter Listeners ────────────────────────────────────────────────────
+    document.getElementById('searchInput').addEventListener('input', renderProjects);
+    document.getElementById('filterStatus').addEventListener('change', renderProjects);
+    document.getElementById('filterDeal').addEventListener('change', renderProjects);
+    document.getElementById('filterContact').addEventListener('change', renderProjects);
+
+    // Close modals on overlay click
+    document.getElementById('projectModal').addEventListener('click', function(e) {
+        if (e.target === this) closeProjectForm();
+    });
+    document.getElementById('paymentModal').addEventListener('click', function(e) {
+        if (e.target === this) closePaymentModal();
+    });
+
+    // ─── Init ────────────────────────────────────────────────────────────────
+    checkSession();
+    </script>
+</body>
+</html>
