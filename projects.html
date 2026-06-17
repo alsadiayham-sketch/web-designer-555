@@ -9,12 +9,14 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        
+
         :root {
             --bg: #f8fafc;
             --card: #ffffff;
+            --card-soft: #f8fbff;
             --border: #e2e8f0;
-            --text: #1e293b;
+            --border-strong: #cbd5e1;
+            --text: #0f172a;
             --text-muted: #64748b;
             --text-light: #94a3b8;
             --primary: #6366f1;
@@ -30,28 +32,35 @@
             --info-light: #dbeafe;
             --purple: #8b5cf6;
             --purple-light: #ede9fe;
-            --radius: 16px;
-            --radius-sm: 10px;
-            --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
-            --shadow-lg: 0 4px 24px rgba(0,0,0,0.08);
-            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --teal: #14b8a6;
+            --teal-light: #ccfbf1;
+            --radius: 18px;
+            --radius-sm: 12px;
+            --shadow: 0 1px 3px rgba(15, 23, 42, 0.05), 0 10px 30px rgba(15, 23, 42, 0.04);
+            --shadow-lg: 0 18px 40px rgba(15, 23, 42, 0.08);
+            --transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: var(--bg);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(99,102,241,0.10), transparent 30%),
+                radial-gradient(circle at top right, rgba(59,130,246,0.08), transparent 32%),
+                var(--bg);
             color: var(--text);
             line-height: 1.6;
             min-height: 100vh;
         }
 
-        /* Login Screen */
+        a { color: inherit; }
+        button, input, select, textarea { font: inherit; }
+
         .login-screen {
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 30%, #1e293b 100%);
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 28%, #1e293b 100%);
             padding: 20px;
         }
 
@@ -59,10 +68,11 @@
             width: 100%;
             max-width: 400px;
             background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.12);
             border-radius: 24px;
             padding: 40px;
             backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
         }
 
         .login-icon {
@@ -78,29 +88,15 @@
         }
 
         .login-icon svg { width: 32px; height: 32px; color: white; }
-
-        .login-title {
-            text-align: center;
-            color: white;
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .login-subtitle {
-            text-align: center;
-            color: rgba(255,255,255,0.5);
-            font-size: 14px;
-            margin-bottom: 32px;
-        }
+        .login-title { text-align: center; color: white; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+        .login-subtitle { text-align: center; color: rgba(255,255,255,0.58); font-size: 14px; margin-bottom: 32px; }
 
         .form-group { margin-bottom: 16px; }
-
         .form-label {
             display: block;
             font-size: 13px;
             font-weight: 500;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.76);
             margin-bottom: 6px;
         }
 
@@ -121,7 +117,7 @@
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
         }
 
-        .form-input::placeholder { color: rgba(255,255,255,0.3); }
+        .form-input::placeholder { color: rgba(255,255,255,0.34); }
 
         .login-error {
             background: rgba(239, 68, 68, 0.1);
@@ -149,26 +145,22 @@
             text-decoration: none;
         }
 
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            width: 100%;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-        }
-
-        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
-
-        .btn-sm { padding: 8px 14px; font-size: 12px; border-radius: 8px; }
+        .btn svg { flex-shrink: 0; }
+        .btn:hover { transform: translateY(-1px); }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 6px 16px rgba(99,102,241,0.25); }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-sm { padding: 8px 14px; font-size: 12px; border-radius: 10px; }
         .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
-        .btn-ghost:hover { background: var(--bg); }
+        .btn-ghost:hover { background: #f8fafc; }
         .btn-success { background: var(--success-light); color: #065f46; }
         .btn-success:hover { background: #a7f3d0; }
         .btn-danger { background: var(--danger-light); color: #991b1b; }
         .btn-danger:hover { background: #fecaca; }
         .btn-info { background: var(--primary-light); color: var(--primary); }
-        .btn-info:hover { background: #c7d2fe; }
+        .btn-info:hover { background: #dbe4ff; }
+        .btn-warning { background: var(--warning-light); color: #92400e; }
+        .btn-warning:hover { background: #fde68a; }
 
-        /* Dashboard */
         .dashboard { display: none; }
         .dashboard.active { display: block; }
 
@@ -177,8 +169,8 @@
             top: 0;
             z-index: 30;
             background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(226,232,240,0.85);
             padding: 16px 24px;
         }
 
@@ -192,17 +184,13 @@
             flex-wrap: wrap;
         }
 
-        .header-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .header-brand { display: flex; align-items: center; gap: 12px; }
 
         .header-logo {
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             background: linear-gradient(135deg, var(--primary), #8b5cf6);
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -210,15 +198,118 @@
         }
 
         .header-logo svg { width: 20px; height: 20px; color: white; }
-
         .header-title { font-size: 18px; font-weight: 700; }
         .header-user { font-size: 12px; color: var(--text-muted); }
-
-        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
         .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
 
-        /* Stats */
+        .tabs-shell {
+            background: rgba(255,255,255,0.84);
+            border: 1px solid rgba(226,232,240,0.84);
+            border-radius: 20px;
+            padding: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .tabs {
+            display: inline-flex;
+            gap: 8px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 6px;
+        }
+
+        .tab-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-weight: 700;
+            padding: 10px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 6px 16px rgba(15,23,42,0.06);
+        }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        .banner {
+            background: linear-gradient(135deg, #fff7ed, #ffffff);
+            border: 1px solid #fdba74;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 18px;
+            margin-bottom: 24px;
+        }
+
+        .banner.ok {
+            background: linear-gradient(135deg, #ecfdf5, #ffffff);
+            border-color: #86efac;
+        }
+
+        .banner-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .banner-title-wrap { display: flex; align-items: center; gap: 12px; }
+
+        .banner-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: #fff7ed;
+            color: #c2410c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .banner.ok .banner-icon {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .banner h3 { font-size: 17px; line-height: 1.25; }
+        .banner p { color: var(--text-muted); font-size: 13px; }
+
+        .alert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+        }
+
+        .alert-card {
+            background: white;
+            border: 1px solid #fed7aa;
+            border-radius: 16px;
+            padding: 14px;
+            box-shadow: 0 10px 25px rgba(249,115,22,0.08);
+        }
+
+        .alert-card.overdue { border-color: #fca5a5; box-shadow: 0 10px 25px rgba(239,68,68,0.08); }
+        .alert-card.upcoming { border-color: #fcd34d; }
+        .alert-card strong { display: block; margin-bottom: 4px; font-size: 14px; }
+        .alert-card small { color: var(--text-muted); display: block; }
+        .alert-card .alert-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -227,9 +318,9 @@
         }
 
         .stat-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
+            background: rgba(255,255,255,0.92);
+            border: 1px solid rgba(226,232,240,0.9);
+            border-radius: 20px;
             padding: 20px;
             display: flex;
             align-items: center;
@@ -238,9 +329,9 @@
         }
 
         .stat-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -252,11 +343,9 @@
         .stat-icon.amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
         .stat-icon.blue { background: linear-gradient(135deg, #6366f1, #4f46e5); }
         .stat-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-
         .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
         .stat-value { font-size: 20px; font-weight: 700; color: var(--text); }
 
-        /* Filters */
         .filters {
             display: flex;
             flex-wrap: wrap;
@@ -267,22 +356,31 @@
 
         .search-box {
             flex: 1;
-            min-width: 200px;
+            min-width: 220px;
             position: relative;
+        }
+
+        .search-box input,
+        .filter-select {
+            background: rgba(255,255,255,0.92);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 13px;
+            outline: none;
+            transition: var(--transition);
         }
 
         .search-box input {
             width: 100%;
-            padding: 10px 16px 10px 40px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            outline: none;
-            background: var(--card);
-            transition: var(--transition);
+            padding: 11px 16px 11px 42px;
+            box-shadow: var(--shadow);
         }
 
-        .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+        .search-box input:focus,
+        .filter-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.10);
+        }
 
         .search-box svg {
             position: absolute;
@@ -295,32 +393,27 @@
         }
 
         .filter-select {
-            padding: 10px 14px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-size: 13px;
-            background: var(--card);
-            outline: none;
+            padding: 11px 14px;
             cursor: pointer;
+            min-width: 150px;
+            box-shadow: var(--shadow);
         }
 
-        .filter-select:focus { border-color: var(--primary); }
-
-        /* Project Cards */
         .project-list { display: flex; flex-direction: column; gap: 12px; }
 
         .project-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
+            background: rgba(255,255,255,0.94);
+            border: 1px solid rgba(226,232,240,0.92);
+            border-radius: 20px;
             box-shadow: var(--shadow);
             overflow: hidden;
             transition: var(--transition);
         }
 
-        .project-card:hover { box-shadow: var(--shadow-lg); }
+        .project-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
         .project-card.cancelled { border-color: #fecaca; background: #fef2f2; }
         .project-card.completed { border-color: #a7f3d0; background: #f0fdf4; }
+        .project-card.needs-attention { border-color: #fdba74; }
 
         .project-header {
             display: flex;
@@ -335,7 +428,7 @@
             font-weight: 700;
             font-size: 15px;
             flex: 1;
-            min-width: 150px;
+            min-width: 180px;
         }
 
         .project-name small {
@@ -351,9 +444,9 @@
             align-items: center;
             gap: 4px;
             padding: 4px 10px;
-            border-radius: 20px;
+            border-radius: 999px;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             white-space: nowrap;
         }
 
@@ -365,16 +458,18 @@
         .badge-purple { background: #ede9fe; color: #6d28d9; }
         .badge-sky { background: #e0f2fe; color: #0369a1; }
         .badge-emerald { background: #d1fae5; color: #065f46; }
+        .badge-teal { background: var(--teal-light); color: #0f766e; }
 
         .project-price {
             font-weight: 700;
             font-size: 15px;
-            min-width: 80px;
+            min-width: 82px;
             text-align: right;
         }
 
         .project-price small {
-            font-weight: 400;
+            display: block;
+            font-weight: 500;
             font-size: 11px;
             color: var(--text-muted);
         }
@@ -393,22 +488,23 @@
         .project-details {
             display: none;
             padding: 0 20px 20px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid rgba(226,232,240,0.92);
+            background: linear-gradient(180deg, rgba(248,250,252,0.38), rgba(255,255,255,0.78));
         }
 
         .project-card.expanded .project-details { display: block; padding-top: 16px; }
 
         .details-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
         }
 
         .detail-section h4 {
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.06em;
             color: var(--text-light);
             margin-bottom: 8px;
         }
@@ -416,7 +512,7 @@
         .detail-section p {
             font-size: 13px;
             color: var(--text-muted);
-            margin-bottom: 4px;
+            margin-bottom: 5px;
         }
 
         .detail-section p strong { color: var(--text); }
@@ -425,26 +521,27 @@
             width: 100%;
             height: 8px;
             background: #f1f5f9;
-            border-radius: 4px;
+            border-radius: 999px;
             overflow: hidden;
             margin: 8px 0;
         }
 
         .progress-fill {
             height: 100%;
-            border-radius: 4px;
+            border-radius: 999px;
             background: linear-gradient(90deg, var(--primary), var(--success));
             transition: width 0.5s ease;
         }
 
-        .payment-list { max-height: 120px; overflow-y: auto; }
+        .payment-list { max-height: 150px; overflow-y: auto; padding-right: 4px; }
 
         .payment-item {
             display: flex;
             justify-content: space-between;
+            gap: 10px;
             font-size: 12px;
-            padding: 4px 0;
-            border-bottom: 1px solid #f1f5f9;
+            padding: 6px 0;
+            border-bottom: 1px solid #eef2f7;
         }
 
         .project-meta {
@@ -459,30 +556,28 @@
         }
 
         .project-meta-info { font-size: 11px; color: var(--text-light); }
-
         .project-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
             border: 2px dashed var(--border);
-            border-radius: var(--radius);
-            background: var(--card);
+            border-radius: 20px;
+            background: rgba(255,255,255,0.92);
+            box-shadow: var(--shadow);
         }
 
         .empty-state svg { width: 48px; height: 48px; color: var(--text-light); margin-bottom: 16px; }
         .empty-state h3 { font-size: 18px; margin-bottom: 6px; }
         .empty-state p { font-size: 14px; color: var(--text-muted); }
 
-        /* Modal */
         .modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            z-index: 50;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
+            z-index: 60;
+            background: rgba(15,23,42,0.52);
+            backdrop-filter: blur(6px);
             align-items: center;
             justify-content: center;
             padding: 20px;
@@ -491,13 +586,13 @@
         .modal-overlay.active { display: flex; }
 
         .modal {
-            background: var(--card);
-            border-radius: 20px;
+            background: white;
+            border-radius: 24px;
             width: 100%;
-            max-width: 640px;
-            max-height: 85vh;
+            max-width: 680px;
+            max-height: 88vh;
             overflow-y: auto;
-            box-shadow: 0 24px 48px rgba(0,0,0,0.2);
+            box-shadow: 0 30px 60px rgba(15,23,42,0.2);
             padding: 28px;
         }
 
@@ -506,6 +601,7 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 24px;
+            gap: 16px;
         }
 
         .modal-title { font-size: 18px; font-weight: 700; }
@@ -515,7 +611,7 @@
             border: none;
             cursor: pointer;
             padding: 8px;
-            border-radius: 8px;
+            border-radius: 10px;
             color: var(--text-muted);
             transition: var(--transition);
         }
@@ -524,14 +620,15 @@
 
         fieldset {
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 16px;
             margin-bottom: 16px;
+            background: #fcfdff;
         }
 
         legend {
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-muted);
             padding: 0 8px;
         }
@@ -547,7 +644,7 @@
         .form-group-dash label {
             display: block;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-muted);
             margin-bottom: 4px;
         }
@@ -558,7 +655,7 @@
             width: 100%;
             padding: 10px 12px;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 13px;
             outline: none;
             transition: var(--transition);
@@ -572,7 +669,7 @@
             box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
         }
 
-        .form-group-dash textarea { resize: vertical; min-height: 60px; }
+        .form-group-dash textarea { resize: vertical; min-height: 68px; }
 
         .checkbox-group {
             display: flex;
@@ -591,24 +688,269 @@
 
         .payment-summary {
             background: var(--bg);
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 14px;
             margin-bottom: 16px;
+            border: 1px solid var(--border);
         }
 
         .payment-summary-row {
             display: flex;
             justify-content: space-between;
+            gap: 10px;
             font-size: 13px;
-            padding: 3px 0;
+            padding: 4px 0;
         }
 
         .payment-summary-row .label { color: var(--text-muted); }
-        .payment-summary-row .value { font-weight: 600; }
+        .payment-summary-row .value { font-weight: 700; }
         .payment-summary-row .value.green { color: var(--success); }
         .payment-summary-row .value.amber { color: var(--warning); }
+        .payment-summary-row .value.red { color: var(--danger); }
 
-        /* Responsive */
+        .calendar-shell {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .calendar-card,
+        .side-card {
+            background: rgba(255,255,255,0.94);
+            border: 1px solid rgba(226,232,240,0.9);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .calendar-card { padding: 18px; }
+        .side-card { padding: 18px; position: sticky; top: 106px; }
+
+        .calendar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .calendar-title h2 { font-size: 20px; line-height: 1.2; }
+        .calendar-title p { font-size: 13px; color: var(--text-muted); }
+        .calendar-nav { display: flex; align-items: center; gap: 8px; }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: white;
+            cursor: pointer;
+            color: var(--text);
+            transition: var(--transition);
+        }
+
+        .icon-btn:hover { background: var(--bg); }
+
+        .calendar-weekdays,
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .calendar-weekdays {
+            margin-bottom: 10px;
+            padding: 0 2px;
+        }
+
+        .calendar-weekday {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            text-align: center;
+        }
+
+        .calendar-day {
+            min-height: 110px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: linear-gradient(180deg, #ffffff, #f8fbff);
+            padding: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow: hidden;
+        }
+
+        .calendar-day:hover {
+            border-color: var(--primary);
+            box-shadow: 0 12px 24px rgba(99,102,241,0.08);
+            transform: translateY(-1px);
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.45;
+            background: #f8fafc;
+        }
+
+        .calendar-day.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+        }
+
+        .calendar-day.today {
+            background: linear-gradient(180deg, #eef2ff, #ffffff);
+        }
+
+        .calendar-day-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .calendar-day-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .calendar-day.today .calendar-day-number {
+            background: var(--primary);
+            color: white;
+        }
+
+        .calendar-event-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-height: 0;
+        }
+
+        .event-dot,
+        .event-chip,
+        .calendar-mini-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            max-width: 100%;
+        }
+
+        .calendar-mini-chip {
+            padding: 4px 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .event-more {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .side-card h3 { font-size: 17px; margin-bottom: 4px; }
+        .side-card > p { color: var(--text-muted); font-size: 13px; margin-bottom: 14px; }
+
+        .selected-day-meta {
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            background: var(--card-soft);
+            border-radius: 14px;
+            margin-bottom: 14px;
+        }
+
+        .selected-day-meta strong { display: block; font-size: 14px; margin-bottom: 2px; }
+        .selected-day-meta span { color: var(--text-muted); font-size: 12px; }
+
+        .selected-day-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 480px;
+            overflow-y: auto;
+            padding-right: 2px;
+        }
+
+        .day-event-card {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 14px;
+            background: white;
+        }
+
+        .day-event-top {
+            display: flex;
+            align-items: start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .day-event-title {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .day-event-card p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .event-chip {
+            padding: 5px 10px;
+            white-space: nowrap;
+        }
+
+        .event-type-meeting { background: #dbeafe; color: #1d4ed8; }
+        .event-type-demo { background: #ede9fe; color: #6d28d9; }
+        .event-type-payment { background: #d1fae5; color: #047857; }
+        .event-type-rent-monthly { background: #fef3c7; color: #92400e; }
+        .event-type-rent-yearly { background: #ffedd5; color: #c2410c; }
+        .event-type-launch { background: #dbeafe; color: #0369a1; }
+        .event-type-followup { background: #fce7f3; color: #be185d; }
+        .event-type-contract { background: #dcfce7; color: #166534; }
+        .event-type-review { background: #ccfbf1; color: #0f766e; }
+        .event-type-default { background: #e2e8f0; color: #334155; }
+
+        .calendar-empty {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 22px 16px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .helper-text {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 6px;
+        }
+
+        @media (max-width: 1100px) {
+            .calendar-shell { grid-template-columns: 1fr; }
+            .side-card { position: static; }
+        }
+
         @media (max-width: 768px) {
             .container { padding: 16px; }
             .header { padding: 12px 16px; }
@@ -617,15 +959,21 @@
             .project-header { padding: 12px 14px; }
             .filters { gap: 8px; }
             .modal { padding: 20px; }
+            .calendar-grid { gap: 8px; }
+            .calendar-day { min-height: 96px; padding: 8px; }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 560px) {
             .stats-grid { grid-template-columns: 1fr; }
+            .calendar-day { min-height: 88px; }
+            .calendar-mini-chip { font-size: 10px; padding: 3px 6px; }
+            .tabs-shell { padding: 8px; }
+            .tabs { width: 100%; justify-content: space-between; }
+            .tab-btn { flex: 1; justify-content: center; }
         }
     </style>
 </head>
 <body>
-    <!-- Login Screen -->
     <div id="loginScreen" class="login-screen">
         <div class="login-box">
             <div class="login-icon">
@@ -643,7 +991,7 @@
                     <label class="form-label">Password</label>
                     <input type="password" id="loginPassword" class="form-input" placeholder="Enter password" autocomplete="current-password">
                 </div>
-                <button type="submit" class="btn btn-primary" style="margin-top:16px">
+                <button type="submit" class="btn btn-primary" style="margin-top:16px; width:100%">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
                     Sign In
                 </button>
@@ -651,7 +999,6 @@
         </div>
     </div>
 
-    <!-- Dashboard -->
     <div id="dashboard" class="dashboard">
         <header class="header">
             <div class="header-inner">
@@ -665,9 +1012,9 @@
                     </div>
                 </div>
                 <div class="header-actions">
-                    <button class="btn btn-primary btn-sm" onclick="openProjectForm()">
+                    <button id="primaryActionBtn" class="btn btn-primary btn-sm" onclick="handlePrimaryAction()">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        New Project
+                        <span id="primaryActionLabel">New Project</span>
                     </button>
                     <button class="btn btn-ghost btn-sm" onclick="logout()">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -678,41 +1025,97 @@
         </header>
 
         <div class="container">
-            <!-- Stats -->
-            <div class="stats-grid" id="statsGrid"></div>
-
-            <!-- Filters -->
-            <div class="filters">
-                <div class="search-box">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input type="text" id="searchInput" placeholder="Search projects, clients, domains...">
+            <div class="tabs-shell">
+                <div class="tabs" role="tablist" aria-label="Dashboard tabs">
+                    <button class="tab-btn active" id="tabProjectsBtn" type="button" onclick="setActiveTab('projects')" aria-selected="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        Projects
+                    </button>
+                    <button class="tab-btn" id="tabCalendarBtn" type="button" onclick="setActiveTab('calendar')" aria-selected="false">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        Calendar
+                    </button>
                 </div>
-                <select class="filter-select" id="filterStatus">
-                    <option value="all">All Status</option>
-                    <option value="active">Active</option>
-                    <option value="completed">Completed</option>
-                    <option value="cancelled">Cancelled</option>
-                </select>
-                <select class="filter-select" id="filterDeal">
-                    <option value="all">All Deals</option>
-                    <option value="buy">Buy</option>
-                    <option value="rent">Rent</option>
-                </select>
-                <select class="filter-select" id="filterContact">
-                    <option value="all">All Contact</option>
-                    <option value="not_contacted">Not Contacted</option>
-                    <option value="contacted">Contacted</option>
-                    <option value="replied">Replied</option>
-                    <option value="no_reply">No Reply</option>
-                </select>
             </div>
 
-            <!-- Project List -->
-            <div class="project-list" id="projectList"></div>
+            <section id="projectsTab" class="tab-panel active">
+                <div id="dueAlertBanner"></div>
+                <div class="stats-grid" id="statsGrid"></div>
+
+                <div class="filters">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="searchInput" placeholder="Search projects, clients, domains...">
+                    </div>
+                    <select class="filter-select" id="filterStatus">
+                        <option value="all">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <select class="filter-select" id="filterDeal">
+                        <option value="all">All Deals</option>
+                        <option value="buy">Buy</option>
+                        <option value="rent">Rent</option>
+                    </select>
+                    <select class="filter-select" id="filterContact">
+                        <option value="all">All Contact</option>
+                        <option value="not_contacted">Not Contacted</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="replied">Replied</option>
+                        <option value="no_reply">No Reply</option>
+                    </select>
+                    <select class="filter-select" id="filterDue">
+                        <option value="all">All Due Status</option>
+                        <option value="attention">Upcoming/Overdue</option>
+                        <option value="upcoming">Upcoming Only</option>
+                        <option value="overdue">Overdue Only</option>
+                    </select>
+                </div>
+
+                <div class="project-list" id="projectList"></div>
+            </section>
+
+            <section id="calendarTab" class="tab-panel">
+                <div class="calendar-shell">
+                    <div class="calendar-card">
+                        <div class="calendar-header">
+                            <div class="calendar-title">
+                                <h2 id="calendarMonthLabel">Calendar</h2>
+                                <p>Plan meetings, demos, payments, launches, and recurring rent reminders.</p>
+                            </div>
+                            <div class="calendar-nav">
+                                <button class="icon-btn" type="button" onclick="changeCalendarMonth(-1)" aria-label="Previous month">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                                </button>
+                                <button class="btn btn-ghost btn-sm" type="button" onclick="goToToday()">Today</button>
+                                <button class="icon-btn" type="button" onclick="changeCalendarMonth(1)" aria-label="Next month">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="calendar-weekdays" id="calendarWeekdays"></div>
+                        <div class="calendar-grid" id="calendarGrid"></div>
+                    </div>
+
+                    <aside class="side-card">
+                        <h3>Selected Day</h3>
+                        <p>Review everything scheduled for the day and add new calendar items.</p>
+                        <div class="selected-day-meta" id="selectedDayMeta"></div>
+                        <div style="display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap">
+                            <button class="btn btn-primary btn-sm" type="button" onclick="openEventModal()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Add Event
+                            </button>
+                            <button class="btn btn-ghost btn-sm" type="button" onclick="selectCalendarDate(formatDateInput(new Date()))">Jump to Today</button>
+                        </div>
+                        <div class="selected-day-list" id="selectedDayEvents"></div>
+                    </aside>
+                </div>
+            </section>
         </div>
     </div>
 
-    <!-- Project Form Modal -->
     <div class="modal-overlay" id="projectModal">
         <div class="modal">
             <div class="modal-header">
@@ -847,7 +1250,7 @@
                     </div>
                 </fieldset>
 
-                <div style="display:flex;gap:12px;margin-top:20px">
+                <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap">
                     <button type="submit" class="btn btn-primary" style="flex:1">Save Project</button>
                     <button type="button" class="btn btn-ghost" onclick="closeProjectForm()">Cancel</button>
                 </div>
@@ -855,9 +1258,8 @@
         </div>
     </div>
 
-    <!-- Payment Modal -->
     <div class="modal-overlay" id="paymentModal">
-        <div class="modal" style="max-width:500px">
+        <div class="modal" style="max-width:520px">
             <div class="modal-header">
                 <h3 class="modal-title">Record Payment — <span id="paymentProjectName"></span></h3>
                 <button class="modal-close" onclick="closePaymentModal()">
@@ -890,17 +1292,72 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="eventModal">
+        <div class="modal" style="max-width:560px">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Calendar Event</h3>
+                <button class="modal-close" onclick="closeEventModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <form id="eventForm" onsubmit="saveCalendarEvent(event)">
+                <fieldset>
+                    <legend>Event Details</legend>
+                    <div class="form-grid">
+                        <div class="form-group-dash">
+                            <label>Date *</label>
+                            <input type="date" id="eDate" required>
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Type *</label>
+                            <select id="eType" required></select>
+                        </div>
+                        <div class="form-group-dash full">
+                            <label>Title *</label>
+                            <input type="text" id="eTitle" required placeholder="Add a short event title">
+                        </div>
+                        <div class="form-group-dash full">
+                            <label>Project (optional)</label>
+                            <select id="eProjectName"></select>
+                            <div class="helper-text">Links the event to an existing project name.</div>
+                        </div>
+                        <div class="form-group-dash full">
+                            <label>Notes</label>
+                            <textarea id="eNotes" rows="4" placeholder="Any extra context, agenda, or reminders..."></textarea>
+                        </div>
+                    </div>
+                </fieldset>
+                <div style="display:flex;gap:12px;flex-wrap:wrap">
+                    <button type="submit" class="btn btn-primary" style="flex:1">Save Event</button>
+                    <button type="button" class="btn btn-ghost" onclick="closeEventModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-    // ─── Config ──────────────────────────────────────────────────────────────
     const VALID_USERS = [
         { username: 'ayham', password: '12344' },
         { username: 'dana', password: '12344' },
         { username: 'akram', password: '12344' }
     ];
+
     const SESSION_KEY = 'wd_projects_session';
     const COLLECTION = 'web_projects';
+    const CALENDAR_COLLECTION = 'calendar_events';
+    const CALENDAR_EVENT_TYPES = [
+        '🤝 Meeting with Client',
+        '🎬 Demo Presentation',
+        '💰 First Payment',
+        '📅 Rent Due (monthly)',
+        '📅 Rent Due (yearly)',
+        '🚀 Project Launch',
+        '📞 Follow-up Call',
+        '📋 Contract Signing',
+        '🎨 Design Review'
+    ];
+    const WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-    // Firebase init
     const firebaseConfig = {
         apiKey: 'AIzaSyAIsq4QV6wxwMb8phPa3tU14p2NRSXvTdY',
         authDomain: 'dimaboutique-b4f16.firebaseapp.com',
@@ -913,13 +1370,17 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const projectsRef = db.collection('projects').doc('web_designer').collection(COLLECTION);
+    const calendarEventsRef = db.collection('projects').doc('web_designer').collection(CALENDAR_COLLECTION);
 
-    // ─── State ───────────────────────────────────────────────────────────────
     let currentUser = null;
     let projects = [];
-    let unsubscribe = null;
+    let calendarEvents = [];
+    let unsubscribeProjects = null;
+    let unsubscribeCalendar = null;
+    let activeTab = 'projects';
+    let currentCalendarMonth = startOfMonth(new Date());
+    let selectedCalendarDate = formatDateInput(new Date());
 
-    // ─── Auth ────────────────────────────────────────────────────────────────
     function checkSession() {
         const saved = sessionStorage.getItem(SESSION_KEY);
         if (saved && VALID_USERS.some(u => u.username === saved)) {
@@ -933,15 +1394,25 @@
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('dashboard').classList.add('active');
         document.getElementById('currentUser').textContent = username;
+        ensureCalendarTypeOptions();
         startListening();
+        updatePrimaryAction();
     }
 
     function logout() {
         sessionStorage.removeItem(SESSION_KEY);
         currentUser = null;
-        if (unsubscribe) unsubscribe();
+        projects = [];
+        calendarEvents = [];
+        if (unsubscribeProjects) unsubscribeProjects();
+        if (unsubscribeCalendar) unsubscribeCalendar();
+        unsubscribeProjects = null;
+        unsubscribeCalendar = null;
         document.getElementById('loginScreen').style.display = 'flex';
         document.getElementById('dashboard').classList.remove('active');
+        document.getElementById('projectList').innerHTML = '';
+        document.getElementById('statsGrid').innerHTML = '';
+        document.getElementById('dueAlertBanner').innerHTML = '';
     }
 
     document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -957,19 +1428,29 @@
         }
     });
 
-    // ─── Firestore ───────────────────────────────────────────────────────────
     function startListening() {
-        unsubscribe = projectsRef.onSnapshot(snapshot => {
+        if (unsubscribeProjects) unsubscribeProjects();
+        if (unsubscribeCalendar) unsubscribeCalendar();
+
+        unsubscribeProjects = projectsRef.onSnapshot(snapshot => {
             projects = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             projects.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
             renderAll();
-        });
+            populateProjectOptions();
+        }, err => alert('Error loading projects: ' + err.message));
+
+        unsubscribeCalendar = calendarEventsRef.onSnapshot(snapshot => {
+            calendarEvents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            calendarEvents.sort((a, b) => (a.date || '').localeCompare(b.date || '') || (a.title || '').localeCompare(b.title || ''));
+            renderCalendar();
+        }, err => alert('Error loading calendar events: ' + err.message));
     }
 
-    // ─── Rendering ───────────────────────────────────────────────────────────
     function renderAll() {
         renderStats();
+        renderDueAlerts();
         renderProjects();
+        renderCalendar();
     }
 
     function renderStats() {
@@ -1001,25 +1482,94 @@
         `;
     }
 
+    function renderDueAlerts() {
+        const alerts = getDueAlerts();
+        const container = document.getElementById('dueAlertBanner');
+
+        if (!alerts.length) {
+            container.innerHTML = `
+                <div class="banner ok">
+                    <div class="banner-head">
+                        <div class="banner-title-wrap">
+                            <div class="banner-icon">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+                            </div>
+                            <div>
+                                <h3>All rent projects are on track</h3>
+                                <p>No project has an upcoming or overdue rent payment in the next 2 days.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        const overdueCount = alerts.filter(a => a.status === 'overdue').length;
+        const upcomingCount = alerts.filter(a => a.status === 'upcoming').length;
+
+        container.innerHTML = `
+            <div class="banner">
+                <div class="banner-head">
+                    <div class="banner-title-wrap">
+                        <div class="banner-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                        </div>
+                        <div>
+                            <h3>${alerts.length} rent alert${alerts.length === 1 ? '' : 's'} need attention</h3>
+                            <p>${overdueCount} overdue · ${upcomingCount} due within 2 days. Use the quick filter to focus on them.</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-warning btn-sm" type="button" onclick="applyDueAttentionFilter()">Show Upcoming/Overdue</button>
+                </div>
+                <div class="alert-grid">
+                    ${alerts.slice(0, 6).map(alert => `
+                        <div class="alert-card ${alert.status}">
+                            <strong>${escapeHtml(alert.project.name || 'Untitled Project')}</strong>
+                            <small>${escapeHtml(alert.project.clientName || 'No client')}</small>
+                            <div style="margin-top:8px;font-size:13px;color:var(--text)">
+                                ${alert.status === 'overdue'
+                                    ? `Overdue since <strong>${formatDate(alert.dueDateKey)}</strong>`
+                                    : `Due on <strong>${formatDate(alert.dueDateKey)}</strong> (${alert.daysUntil} day${alert.daysUntil === 1 ? '' : 's'})`}
+                            </div>
+                            <small>${escapeHtml(alert.message)}</small>
+                            <div class="alert-actions">
+                                <button class="btn btn-success btn-sm" type="button" onclick="openPaymentModal('${alert.project.id}')">Record Payment</button>
+                                <button class="btn btn-ghost btn-sm" type="button" onclick="focusProject('${alert.project.id}')">View Project</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
     function getFilteredProjects() {
         const search = document.getElementById('searchInput').value.toLowerCase();
         const status = document.getElementById('filterStatus').value;
         const deal = document.getElementById('filterDeal').value;
         const contact = document.getElementById('filterContact').value;
+        const due = document.getElementById('filterDue').value;
 
-        return projects.filter(p => {
-            if (status !== 'all' && p.status !== status) return false;
-            if (deal !== 'all' && p.dealType !== deal) return false;
-            if (contact !== 'all' && p.contactStatus !== contact) return false;
-            if (search) {
-                const q = search;
-                return (p.name || '').toLowerCase().includes(q) ||
-                       (p.clientName || '').toLowerCase().includes(q) ||
-                       (p.clientEmail || '').toLowerCase().includes(q) ||
-                       (p.clientPhone || '').includes(q) ||
-                       (p.domainName || '').toLowerCase().includes(q);
-            }
-            return true;
+        return projects.filter(project => {
+            if (status !== 'all' && project.status !== status) return false;
+            if (deal !== 'all' && project.dealType !== deal) return false;
+            if (contact !== 'all' && project.contactStatus !== contact) return false;
+
+            const dueInfo = getRentDueInsight(project);
+            if (due === 'attention' && !dueInfo) return false;
+            if (due === 'upcoming' && (!dueInfo || dueInfo.status !== 'upcoming')) return false;
+            if (due === 'overdue' && (!dueInfo || dueInfo.status !== 'overdue')) return false;
+
+            if (!search) return true;
+
+            const q = search;
+            return (project.name || '').toLowerCase().includes(q) ||
+                (project.clientName || '').toLowerCase().includes(q) ||
+                (project.clientEmail || '').toLowerCase().includes(q) ||
+                (project.clientPhone || '').includes(q) ||
+                (project.domainName || '').toLowerCase().includes(q) ||
+                (project.notes || '').toLowerCase().includes(q);
         });
     }
 
@@ -1027,7 +1577,7 @@
         const filtered = getFilteredProjects();
         const container = document.getElementById('projectList');
 
-        if (filtered.length === 0) {
+        if (!filtered.length) {
             container.innerHTML = `
                 <div class="empty-state">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -1038,107 +1588,204 @@
             return;
         }
 
-        container.innerHTML = filtered.map(p => renderProjectCard(p)).join('');
+        container.innerHTML = filtered.map(renderProjectCard).join('');
     }
 
-    function renderProjectCard(p) {
-        const contactBadge = getContactBadge(p.contactStatus);
-        const interestBadge = getInterestBadge(p.interestLevel);
-        const paid = getTotalPaid(p);
-        const rem = p.dealType === 'buy' ? Math.max(0, (p.totalPrice || 0) - paid) : 0;
-        const progress = (p.totalPrice || 0) > 0 ? Math.min(100, (paid / p.totalPrice) * 100) : 0;
-        const statusClass = p.status === 'cancelled' ? 'cancelled' : p.status === 'completed' ? 'completed' : '';
+    function renderProjectCard(project) {
+        const contactBadge = getContactBadge(project.contactStatus);
+        const interestBadge = getInterestBadge(project.interestLevel);
+        const paid = getTotalPaid(project);
+        const remaining = project.dealType === 'buy' ? Math.max(0, (project.totalPrice || 0) - paid) : 0;
+        const progress = (project.totalPrice || 0) > 0 ? Math.min(100, (paid / project.totalPrice) * 100) : 0;
+        const statusClass = project.status === 'cancelled' ? 'cancelled' : project.status === 'completed' ? 'completed' : '';
+        const dueInfo = getRentDueInsight(project);
+        const attentionClass = dueInfo ? 'needs-attention' : '';
 
-        let priceHtml = '';
-        if (p.dealType === 'buy') {
-            priceHtml = `<div class="project-price">${formatCurrency(p.totalPrice || 0)}</div>`;
-        } else {
-            priceHtml = `<div class="project-price">${formatCurrency(p.monthlyRent || 0)}<small>/mo</small></div>`;
-        }
+        const priceHtml = project.dealType === 'buy'
+            ? `<div class="project-price">${formatCurrency(project.totalPrice || 0)}</div>`
+            : `<div class="project-price">${formatCurrency(project.monthlyRent || 0)}<small>/mo</small></div>`;
 
-        let paymentBadge = '';
-        if (p.dealType === 'buy') {
-            const ps = getPaymentBadge(p.paymentStatus);
-            paymentBadge = `<span class="badge ${ps.cls}">${ps.label}</span>`;
-        }
+        const paymentBadge = project.dealType === 'buy'
+            ? (() => {
+                const status = getPaymentBadge(project.paymentStatus);
+                return `<span class="badge ${status.cls}">${status.label}</span>`;
+            })()
+            : '';
 
-        const domainBadge = p.hasDomain
+        const domainBadge = project.hasDomain
             ? '<span class="badge badge-green">Has Domain</span>'
             : '<span class="badge badge-gray">No Domain</span>';
 
-        const dealBadge = p.dealType === 'buy'
+        const dealBadge = project.dealType === 'buy'
             ? '<span class="badge badge-sky">Buy</span>'
             : '<span class="badge badge-purple">Rent</span>';
 
-        // Details section
-        let detailsHtml = `
-            <div class="project-details">
-                <div class="details-grid">
-                    <div class="detail-section">
-                        <h4>Client</h4>
-                        ${p.clientPhone ? `<p>📞 ${p.clientPhone}</p>` : ''}
-                        ${p.clientEmail ? `<p>✉️ ${p.clientEmail}</p>` : ''}
-                        ${p.hasDomain && p.domainName ? `<p>🌐 ${p.domainName}</p>` : ''}
-                        ${!p.clientPhone && !p.clientEmail ? '<p>No contact info</p>' : ''}
-                    </div>
-                    <div class="detail-section">
-                        <h4>${p.dealType === 'buy' ? 'Payment Progress' : 'Rent Info'}</h4>
-                        ${p.dealType === 'buy' ? `
-                            <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
-                            <p>Paid: <strong style="color:var(--success)">${formatCurrency(paid)}</strong></p>
-                            <p>Remaining: <strong style="color:var(--warning)">${formatCurrency(rem)}</strong></p>
-                        ` : `
-                            <p>Monthly: <strong>${formatCurrency(p.monthlyRent || 0)}</strong></p>
-                            <p>Due day: <strong>${p.rentDueDay || 1}</strong> of each month</p>
-                            ${p.rentStartDate ? `<p>Started: <strong>${formatDate(p.rentStartDate)}</strong></p>` : ''}
-                        `}
-                    </div>
-                    <div class="detail-section">
-                        <h4>Recent Payments</h4>
-                        ${(p.payments || []).length === 0 ? '<p>No payments recorded</p>' : `
-                            <div class="payment-list">
-                                ${(p.payments || []).slice(-5).reverse().map(pay => `
-                                    <div class="payment-item">
-                                        <span style="color:var(--success);font-weight:600">${formatCurrency(pay.amount)}</span>
-                                        <span>${pay.note ? pay.note + ' — ' : ''}${formatDate(pay.date)}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        `}
-                    </div>
-                </div>
-                ${p.notes ? `<div style="margin-top:12px;padding:10px 14px;background:var(--bg);border-radius:8px;font-size:13px;color:var(--text-muted)">${escapeHtml(p.notes)}</div>` : ''}
-                <div class="project-meta">
-                    <div class="project-meta-info">Created by <strong>${p.createdBy || '—'}</strong> on ${formatDate(p.createdAt)}${p.updatedAt && p.updatedAt !== p.createdAt ? ' · Updated ' + formatDate(p.updatedAt) : ''}</div>
-                    <div class="project-actions">
-                        <button class="btn btn-success btn-sm" onclick="openPaymentModal('${p.id}')">💰 Add Payment</button>
-                        <button class="btn btn-info btn-sm" onclick="editProject('${p.id}')">✏️ Edit</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteProject('${p.id}')">🗑️ Delete</button>
-                    </div>
-                </div>
-            </div>
-        `;
+        const dueBadge = dueInfo
+            ? `<span class="badge ${dueInfo.status === 'overdue' ? 'badge-red' : 'badge-amber'}">${dueInfo.status === 'overdue' ? '🚨 Overdue Rent' : '⏰ Due Soon'}</span>`
+            : project.dealType === 'rent'
+                ? '<span class="badge badge-teal">📅 Rent Tracked</span>'
+                : '';
 
         return `
-            <div class="project-card ${statusClass}" id="card-${p.id}">
-                <div class="project-header" onclick="toggleCard('${p.id}')">
+            <div class="project-card ${statusClass} ${attentionClass}" id="card-${project.id}">
+                <div class="project-header" onclick="toggleCard('${project.id}')">
                     <div class="project-name">
-                        ${escapeHtml(p.name)}${p.projectUrl ? ` <a href="${p.projectUrl}" target="_blank" onclick="event.stopPropagation()" style="color:var(--primary);font-size:12px">🔗</a>` : ''}
-                        <small>${escapeHtml(p.clientName || 'No client')}</small>
+                        ${escapeHtml(project.name || 'Untitled Project')}${project.projectUrl ? ` <a href="${escapeAttribute(project.projectUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--primary);font-size:12px">🔗</a>` : ''}
+                        <small>${escapeHtml(project.clientName || 'No client')}</small>
                     </div>
                     <span class="badge ${contactBadge.cls}">${contactBadge.label}</span>
                     <span class="badge ${interestBadge.cls}">${interestBadge.label}</span>
                     ${dealBadge}
                     ${paymentBadge}
+                    ${dueBadge}
                     ${domainBadge}
                     ${priceHtml}
-                    <button class="expand-btn" onclick="event.stopPropagation();toggleCard('${p.id}')">
+                    <button class="expand-btn" onclick="event.stopPropagation();toggleCard('${project.id}')">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                     </button>
                 </div>
-                ${detailsHtml}
+                <div class="project-details">
+                    <div class="details-grid">
+                        <div class="detail-section">
+                            <h4>Client</h4>
+                            ${project.clientPhone ? `<p>📞 ${escapeHtml(project.clientPhone)}</p>` : ''}
+                            ${project.clientEmail ? `<p>✉️ ${escapeHtml(project.clientEmail)}</p>` : ''}
+                            ${project.hasDomain && project.domainName ? `<p>🌐 ${escapeHtml(project.domainName)}</p>` : ''}
+                            ${!project.clientPhone && !project.clientEmail ? '<p>No contact info</p>' : ''}
+                        </div>
+                        <div class="detail-section">
+                            <h4>${project.dealType === 'buy' ? 'Payment Progress' : 'Rent Info'}</h4>
+                            ${project.dealType === 'buy' ? `
+                                <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+                                <p>Paid: <strong style="color:var(--success)">${formatCurrency(paid)}</strong></p>
+                                <p>Remaining: <strong style="color:var(--warning)">${formatCurrency(remaining)}</strong></p>
+                            ` : `
+                                <p>Monthly: <strong>${formatCurrency(project.monthlyRent || 0)}</strong></p>
+                                <p>Due day: <strong>${project.rentDueDay || 1}</strong> of each month</p>
+                                ${project.rentStartDate ? `<p>Started: <strong>${formatDate(project.rentStartDate)}</strong></p>` : ''}
+                                <p>${formatRentInsightLine(dueInfo, project)}</p>
+                            `}
+                        </div>
+                        <div class="detail-section">
+                            <h4>Recent Payments</h4>
+                            ${(project.payments || []).length === 0 ? '<p>No payments recorded</p>' : `
+                                <div class="payment-list">
+                                    ${(project.payments || []).slice().sort((a, b) => (a.date || '').localeCompare(b.date || '')).slice(-5).reverse().map(payment => `
+                                        <div class="payment-item">
+                                            <span style="color:var(--success);font-weight:700">${formatCurrency(payment.amount)}</span>
+                                            <span>${payment.note ? `${escapeHtml(payment.note)} — ` : ''}${formatDate(payment.date)}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                    ${project.notes ? `<div style="margin-top:12px;padding:10px 14px;background:var(--bg);border-radius:12px;font-size:13px;color:var(--text-muted)">${escapeHtml(project.notes)}</div>` : ''}
+                    <div class="project-meta">
+                        <div class="project-meta-info">Created by <strong>${escapeHtml(project.createdBy || '—')}</strong> on ${formatDate(project.createdAt)}${project.updatedAt && project.updatedAt !== project.createdAt ? ' · Updated ' + formatDate(project.updatedAt) : ''}</div>
+                        <div class="project-actions">
+                            <button class="btn btn-success btn-sm" onclick="openPaymentModal('${project.id}')">💰 Add Payment</button>
+                            <button class="btn btn-info btn-sm" onclick="editProject('${project.id}')">✏️ Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteProject('${project.id}')">🗑️ Delete</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         `;
+    }
+
+    function renderCalendar() {
+        renderCalendarWeekdays();
+        renderCalendarGrid();
+        renderSelectedDayEvents();
+    }
+
+    function renderCalendarWeekdays() {
+        const weekdays = document.getElementById('calendarWeekdays');
+        weekdays.innerHTML = WEEKDAY_LABELS.map(day => `<div class="calendar-weekday">${day}</div>`).join('');
+    }
+
+    function renderCalendarGrid() {
+        const monthStart = startOfMonth(currentCalendarMonth);
+        const gridStart = addDays(monthStart, -monthStart.getDay());
+        const monthLabel = monthStart.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+        document.getElementById('calendarMonthLabel').textContent = monthLabel;
+
+        const grid = [];
+        for (let i = 0; i < 42; i++) {
+            const day = addDays(gridStart, i);
+            const dateKey = formatDateInput(day);
+            const dayEvents = getEventsForDate(dateKey);
+            const isCurrentMonth = day.getMonth() === monthStart.getMonth();
+            const isToday = dateKey === formatDateInput(new Date());
+            const isSelected = dateKey === selectedCalendarDate;
+            const cellClasses = [
+                'calendar-day',
+                isCurrentMonth ? '' : 'other-month',
+                isToday ? 'today' : '',
+                isSelected ? 'selected' : ''
+            ].filter(Boolean).join(' ');
+
+            const preview = dayEvents.slice(0, 3).map(event => {
+                const type = getCalendarTypeMeta(event.type);
+                return `<span class="calendar-mini-chip ${type.cls}" title="${escapeAttribute(event.title || type.label)}">${escapeHtml(event.title || type.label)}</span>`;
+            }).join('');
+
+            grid.push(`
+                <button type="button" class="${cellClasses}" onclick="selectCalendarDate('${dateKey}')">
+                    <div class="calendar-day-header">
+                        <span class="calendar-day-number">${day.getDate()}</span>
+                        ${dayEvents.length ? `<span class="event-more">${dayEvents.length}</span>` : ''}
+                    </div>
+                    <div class="calendar-event-stack">
+                        ${preview || ''}
+                        ${dayEvents.length > 3 ? `<span class="event-more">+${dayEvents.length - 3} more</span>` : ''}
+                    </div>
+                </button>
+            `);
+        }
+
+        document.getElementById('calendarGrid').innerHTML = grid.join('');
+    }
+
+    function renderSelectedDayEvents() {
+        const meta = document.getElementById('selectedDayMeta');
+        const list = document.getElementById('selectedDayEvents');
+        const dateKey = selectedCalendarDate;
+        const events = getEventsForDate(dateKey);
+
+        meta.innerHTML = `
+            <strong>${formatLongDate(dateKey)}</strong>
+            <span>${events.length} event${events.length === 1 ? '' : 's'} scheduled</span>
+        `;
+
+        if (!events.length) {
+            list.innerHTML = `
+                <div class="calendar-empty">
+                    No events on this date yet.<br>
+                    Add one to keep client work and rent reminders organized.
+                </div>
+            `;
+            return;
+        }
+
+        list.innerHTML = events.map(event => {
+            const type = getCalendarTypeMeta(event.type);
+            return `
+                <div class="day-event-card">
+                    <div class="day-event-top">
+                        <div>
+                            <div class="event-chip ${type.cls}">${escapeHtml(event.type || type.label)}</div>
+                            <div class="day-event-title" style="margin-top:8px">${escapeHtml(event.title || type.label)}</div>
+                        </div>
+                        <button class="btn btn-danger btn-sm" type="button" onclick="deleteCalendarEvent('${event.id}')">Delete</button>
+                    </div>
+                    ${event.projectName ? `<p><strong style="color:var(--text)">Project:</strong> ${escapeHtml(event.projectName)}</p>` : ''}
+                    ${event.notes ? `<p><strong style="color:var(--text)">Notes:</strong> ${escapeHtml(event.notes)}</p>` : ''}
+                    <p><strong style="color:var(--text)">Created by:</strong> ${escapeHtml(event.createdBy || '—')}</p>
+                </div>
+            `;
+        }).join('');
     }
 
     function toggleCard(id) {
@@ -1146,7 +1793,6 @@
         if (card) card.classList.toggle('expanded');
     }
 
-    // ─── Badge Helpers ───────────────────────────────────────────────────────
     function getContactBadge(status) {
         const map = {
             not_contacted: { label: '⏸ Not Contacted', cls: 'badge-gray' },
@@ -1177,53 +1823,222 @@
         return map[status] || map.not_started;
     }
 
-    // ─── Helpers ─────────────────────────────────────────────────────────────
+    function getCalendarTypeMeta(type) {
+        const map = {
+            '🤝 Meeting with Client': { cls: 'event-type-meeting', label: 'Meeting with Client' },
+            '🎬 Demo Presentation': { cls: 'event-type-demo', label: 'Demo Presentation' },
+            '💰 First Payment': { cls: 'event-type-payment', label: 'First Payment' },
+            '📅 Rent Due (monthly)': { cls: 'event-type-rent-monthly', label: 'Rent Due (monthly)' },
+            '📅 Rent Due (yearly)': { cls: 'event-type-rent-yearly', label: 'Rent Due (yearly)' },
+            '🚀 Project Launch': { cls: 'event-type-launch', label: 'Project Launch' },
+            '📞 Follow-up Call': { cls: 'event-type-followup', label: 'Follow-up Call' },
+            '📋 Contract Signing': { cls: 'event-type-contract', label: 'Contract Signing' },
+            '🎨 Design Review': { cls: 'event-type-review', label: 'Design Review' }
+        };
+        return map[type] || { cls: 'event-type-default', label: type || 'Event' };
+    }
+
     function getTotalPaid(project) {
-        return (project.payments || []).reduce((sum, p) => sum + (p.amount || 0), 0);
+        return (project.payments || []).reduce((sum, payment) => sum + (Number(payment.amount) || 0), 0);
     }
 
     function formatCurrency(amount) {
-        return '₪' + (amount || 0).toLocaleString();
+        return '₪' + (Number(amount) || 0).toLocaleString();
     }
 
-    function formatDate(dateStr) {
-        if (!dateStr) return '—';
-        try {
-            return new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-        } catch { return dateStr; }
+    function parseDateValue(value) {
+        if (!value) return null;
+        if (value instanceof Date) return new Date(value.getFullYear(), value.getMonth(), value.getDate(), 12, 0, 0, 0);
+        if (typeof value === 'string') {
+            const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+            if (match) return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]), 12, 0, 0, 0);
+            const date = new Date(value);
+            if (!Number.isNaN(date.getTime())) return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0, 0);
+        }
+        return null;
+    }
+
+    function formatDate(dateValue) {
+        const date = parseDateValue(dateValue);
+        if (!date) return '—';
+        return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function formatLongDate(dateValue) {
+        const date = parseDateValue(dateValue);
+        if (!date) return '—';
+        return date.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function formatDateInput(date) {
+        const d = parseDateValue(date) || new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
     }
 
     function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function escapeAttribute(str) {
+        return escapeHtml(str);
     }
 
     function generateId() {
-        return Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+        return Math.random().toString(36).slice(2, 9) + Date.now().toString(36);
     }
 
-    // ─── Project Form ────────────────────────────────────────────────────────
+    function startOfMonth(date) {
+        const parsed = parseDateValue(date) || new Date();
+        return new Date(parsed.getFullYear(), parsed.getMonth(), 1, 12, 0, 0, 0);
+    }
+
+    function addDays(date, days) {
+        const d = parseDateValue(date) || new Date();
+        const next = new Date(d);
+        next.setDate(next.getDate() + days);
+        return new Date(next.getFullYear(), next.getMonth(), next.getDate(), 12, 0, 0, 0);
+    }
+
+    function diffInDays(fromDate, toDate) {
+        const start = parseDateValue(fromDate);
+        const end = parseDateValue(toDate);
+        if (!start || !end) return 0;
+        return Math.round((end - start) / 86400000);
+    }
+
+    function getDueDateForMonth(year, monthIndex, dueDay) {
+        const safeDay = Math.min(Math.max(Number(dueDay) || 1, 1), 28);
+        return new Date(year, monthIndex, safeDay, 12, 0, 0, 0);
+    }
+
+    function getFirstApplicableDueDate(project) {
+        const dueDay = Math.min(Math.max(Number(project.rentDueDay) || 1, 1), 28);
+        const startReference = parseDateValue(project.rentStartDate || project.createdAt) || new Date();
+        let dueDate = getDueDateForMonth(startReference.getFullYear(), startReference.getMonth(), dueDay);
+        if (dueDate < startReference) {
+            dueDate = getDueDateForMonth(startReference.getFullYear(), startReference.getMonth() + 1, dueDay);
+        }
+        return dueDate;
+    }
+
+    function hasPaymentForPeriod(project, dueDate) {
+        const payments = project.payments || [];
+        return payments.some(payment => {
+            const paymentDate = parseDateValue(payment.date);
+            return paymentDate &&
+                paymentDate.getFullYear() === dueDate.getFullYear() &&
+                paymentDate.getMonth() === dueDate.getMonth() &&
+                (Number(payment.amount) || 0) > 0;
+        });
+    }
+
+    function getRentDueInsight(project) {
+        if (!project || project.dealType !== 'rent' || project.status !== 'active') return null;
+
+        const firstDue = getFirstApplicableDueDate(project);
+        const today = parseDateValue(new Date());
+        const currentMonthDue = getDueDateForMonth(today.getFullYear(), today.getMonth(), project.rentDueDay || 1);
+
+        let previousApplicableDue = currentMonthDue;
+        if (today < currentMonthDue) {
+            previousApplicableDue = getDueDateForMonth(today.getFullYear(), today.getMonth() - 1, project.rentDueDay || 1);
+        }
+
+        if (previousApplicableDue >= firstDue && today > previousApplicableDue && !hasPaymentForPeriod(project, previousApplicableDue)) {
+            return {
+                status: 'overdue',
+                dueDate: previousApplicableDue,
+                dueDateKey: formatDateInput(previousApplicableDue),
+                daysUntil: diffInDays(today, previousApplicableDue),
+                message: `No payment registered for ${previousApplicableDue.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}.`,
+                project
+            };
+        }
+
+        let nextDue = currentMonthDue;
+        if (today > currentMonthDue) {
+            nextDue = getDueDateForMonth(today.getFullYear(), today.getMonth() + 1, project.rentDueDay || 1);
+        }
+        if (nextDue < firstDue) nextDue = firstDue;
+
+        const daysUntil = diffInDays(today, nextDue);
+        if (daysUntil >= 0 && daysUntil <= 2 && !hasPaymentForPeriod(project, nextDue)) {
+            return {
+                status: 'upcoming',
+                dueDate: nextDue,
+                dueDateKey: formatDateInput(nextDue),
+                daysUntil,
+                message: `Rent for ${nextDue.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })} is due soon.`,
+                project
+            };
+        }
+
+        return null;
+    }
+
+    function getDueAlerts() {
+        return projects
+            .map(getRentDueInsight)
+            .filter(Boolean)
+            .sort((a, b) => {
+                if (a.status !== b.status) return a.status === 'overdue' ? -1 : 1;
+                return a.dueDateKey.localeCompare(b.dueDateKey);
+            });
+    }
+
+    function formatRentInsightLine(dueInfo, project) {
+        if (dueInfo) {
+            if (dueInfo.status === 'overdue') {
+                return `Status: <strong style="color:var(--danger)">Overdue since ${formatDate(dueInfo.dueDateKey)}</strong>`;
+            }
+            return `Status: <strong style="color:var(--warning)">Due on ${formatDate(dueInfo.dueDateKey)}</strong>`;
+        }
+
+        const nextDue = getNextRentDueDate(project);
+        return nextDue
+            ? `Next due: <strong>${formatDate(nextDue)}</strong>`
+            : 'Status: <strong>Schedule not available</strong>';
+    }
+
+    function getNextRentDueDate(project) {
+        if (!project || project.dealType !== 'rent') return null;
+        const today = parseDateValue(new Date());
+        const firstDue = getFirstApplicableDueDate(project);
+        let nextDue = getDueDateForMonth(today.getFullYear(), today.getMonth(), project.rentDueDay || 1);
+        if (today > nextDue) nextDue = getDueDateForMonth(today.getFullYear(), today.getMonth() + 1, project.rentDueDay || 1);
+        if (nextDue < firstDue) nextDue = firstDue;
+        return nextDue;
+    }
+
     function openProjectForm(project) {
         document.getElementById('modalTitle').textContent = project ? 'Edit Project' : 'New Project';
         document.getElementById('editId').value = project ? project.id : '';
-        document.getElementById('fName').value = project ? project.name : '';
+        document.getElementById('fName').value = project ? (project.name || '') : '';
         document.getElementById('fUrl').value = project ? (project.projectUrl || '') : '';
-        document.getElementById('fStatus').value = project ? project.status : 'active';
+        document.getElementById('fStatus').value = project ? (project.status || 'active') : 'active';
         document.getElementById('fClient').value = project ? (project.clientName || '') : '';
         document.getElementById('fPhone').value = project ? (project.clientPhone || '') : '';
         document.getElementById('fEmail').value = project ? (project.clientEmail || '') : '';
-        document.getElementById('fContact').value = project ? project.contactStatus : 'not_contacted';
-        document.getElementById('fInterest').value = project ? project.interestLevel : 'unknown';
-        document.getElementById('fHasDomain').checked = project ? project.hasDomain : false;
+        document.getElementById('fContact').value = project ? (project.contactStatus || 'not_contacted') : 'not_contacted';
+        document.getElementById('fInterest').value = project ? (project.interestLevel || 'unknown') : 'unknown';
+        document.getElementById('fHasDomain').checked = project ? !!project.hasDomain : false;
         document.getElementById('fDomain').value = project ? (project.domainName || '') : '';
-        document.getElementById('fDealType').value = project ? project.dealType : 'buy';
+        document.getElementById('fDealType').value = project ? (project.dealType || 'buy') : 'buy';
         document.getElementById('fTotalPrice').value = project ? (project.totalPrice || '') : '';
-        document.getElementById('fPaymentStatus').value = project ? project.paymentStatus : 'not_started';
+        document.getElementById('fPaymentStatus').value = project ? (project.paymentStatus || 'not_started') : 'not_started';
         document.getElementById('fMonthlyRent').value = project ? (project.monthlyRent || '') : '';
         document.getElementById('fRentDue').value = project ? (project.rentDueDay || '') : '';
         document.getElementById('fRentStart').value = project ? (project.rentStartDate || '') : '';
         document.getElementById('fNotes').value = project ? (project.notes || '') : '';
-
         toggleDomainField();
         toggleDealFields();
         document.getElementById('projectModal').classList.add('active');
@@ -1234,14 +2049,16 @@
     }
 
     function editProject(id) {
-        const project = projects.find(p => p.id === id);
+        const project = projects.find(item => item.id === id);
         if (project) openProjectForm(project);
     }
 
     async function saveProject(e) {
         e.preventDefault();
         const id = document.getElementById('editId').value;
+        const existing = projects.find(item => item.id === id);
         const now = new Date().toISOString();
+        const dealType = document.getElementById('fDealType').value;
 
         const data = {
             name: document.getElementById('fName').value.trim(),
@@ -1254,9 +2071,9 @@
             interestLevel: document.getElementById('fInterest').value,
             hasDomain: document.getElementById('fHasDomain').checked,
             domainName: document.getElementById('fDomain').value.trim(),
-            dealType: document.getElementById('fDealType').value,
+            dealType,
             totalPrice: Number(document.getElementById('fTotalPrice').value) || 0,
-            paymentStatus: document.getElementById('fPaymentStatus').value,
+            paymentStatus: dealType === 'buy' ? document.getElementById('fPaymentStatus').value : (existing?.paymentStatus || 'not_started'),
             monthlyRent: Number(document.getElementById('fMonthlyRent').value) || 0,
             rentDueDay: Number(document.getElementById('fRentDue').value) || 1,
             rentStartDate: document.getElementById('fRentStart').value,
@@ -1268,10 +2085,12 @@
             if (id) {
                 await projectsRef.doc(id).update(data);
             } else {
-                data.createdAt = now;
-                data.createdBy = currentUser;
-                data.payments = [];
-                await projectsRef.add(data);
+                await projectsRef.add({
+                    ...data,
+                    createdAt: now,
+                    createdBy: currentUser,
+                    payments: []
+                });
             }
             closeProjectForm();
         } catch (err) {
@@ -1288,38 +2107,50 @@
         }
     }
 
-    // ─── Payment Modal ───────────────────────────────────────────────────────
     function openPaymentModal(id) {
-        const project = projects.find(p => p.id === id);
+        const project = projects.find(item => item.id === id);
         if (!project) return;
 
+        const dueInfo = getRentDueInsight(project);
         document.getElementById('paymentProjectId').value = id;
-        document.getElementById('paymentProjectName').textContent = project.name;
+        document.getElementById('paymentProjectName').textContent = project.name || 'Untitled Project';
         document.getElementById('pAmount').value = '';
-        document.getElementById('pDate').value = new Date().toISOString().split('T')[0];
+        document.getElementById('pDate').value = formatDateInput(new Date());
         document.getElementById('pNote').value = '';
 
-        const paid = getTotalPaid(project);
-        const rem = Math.max(0, (project.totalPrice || 0) - paid);
-
-        document.getElementById('paymentSummary').innerHTML = `
-            <div class="payment-summary-row"><span class="label">Total Price:</span><span class="value">${formatCurrency(project.totalPrice)}</span></div>
-            <div class="payment-summary-row"><span class="label">Already Paid:</span><span class="value green">${formatCurrency(paid)}</span></div>
-            <div class="payment-summary-row"><span class="label">Remaining:</span><span class="value amber">${formatCurrency(rem)}</span></div>
-        `;
+        if (project.dealType === 'buy') {
+            const paid = getTotalPaid(project);
+            const remaining = Math.max(0, (project.totalPrice || 0) - paid);
+            document.getElementById('paymentSummary').innerHTML = `
+                <div class="payment-summary-row"><span class="label">Total Price:</span><span class="value">${formatCurrency(project.totalPrice)}</span></div>
+                <div class="payment-summary-row"><span class="label">Already Paid:</span><span class="value green">${formatCurrency(paid)}</span></div>
+                <div class="payment-summary-row"><span class="label">Remaining:</span><span class="value amber">${formatCurrency(remaining)}</span></div>
+            `;
+        } else {
+            const nextDue = getNextRentDueDate(project);
+            document.getElementById('paymentSummary').innerHTML = `
+                <div class="payment-summary-row"><span class="label">Monthly Rent:</span><span class="value">${formatCurrency(project.monthlyRent)}</span></div>
+                <div class="payment-summary-row"><span class="label">Due Day:</span><span class="value">${project.rentDueDay || 1} each month</span></div>
+                <div class="payment-summary-row"><span class="label">Next Due:</span><span class="value ${dueInfo?.status === 'overdue' ? 'red' : 'amber'}">${nextDue ? formatDate(nextDue) : '—'}</span></div>
+                ${dueInfo ? `<div class="payment-summary-row"><span class="label">Alert:</span><span class="value ${dueInfo.status === 'overdue' ? 'red' : 'amber'}">${escapeHtml(dueInfo.status === 'overdue' ? 'Overdue payment missing' : 'Payment due soon')}</span></div>` : ''}
+            `;
+        }
 
         let historyHtml = '';
         if ((project.payments || []).length > 0) {
-            historyHtml = `<h4 style="font-size:13px;font-weight:600;margin-bottom:8px">Payment History</h4>`;
-            historyHtml += (project.payments || []).slice().reverse().map(p => `
-                <div class="payment-item">
-                    <span style="color:var(--success);font-weight:600">${formatCurrency(p.amount)}</span>
-                    <span>${p.note ? escapeHtml(p.note) + ' — ' : ''}${formatDate(p.date)}</span>
-                </div>
-            `).join('');
+            historyHtml = `<h4 style="font-size:13px;font-weight:700;margin-bottom:8px">Payment History</h4>`;
+            historyHtml += (project.payments || [])
+                .slice()
+                .sort((a, b) => (a.date || '').localeCompare(b.date || ''))
+                .reverse()
+                .map(payment => `
+                    <div class="payment-item">
+                        <span style="color:var(--success);font-weight:700">${formatCurrency(payment.amount)}</span>
+                        <span>${payment.note ? `${escapeHtml(payment.note)} — ` : ''}${formatDate(payment.date)}</span>
+                    </div>
+                `).join('');
         }
         document.getElementById('paymentHistory').innerHTML = historyHtml;
-
         document.getElementById('paymentModal').classList.add('active');
     }
 
@@ -1330,7 +2161,7 @@
     async function savePayment(e) {
         e.preventDefault();
         const id = document.getElementById('paymentProjectId').value;
-        const project = projects.find(p => p.id === id);
+        const project = projects.find(item => item.id === id);
         if (!project) return;
 
         const newPayment = {
@@ -1341,15 +2172,19 @@
         };
 
         const payments = [...(project.payments || []), newPayment];
-        const totalPaid = payments.reduce((sum, p) => sum + (p.amount || 0), 0);
-        let paymentStatus = 'partial';
-        if (totalPaid === 0) paymentStatus = 'not_started';
-        else if (totalPaid >= (project.totalPrice || 0)) paymentStatus = 'full';
+        let paymentStatus = project.paymentStatus || 'not_started';
+
+        if (project.dealType === 'buy') {
+            const totalPaid = payments.reduce((sum, payment) => sum + (Number(payment.amount) || 0), 0);
+            paymentStatus = 'partial';
+            if (totalPaid === 0) paymentStatus = 'not_started';
+            else if (totalPaid >= (project.totalPrice || 0)) paymentStatus = 'full';
+        }
 
         try {
             await projectsRef.doc(id).update({
-                payments: payments,
-                paymentStatus: paymentStatus,
+                payments,
+                paymentStatus,
                 updatedAt: new Date().toISOString()
             });
             closePaymentModal();
@@ -1358,17 +2193,76 @@
         }
     }
 
-    // ─── Toggle Helpers ──────────────────────────────────────────────────────
+    function openEventModal(prefillDate) {
+        populateProjectOptions();
+        ensureCalendarTypeOptions();
+        document.getElementById('eDate').value = prefillDate || selectedCalendarDate || formatDateInput(new Date());
+        document.getElementById('eType').value = CALENDAR_EVENT_TYPES[0];
+        document.getElementById('eTitle').value = '';
+        document.getElementById('eProjectName').value = '';
+        document.getElementById('eNotes').value = '';
+        document.getElementById('eventModal').classList.add('active');
+    }
+
+    function closeEventModal() {
+        document.getElementById('eventModal').classList.remove('active');
+    }
+
+    async function saveCalendarEvent(e) {
+        e.preventDefault();
+        const id = generateId();
+        const eventData = {
+            id,
+            date: document.getElementById('eDate').value,
+            type: document.getElementById('eType').value,
+            title: document.getElementById('eTitle').value.trim(),
+            projectName: document.getElementById('eProjectName').value || '',
+            notes: document.getElementById('eNotes').value.trim(),
+            createdBy: currentUser,
+            createdAt: new Date().toISOString()
+        };
+
+        try {
+            await calendarEventsRef.doc(id).set(eventData);
+            selectedCalendarDate = eventData.date;
+            currentCalendarMonth = startOfMonth(parseDateValue(eventData.date));
+            closeEventModal();
+            renderCalendar();
+        } catch (err) {
+            alert('Error saving event: ' + err.message);
+        }
+    }
+
+    async function deleteCalendarEvent(id) {
+        if (!confirm('Delete this calendar event?')) return;
+        try {
+            await calendarEventsRef.doc(id).delete();
+        } catch (err) {
+            alert('Error deleting event: ' + err.message);
+        }
+    }
+
+    function ensureCalendarTypeOptions() {
+        const select = document.getElementById('eType');
+        if (!select || select.options.length) return;
+        select.innerHTML = CALENDAR_EVENT_TYPES.map(type => `<option value="${escapeAttribute(type)}">${escapeHtml(type)}</option>`).join('');
+    }
+
+    function populateProjectOptions() {
+        const select = document.getElementById('eProjectName');
+        if (!select) return;
+        const options = [`<option value="">No linked project</option>`]
+            .concat(projects.map(project => `<option value="${escapeAttribute(project.name || '')}">${escapeHtml(project.name || 'Untitled Project')}</option>`));
+        select.innerHTML = options.join('');
+    }
+
     function toggleDealFields() {
         const dealType = document.getElementById('fDealType').value;
         const isBuy = dealType === 'buy';
-        document.getElementById('totalPriceGroup').style.display = isBuy ? '' : '';
         document.getElementById('paymentStatusGroup').style.display = isBuy ? '' : 'none';
         document.getElementById('monthlyRentGroup').style.display = isBuy ? 'none' : '';
         document.getElementById('rentDueGroup').style.display = isBuy ? 'none' : '';
         document.getElementById('rentStartGroup').style.display = isBuy ? 'none' : '';
-
-        // Change label for totalPrice in rent mode
         const priceLabel = document.querySelector('#totalPriceGroup label');
         if (priceLabel) priceLabel.textContent = isBuy ? 'Total Price (ILS)' : 'Initial Setup Price (ILS)';
     }
@@ -1377,23 +2271,88 @@
         document.getElementById('domainNameGroup').style.display = document.getElementById('fHasDomain').checked ? '' : 'none';
     }
 
-    document.getElementById('fHasDomain').addEventListener('change', toggleDomainField);
+    function setActiveTab(tab) {
+        activeTab = tab;
+        const isProjects = tab === 'projects';
+        document.getElementById('projectsTab').classList.toggle('active', isProjects);
+        document.getElementById('calendarTab').classList.toggle('active', !isProjects);
+        document.getElementById('tabProjectsBtn').classList.toggle('active', isProjects);
+        document.getElementById('tabCalendarBtn').classList.toggle('active', !isProjects);
+        document.getElementById('tabProjectsBtn').setAttribute('aria-selected', String(isProjects));
+        document.getElementById('tabCalendarBtn').setAttribute('aria-selected', String(!isProjects));
+        updatePrimaryAction();
+        if (!isProjects) renderCalendar();
+    }
 
-    // ─── Filter Listeners ────────────────────────────────────────────────────
+    function updatePrimaryAction() {
+        document.getElementById('primaryActionLabel').textContent = activeTab === 'projects' ? 'New Project' : 'Add Event';
+    }
+
+    function handlePrimaryAction() {
+        if (activeTab === 'projects') openProjectForm();
+        else openEventModal();
+    }
+
+    function changeCalendarMonth(offset) {
+        currentCalendarMonth = new Date(currentCalendarMonth.getFullYear(), currentCalendarMonth.getMonth() + offset, 1, 12, 0, 0, 0);
+        renderCalendar();
+    }
+
+    function goToToday() {
+        const todayKey = formatDateInput(new Date());
+        selectedCalendarDate = todayKey;
+        currentCalendarMonth = startOfMonth(new Date());
+        renderCalendar();
+    }
+
+    function selectCalendarDate(dateKey) {
+        selectedCalendarDate = dateKey;
+        const selectedDate = parseDateValue(dateKey);
+        if (selectedDate) currentCalendarMonth = startOfMonth(selectedDate);
+        renderCalendar();
+    }
+
+    function getEventsForDate(dateKey) {
+        return calendarEvents
+            .filter(event => event.date === dateKey)
+            .sort((a, b) => (a.type || '').localeCompare(b.type || '') || (a.title || '').localeCompare(b.title || ''));
+    }
+
+    function applyDueAttentionFilter() {
+        document.getElementById('filterDue').value = 'attention';
+        renderProjects();
+        setActiveTab('projects');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function focusProject(id) {
+        setActiveTab('projects');
+        renderProjects();
+        const card = document.getElementById('card-' + id);
+        if (!card) return;
+        if (!card.classList.contains('expanded')) card.classList.add('expanded');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    document.getElementById('fHasDomain').addEventListener('change', toggleDomainField);
     document.getElementById('searchInput').addEventListener('input', renderProjects);
     document.getElementById('filterStatus').addEventListener('change', renderProjects);
     document.getElementById('filterDeal').addEventListener('change', renderProjects);
     document.getElementById('filterContact').addEventListener('change', renderProjects);
+    document.getElementById('filterDue').addEventListener('change', renderProjects);
 
-    // Close modals on overlay click
     document.getElementById('projectModal').addEventListener('click', function(e) {
         if (e.target === this) closeProjectForm();
     });
+
     document.getElementById('paymentModal').addEventListener('click', function(e) {
         if (e.target === this) closePaymentModal();
     });
 
-    // ─── Init ────────────────────────────────────────────────────────────────
+    document.getElementById('eventModal').addEventListener('click', function(e) {
+        if (e.target === this) closeEventModal();
+    });
+
     checkSession();
     </script>
 </body>
