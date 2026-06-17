@@ -2367,6 +2367,7 @@
     }
 
     // Mark rent as paid from the calendar — records a payment on the project
+    // Also pays any earlier unpaid months automatically
     async function markRentPaid(projectId, dateKey) {
         const project = projects.find(p => p.id === projectId);
         if (!project) { alert('Project not found.'); return; }
@@ -2374,17 +2375,46 @@
         const amount = project.monthlyRent || 0;
         if (amount <= 0) { alert('Monthly rent amount is ₪0. Set a rent amount on the project first.'); return; }
 
-        const periodLabel = parseDateValue(dateKey).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-        if (!confirm(`Record rent payment of ${formatCurrency(amount)} for ${project.name} (${periodLabel})?`)) return;
+        const clickedDate = parseDateValue(dateKey);
+        const dueDay = Math.min(Math.max(Number(project.rentDueDay) || 1, 1), 28);
+        const firstDueDate = getFirstApplicableDueDate(project);
 
-        const newPayment = {
+        // Find all unpaid months from firstDue up to and including the clicked month
+        const unpaidMonths = [];
+        let checkDate = new Date(firstDueDate.getFullYear(), firstDueDate.getMonth(), dueDay, 12, 0, 0, 0);
+
+        while (checkDate <= clickedDate) {
+            if (!hasPaymentForPeriod(project, checkDate)) {
+                unpaidMonths.push(new Date(checkDate));
+            }
+            checkDate = new Date(checkDate.getFullYear(), checkDate.getMonth() + 1, dueDay, 12, 0, 0, 0);
+        }
+
+        if (unpaidMonths.length === 0) {
+            alert('This period is already paid.');
+            return;
+        }
+
+        const totalAmount = amount * unpaidMonths.length;
+        const monthNames = unpaidMonths.map(d => d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }));
+
+        let msg;
+        if (unpaidMonths.length === 1) {
+            msg = `Record rent payment of ${formatCurrency(amount)} for ${project.name} (${monthNames[0]})?`;
+        } else {
+            msg = `Record ${unpaidMonths.length} rent payments totaling ${formatCurrency(totalAmount)} for ${project.name}?\n\nMonths: ${monthNames.join(', ')}`;
+        }
+
+        if (!confirm(msg)) return;
+
+        const newPayments = unpaidMonths.map(d => ({
             id: generateId(),
             amount: amount,
-            date: dateKey,
-            note: 'Rent — ' + periodLabel
-        };
+            date: formatDateInput(d),
+            note: 'Rent — ' + d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
+        }));
 
-        const payments = [...(project.payments || []), newPayment];
+        const payments = [...(project.payments || []), ...newPayments];
 
         try {
             await projectsRef.doc(projectId).update({
