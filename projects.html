@@ -2000,41 +2000,60 @@
 
     function getRentDueInsight(project) {
         if (!project || project.dealType !== 'rent' || project.status !== 'active') return null;
+        if (!project.rentDueDay) return null;
 
-        const firstDue = getFirstApplicableDueDate(project);
-        const today = parseDateValue(new Date());
-        const currentMonthDue = getDueDateForMonth(today.getFullYear(), today.getMonth(), project.rentDueDay || 1);
+        const dueDay = Math.min(Math.max(Number(project.rentDueDay) || 1, 1), 28);
+        const today = new Date();
+        const todayNorm = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0, 0, 0);
 
-        let previousApplicableDue = currentMonthDue;
-        if (today < currentMonthDue) {
-            previousApplicableDue = getDueDateForMonth(today.getFullYear(), today.getMonth() - 1, project.rentDueDay || 1);
+        // Current month's due date
+        const thisMonthDue = new Date(todayNorm.getFullYear(), todayNorm.getMonth(), dueDay, 12, 0, 0, 0);
+        // Previous month's due date
+        const prevMonthDue = new Date(todayNorm.getFullYear(), todayNorm.getMonth() - 1, dueDay, 12, 0, 0, 0);
+        // Next month's due date
+        const nextMonthDue = new Date(todayNorm.getFullYear(), todayNorm.getMonth() + 1, dueDay, 12, 0, 0, 0);
+
+        // Determine the start boundary
+        const startDate = parseDateValue(project.rentStartDate || project.createdAt);
+        const firstDueDate = startDate ? getFirstApplicableDueDate(project) : thisMonthDue;
+
+        // Check THIS month's due date first
+        if (thisMonthDue >= firstDueDate) {
+            const daysDiff = Math.round((thisMonthDue.getTime() - todayNorm.getTime()) / 86400000);
+
+            if (daysDiff < 0 && !hasPaymentForPeriod(project, thisMonthDue)) {
+                // Due date already passed this month, no payment
+                return {
+                    status: 'overdue',
+                    dueDate: thisMonthDue,
+                    dueDateKey: formatDateInput(thisMonthDue),
+                    daysUntil: daysDiff,
+                    message: 'Rent for ' + thisMonthDue.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) + ' is overdue!',
+                    project
+                };
+            }
+
+            if (daysDiff >= 0 && daysDiff <= 2 && !hasPaymentForPeriod(project, thisMonthDue)) {
+                // Due within 2 days (including today)
+                return {
+                    status: 'upcoming',
+                    dueDate: thisMonthDue,
+                    dueDateKey: formatDateInput(thisMonthDue),
+                    daysUntil: daysDiff,
+                    message: 'Rent for ' + thisMonthDue.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) + ' is due ' + (daysDiff === 0 ? 'today!' : 'in ' + daysDiff + ' day' + (daysDiff > 1 ? 's' : '') + '.'),
+                    project
+                };
+            }
         }
 
-        if (previousApplicableDue >= firstDue && today > previousApplicableDue && !hasPaymentForPeriod(project, previousApplicableDue)) {
+        // Check PREVIOUS month's due date (maybe still unpaid)
+        if (prevMonthDue >= firstDueDate && !hasPaymentForPeriod(project, prevMonthDue)) {
             return {
                 status: 'overdue',
-                dueDate: previousApplicableDue,
-                dueDateKey: formatDateInput(previousApplicableDue),
-                daysUntil: diffInDays(today, previousApplicableDue),
-                message: `No payment registered for ${previousApplicableDue.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}.`,
-                project
-            };
-        }
-
-        let nextDue = currentMonthDue;
-        if (today > currentMonthDue) {
-            nextDue = getDueDateForMonth(today.getFullYear(), today.getMonth() + 1, project.rentDueDay || 1);
-        }
-        if (nextDue < firstDue) nextDue = firstDue;
-
-        const daysUntil = diffInDays(today, nextDue);
-        if (daysUntil >= 0 && daysUntil <= 2 && !hasPaymentForPeriod(project, nextDue)) {
-            return {
-                status: 'upcoming',
-                dueDate: nextDue,
-                dueDateKey: formatDateInput(nextDue),
-                daysUntil,
-                message: `Rent for ${nextDue.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })} is due soon.`,
+                dueDate: prevMonthDue,
+                dueDateKey: formatDateInput(prevMonthDue),
+                daysUntil: Math.round((prevMonthDue.getTime() - todayNorm.getTime()) / 86400000),
+                message: 'Rent for ' + prevMonthDue.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) + ' was never paid!',
                 project
             };
         }
@@ -2455,23 +2474,24 @@
         const date = parseDateValue(dateKey);
         if (!date) return [];
         const events = [];
+        const today = new Date();
+        const todayNorm = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0, 0, 0);
 
         projects.forEach(project => {
             if (project.dealType !== 'rent' || project.status !== 'active') return;
             const dueDay = Math.min(Math.max(Number(project.rentDueDay) || 1, 1), 28);
             const startDate = parseDateValue(project.rentStartDate || project.createdAt);
-            if (!startDate) return;
+            const firstDueDate = startDate ? getFirstApplicableDueDate(project) : date;
 
             // Check if this date's day matches dueDay
             if (date.getDate() !== dueDay) return;
 
             // Must be on or after the first due month
-            const firstDue = getFirstApplicableDueDate(project);
-            if (date < firstDue) return;
+            if (date < firstDueDate) return;
 
             const hasPaid = hasPaymentForPeriod(project, date);
-            const isPast = date < parseDateValue(new Date());
-            const isToday = dateKey === formatDateInput(new Date());
+            const isPast = date.getTime() < todayNorm.getTime();
+            const isToday = date.getTime() === todayNorm.getTime();
 
             events.push({
                 id: '__rent_' + project.id + '_' + dateKey,
@@ -2496,15 +2516,17 @@
     // Get rent due date keys for a given month (for highlighting)
     function getRentDueDatesForMonth(year, month) {
         const result = {}; // dateKey → { due: true, warning: bool, overdue: bool }
-        const today = parseDateValue(new Date());
+        const today = new Date();
+        const todayNorm = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0, 0, 0);
 
         projects.forEach(project => {
             if (project.dealType !== 'rent' || project.status !== 'active') return;
             const dueDay = Math.min(Math.max(Number(project.rentDueDay) || 1, 1), 28);
-            const firstDue = getFirstApplicableDueDate(project);
+            const startDate = parseDateValue(project.rentStartDate || project.createdAt);
+            const firstDueDate = startDate ? getFirstApplicableDueDate(project) : new Date(year, month, dueDay, 12, 0, 0, 0);
 
             const dueDate = new Date(year, month, dueDay, 12, 0, 0, 0);
-            if (dueDate < firstDue) return;
+            if (dueDate < firstDueDate) return;
 
             const dueDateKey = formatDateInput(dueDate);
             const hasPaid = hasPaymentForPeriod(project, dueDate);
@@ -2512,13 +2534,16 @@
 
             const dayBefore = addDays(dueDate, -1);
             const dayBeforeKey = formatDateInput(dayBefore);
-            const isPast = dueDate < today;
+            const isPast = dueDate.getTime() < todayNorm.getTime();
+            const isToday = dueDate.getTime() === todayNorm.getTime();
+            const isTomorrow = Math.round((dueDate.getTime() - todayNorm.getTime()) / 86400000) === 1;
 
+            // Due date itself: red if past/today, amber if tomorrow
             if (!result[dueDateKey]) result[dueDateKey] = { due: false, warning: false, overdue: false };
             result[dueDateKey].due = true;
             if (isPast) result[dueDateKey].overdue = true;
 
-            // Day before = warning
+            // Day before: warning (yellow) if it's today or in the future
             if (dayBefore.getMonth() === month) {
                 if (!result[dayBeforeKey]) result[dayBeforeKey] = { due: false, warning: false, overdue: false };
                 result[dayBeforeKey].warning = true;
