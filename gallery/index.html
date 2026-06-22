@@ -3,174 +3,458 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>معرض التصاميم | كل الأنماط</title>
+  <title>معرض التصاميم | ADA Web Designer</title>
+  <meta name="description" content="معرض 33 تصميم متجر إلكتروني بأنماط مختلفة ومتنوعة ضمن واجهة light minimal متناسقة مع الصفحة الرئيسية.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      font-family: 'Tajawal', sans-serif;
-      background: #0a0a0f;
-      color: #fff;
-      min-height: 100vh;
-      overflow-x: hidden;
+    :root {
+      --bg: #fafafa;
+      --surface: rgba(255, 255, 255, 0.72);
+      --surface-strong: rgba(255, 255, 255, 0.9);
+      --line: rgba(124, 58, 237, 0.12);
+      --text: #1a1a2e;
+      --muted: #64748b;
+      --violet: #7c3aed;
+      --cyan: #06b6d4;
+      --shadow: 0 24px 64px rgba(15, 23, 42, 0.08);
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.06);
+      --radius: 28px;
     }
 
-    .bg-grid {
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Tajawal', 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      inset: -20%;
+      pointer-events: none;
+      z-index: -4;
+      background:
+        radial-gradient(circle at 18% 16%, rgba(124, 58, 237, 0.11), transparent 28%),
+        radial-gradient(circle at 80% 18%, rgba(6, 182, 212, 0.1), transparent 25%),
+        radial-gradient(circle at 75% 78%, rgba(124, 58, 237, 0.08), transparent 24%),
+        radial-gradient(circle at 12% 76%, rgba(6, 182, 212, 0.07), transparent 22%);
+      filter: blur(12px);
+      animation: meshShift 18s ease-in-out infinite alternate;
+    }
+
+    body::after {
+      opacity: 0.72;
+      transform: scale(1.08);
+      animation-duration: 24s;
+    }
+
+    @keyframes meshShift {
+      0% { transform: translate3d(-1%, 0, 0) scale(1); }
+      50% { transform: translate3d(1.4%, -1.1%, 0) scale(1.04); }
+      100% { transform: translate3d(-1%, 1.5%, 0) scale(1.02); }
+    }
+
+    .page-noise {
       position: fixed;
       inset: 0;
-      background-image: 
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      z-index: 0;
+      z-index: -3;
+      pointer-events: none;
+      opacity: 0.34;
+      background-image: radial-gradient(rgba(15, 23, 42, 0.045) 0.8px, transparent 0.8px);
+      background-size: 22px 22px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.62), transparent 92%);
     }
 
-    .bg-glow {
+    .glow {
       position: fixed;
-      width: 600px;
-      height: 600px;
+      top: 0;
+      left: 0;
+      width: 340px;
+      height: 340px;
       border-radius: 50%;
-      filter: blur(120px);
-      opacity: 0.15;
-      z-index: 0;
-      animation: floatGlow 12s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.5;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.16), rgba(6, 182, 212, 0.08) 42%, transparent 72%);
+      transform: translate3d(-170px, -170px, 0);
+      filter: blur(12px);
     }
 
-    .glow-1 { top: -200px; right: -100px; background: #6366f1; }
-    .glow-2 { bottom: -200px; left: -100px; background: #ec4899; animation-delay: -6s; }
-    .glow-3 { top: 40%; left: 30%; background: #06b6d4; animation-delay: -3s; }
-
-    @keyframes floatGlow {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(30px, -20px) scale(1.1); }
+    .floating-shapes {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -2;
+      overflow: hidden;
     }
 
-    header {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      padding: 60px 20px 40px;
-    }
-
-    header h1 {
-      font-family: 'Cairo', sans-serif;
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 800;
-      background: linear-gradient(135deg, #6366f1, #ec4899, #06b6d4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 12px;
-    }
-
-    header p {
-      font-size: 1.1rem;
-      color: #94a3b8;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .counter {
-      display: inline-block;
-      margin-top: 16px;
-      padding: 8px 20px;
-      border-radius: 50px;
-      background: rgba(99, 102, 241, 0.15);
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      color: #a5b4fc;
-      font-size: 0.9rem;
-    }
-
-    .search-bar {
-      position: relative;
-      z-index: 10;
-      max-width: 500px;
-      margin: 0 auto 40px;
-      padding: 0 20px;
-    }
-
-    .search-bar input {
-      width: 100%;
-      padding: 14px 24px;
-      border-radius: 50px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.05);
-      color: #fff;
-      font-size: 1rem;
-      font-family: 'Tajawal', sans-serif;
+    .shape {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.48);
+      border: 1px solid rgba(124, 58, 237, 0.1);
+      box-shadow: 0 10px 28px rgba(124, 58, 237, 0.07);
       backdrop-filter: blur(10px);
-      transition: all 0.3s;
+      -webkit-backdrop-filter: blur(10px);
+      opacity: 0.84;
+      animation: floatShape 11s ease-in-out infinite;
     }
 
-    .search-bar input::placeholder { color: #64748b; }
-    .search-bar input:focus {
-      outline: none;
-      border-color: #6366f1;
-      box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+    .shape.circle { border-radius: 50%; }
+    .shape.square { border-radius: 18px; }
+    .shape.diamond { border-radius: 16px; transform: rotate(45deg); }
+    .shape.s1 { top: 14%; left: 8%; width: 14px; height: 14px; animation-delay: -2s; }
+    .shape.s2 { top: 24%; right: 12%; width: 22px; height: 22px; animation-delay: -5s; }
+    .shape.s3 { top: 56%; left: 10%; width: 18px; height: 18px; animation-delay: -1s; }
+    .shape.s4 { top: 70%; right: 16%; width: 12px; height: 12px; animation-delay: -6s; }
+    .shape.s5 { top: 82%; left: 24%; width: 30px; height: 30px; animation-delay: -8s; }
+    .shape.s6 { top: 38%; right: 30%; width: 10px; height: 10px; animation-delay: -3s; }
+
+    @keyframes floatShape {
+      0% { margin-top: 0; }
+      50% { margin-top: -16px; }
+      100% { margin-top: 0; }
     }
 
-    .gallery {
-      position: relative;
-      z-index: 10;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 24px;
-      padding: 0 40px 80px;
-      max-width: 1400px;
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 18px 18px 0;
+    }
+
+    .nav-shell {
+      width: min(1180px, calc(100% - 8px));
       margin: 0 auto;
+      padding: 14px 18px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .site-nav.scrolled .nav-shell {
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .back-link,
+    .nav-chip,
+    .count-badge,
+    .tag-pill,
+    .card-tags span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      background: rgba(255, 255, 255, 0.58);
+      color: var(--text);
+      font-weight: 700;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease, color 0.25s ease;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.04);
+    }
+
+    .back-link:hover,
+    .card:hover,
+    .search-shell:hover {
+      transform: translateY(-2px);
+    }
+
+    .nav-chip {
+      font-family: 'Inter', sans-serif;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 30px 0 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .glass {
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .hero {
+      text-align: center;
+      padding: 38px 28px;
+      border-radius: calc(var(--radius) + 8px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(6, 182, 212, 0.03));
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tag-pill,
+    .count-badge {
+      color: var(--muted);
+    }
+
+    .tag-pill::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+      box-shadow: 0 0 0 6px rgba(124, 58, 237, 0.08);
+    }
+
+    .hero h1 {
+      margin: 18px 0 12px;
+      font-size: clamp(2.7rem, 6vw, 5rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      color: var(--text);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p,
+    .search-note,
+    .card-body p,
+    .empty-state,
+    footer {
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .count-badge {
+      font-family: 'Inter', sans-serif;
+      background: rgba(124, 58, 237, 0.1);
+      color: #6d28d9;
+    }
+
+    .search-wrap {
+      margin-top: 26px;
+      display: grid;
+      gap: 12px;
+      justify-items: center;
+    }
+
+    .search-shell {
+      width: min(680px, 100%);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      box-shadow: 0 18px 34px rgba(15, 23, 42, 0.05);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .search-shell:focus-within {
+      border-color: rgba(124, 58, 237, 0.24);
+      box-shadow: 0 20px 42px rgba(124, 58, 237, 0.12);
+    }
+
+    .search-icon {
+      flex: 0 0 auto;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(6, 182, 212, 0.12));
+      color: var(--violet);
+      font-size: 1.1rem;
+    }
+
+    .search-shell input {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      outline: none;
+      font: inherit;
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .search-shell input::placeholder {
+      color: #94a3b8;
+    }
+
+    .gallery-grid {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
     }
 
     .card {
+      display: block;
+      min-height: 100%;
       position: relative;
-      border-radius: 20px;
       overflow: hidden;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      backdrop-filter: blur(10px);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      cursor: pointer;
       text-decoration: none;
       color: inherit;
-      display: block;
+      padding: 16px;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.68);
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.05);
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      padding: 1px;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.24), rgba(6, 182, 212, 0.16), rgba(255, 255, 255, 0));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.28s ease;
+      pointer-events: none;
     }
 
     .card:hover {
-      transform: translateY(-8px) scale(1.02);
-      border-color: rgba(99, 102, 241, 0.4);
-      box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 24px 46px rgba(15, 23, 42, 0.08);
+      border-color: rgba(124, 58, 237, 0.14);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card.hidden {
+      display: none;
     }
 
     .card-preview {
-      height: 180px;
       position: relative;
+      height: 190px;
       overflow: hidden;
+      border-radius: 24px;
+      margin-bottom: 18px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
     }
 
-    .card-preview .gradient-bg {
+    .card-preview::before,
+    .card-preview::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(2px);
+      opacity: 0.55;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .card-preview::before {
+      width: 120px;
+      height: 120px;
+      top: -40px;
+      right: -24px;
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    .card-preview::after {
+      width: 90px;
+      height: 90px;
+      bottom: -28px;
+      left: -18px;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .gradient-bg {
       position: absolute;
       inset: 0;
-      opacity: 0.8;
-      transition: transform 0.6s;
+      opacity: 0.88;
+      transition: transform 0.6s ease;
     }
 
-    .card:hover .gradient-bg { transform: scale(1.1); }
+    .card:hover .gradient-bg {
+      transform: scale(1.08);
+    }
 
     .card-number {
       position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 32px;
-      height: 32px;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(5px);
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       display: grid;
       place-items: center;
-      font-size: 0.8rem;
-      font-weight: 700;
+      color: var(--text);
+      font-size: 0.82rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+      z-index: 2;
     }
 
     .card-emoji {
@@ -178,252 +462,394 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 3rem;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+      font-size: 3.15rem;
+      filter: drop-shadow(0 8px 16px rgba(15, 23, 42, 0.16));
+      z-index: 2;
     }
 
     .card-body {
-      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 170px;
+      padding: 2px 4px 4px;
     }
 
     .card-body h3 {
-      font-family: 'Cairo', sans-serif;
-      font-size: 1.2rem;
-      margin-bottom: 6px;
+      margin: 0;
+      font-size: 1.3rem;
+      line-height: 1.35;
+      color: var(--text);
     }
 
     .card-body p {
-      font-size: 0.85rem;
-      color: #94a3b8;
-      line-height: 1.5;
+      margin: 0;
+      font-size: 0.96rem;
     }
 
     .card-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 12px;
+      gap: 8px;
+      margin-top: auto;
     }
 
     .card-tags span {
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #cbd5e1;
+      min-height: 34px;
+      padding: 0 12px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      box-shadow: none;
+      background: rgba(255, 255, 255, 0.64);
     }
 
-    .hidden { display: none; }
+    .empty-state {
+      margin-top: 22px;
+      padding: 24px;
+      text-align: center;
+      border-radius: var(--radius);
+      display: none;
+    }
 
-    @media (max-width: 768px) {
-      .gallery {
-        grid-template-columns: 1fr;
-        padding: 0 16px 60px;
+    footer {
+      text-align: center;
+      padding-top: 28px;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 980px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-      header { padding: 40px 16px 30px; }
+    }
+
+    @media (max-width: 720px) {
+      .site-nav {
+        padding: 14px 14px 0;
+      }
+
+      .nav-shell {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .page {
+        width: min(100% - 16px, 1180px);
+        padding-top: 18px;
+      }
+
+      .hero,
+      .card,
+      .empty-state {
+        padding: 22px;
+      }
+
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .back-link,
+      .nav-chip,
+      .count-badge,
+      .tag-pill {
+        width: 100%;
+      }
+
+      .search-shell {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="bg-grid"></div>
-  <div class="bg-glow glow-1"></div>
-  <div class="bg-glow glow-2"></div>
-  <div class="bg-glow glow-3"></div>
-
-  <header>
-    <h1>🎨 معرض التصاميم</h1>
-    <p>مجموعة من 33 تصميم متجر إلكتروني بأنماط مختلفة ومتنوعة</p>
-    <div class="counter">33 تصميم متاح</div>
-  </header>
-
-  <div class="search-bar">
-    <input type="text" id="search" placeholder="ابحث عن نمط... (مثال: فيزياء، كلاسيك، نيون)">
+  <div class="page-noise"></div>
+  <div class="glow" id="glow"></div>
+  <div class="floating-shapes" aria-hidden="true">
+    <span class="shape circle s1" data-depth="18"></span>
+    <span class="shape square s2" data-depth="32"></span>
+    <span class="shape diamond s3" data-depth="22"></span>
+    <span class="shape circle s4" data-depth="16"></span>
+    <span class="shape square s5" data-depth="28"></span>
+    <span class="shape diamond s6" data-depth="12"></span>
   </div>
 
-  <div class="gallery" id="gallery">
+  <nav class="site-nav" id="siteNav">
+    <div class="nav-shell">
+      <a class="back-link" href="../">← العودة للرئيسية</a>
+      <div class="nav-chip">ADA Web Designer • Themes</div>
+    </div>
+  </nav>
 
-    <a href="/" class="card" data-keywords="main soft cute kawaii باستيل لطيف">
+  <main class="page">
+    <section class="hero glass">
+      <div class="hero-inner">
+        <span class="tag-pill">ثيمات متجر إلكتروني متنوعة</span>
+        <h1>🎨 معرض <span class="gradient-text">التصاميم</span></h1>
+        <p>مجموعة من 33 تصميم متجر إلكتروني بأنماط مختلفة ومتنوعة</p>
+        <div class="hero-actions">
+          <span class="count-badge" id="counterBadge">33 تصميم متاح</span>
+        </div>
+        <div class="search-wrap">
+          <label class="search-shell" for="search">
+            <span class="search-icon">⌕</span>
+            <input type="text" id="search" placeholder="ابحث عن نمط... (مثال: فيزياء، كلاسيك، نيون)">
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="gallery-grid" id="galleryGrid">
+      <a href="/" class="card" data-keywords="main soft cute kawaii باستيل لطيف">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #fce7f3, #ddd6fe, #cffafe);"></div><span class="card-number">1</span><span class="card-emoji">🧁</span></div>
       <div class="card-body"><h3>Soft & Cute</h3><p>تصميم ناعم وكيوت بألوان الباستيل مع رموز تعبيرية عائمة</p><div class="card-tags"><span>باستيل</span><span>كيوت</span><span>إكسسوارات</span></div></div>
     </a>
 
-    <a href="/classy" class="card" data-keywords="classy كلاسيك أنيق ذهبي ساعات">
+      <a href="/classy" class="card" data-keywords="classy كلاسيك أنيق ذهبي ساعات">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #1a1a2e, #d4af37, #0f0f1a);"></div><span class="card-number">2</span><span class="card-emoji">⌚</span></div>
       <div class="card-body"><h3>Classy</h3><p>تصميم أنيق وراقي بالأسود والذهبي مع خطوط serif</p><div class="card-tags"><span>ذهبي</span><span>أنيق</span><span>ساعات</span></div></div>
     </a>
 
-    <a href="/girly" class="card" data-keywords="girly بناتي وردي جلام مكياج">
+      <a href="/girly" class="card" data-keywords="girly بناتي وردي جلام مكياج">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #ff69b4, #ff1493, #ffb6c1);"></div><span class="card-number">3</span><span class="card-emoji">💖</span></div>
       <div class="card-body"><h3>Girly</h3><p>تصميم بناتي بالوردي مع قلوب عائمة ولمعان</p><div class="card-tags"><span>وردي</span><span>قلوب</span><span>مكياج</span></div></div>
     </a>
 
-    <a href="/animated" class="card" data-keywords="animated متحرك أنيميشن 3d">
+      <a href="/animated" class="card" data-keywords="animated متحرك أنيميشن 3d">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);"></div><span class="card-number">4</span><span class="card-emoji">🎬</span></div>
       <div class="card-body"><h3>Animated</h3><p>بطاقات ثلاثية الأبعاد وتأثيرات حركية مذهلة</p><div class="card-tags"><span>3D</span><span>حركة</span><span>تفاعلي</span></div></div>
     </a>
 
-    <a href="/minimal" class="card" data-keywords="minimal مينيمال ياباني بسيط">
+      <a href="/minimal" class="card" data-keywords="minimal مينيمال ياباني بسيط">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #f5f5f0, #e8e4dc, #d4cfc4);"></div><span class="card-number">5</span><span class="card-emoji">🎎</span></div>
       <div class="card-body"><h3>Minimal</h3><p>تصميم ياباني بسيط جداً — أقل هو أكثر</p><div class="card-tags"><span>بسيط</span><span>ياباني</span><span>شاي</span></div></div>
     </a>
 
-    <a href="/neon" class="card" data-keywords="neon نيون سايبربنك قيمنق gaming">
+      <a href="/neon" class="card" data-keywords="neon نيون سايبربنك قيمنق gaming">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #0f0f23, #00ff88, #ff0066);"></div><span class="card-number">6</span><span class="card-emoji">🎮</span></div>
       <div class="card-body"><h3>Neon</h3><p>سايبربنك مع مطر ماتريكس وتأثيرات خلل</p><div class="card-tags"><span>قيمنق</span><span>نيون</span><span>سايبر</span></div></div>
     </a>
 
-    <a href="/luxury" class="card" data-keywords="luxury فخم فاخر موضة">
+      <a href="/luxury" class="card" data-keywords="luxury فخم فاخر موضة">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #1a1a1a, #4a4a4a, #2d2d2d);"></div><span class="card-number">7</span><span class="card-emoji">👜</span></div>
       <div class="card-body"><h3>Luxury</h3><p>تصميم فاخر بأسلوب المجلات مع بارالاكس</p><div class="card-tags"><span>فخم</span><span>أزياء</span><span>تحريري</span></div></div>
     </a>
 
-    <a href="/retro" class="card" data-keywords="retro ريترو تسعينات فابورويف">
+      <a href="/retro" class="card" data-keywords="retro ريترو تسعينات فابورويف">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #ff6ad5, #c774e8, #ad8cff, #8795e8, #94d0ff);"></div><span class="card-number">8</span><span class="card-emoji">📼</span></div>
       <div class="card-body"><h3>Retro</h3><p>أجواء التسعينات مع ويندوز 95 وفابورويف</p><div class="card-tags"><span>90s</span><span>كاسيت</span><span>فاينيل</span></div></div>
     </a>
 
-    <a href="/nature" class="card" data-keywords="nature طبيعة نباتات botanical">
+      <a href="/nature" class="card" data-keywords="nature طبيعة نباتات botanical">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #2d5016, #4a7c23, #6b8f3c);"></div><span class="card-number">9</span><span class="card-emoji">🌿</span></div>
       <div class="card-body"><h3>Nature</h3><p>تصميم نباتي عضوي بألوان ترابية</p><div class="card-tags"><span>نباتات</span><span>أخضر</span><span>عضوي</span></div></div>
     </a>
 
-    <a href="/gradient" class="card" data-keywords="gradient تدرج ألوان ملون">
+      <a href="/gradient" class="card" data-keywords="gradient تدرج ألوان ملون">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #f72585, #7209b7, #3a0ca3, #4361ee, #4cc9f0);"></div><span class="card-number">10</span><span class="card-emoji">🌈</span></div>
       <div class="card-body"><h3>Gradient</h3><p>جنة التدرجات اللونية المتحركة</p><div class="card-tags"><span>ملون</span><span>تدرج</span><span>هولوغرام</span></div></div>
     </a>
 
-    <a href="/comic" class="card" data-keywords="comic كوميك بوب آرت">
+      <a href="/comic" class="card" data-keywords="comic كوميك بوب آرت">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #ffeb3b, #ff5722, #2196f3);"></div><span class="card-number">11</span><span class="card-emoji">💥</span></div>
       <div class="card-body"><h3>Comic</h3><p>بوب آرت مع نقاط Ben-Day وفقاعات حوار</p><div class="card-tags"><span>كوميكس</span><span>أكشن</span><span>بوب</span></div></div>
     </a>
 
-    <a href="/glass" class="card" data-keywords="glass زجاج glassmorphism تقنية">
+      <a href="/glass" class="card" data-keywords="glass زجاج glassmorphism تقنية">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div><span class="card-number">12</span><span class="card-emoji">🪟</span></div>
       <div class="card-body"><h3>Glass</h3><p>تأثير الزجاج المثلج مع كرات متحركة</p><div class="card-tags"><span>زجاج</span><span>تقنية</span><span>شفاف</span></div></div>
     </a>
 
-    <a href="/darkmode" class="card" data-keywords="darkmode داكن dark ساعات">
+      <a href="/darkmode" class="card" data-keywords="darkmode داكن dark ساعات">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #1e1e2e, #2d2d3f, #1a1a2e);"></div><span class="card-number">13</span><span class="card-emoji">🌙</span></div>
       <div class="card-body"><h3>Dark Mode</h3><p>وضع داكن بريميوم بتصميم Material</p><div class="card-tags"><span>داكن</span><span>ساعات</span><span>أنيق</span></div></div>
     </a>
 
-    <a href="/scandinavian" class="card" data-keywords="scandinavian اسكندنافي nordic ديكور">
+      <a href="/scandinavian" class="card" data-keywords="scandinavian اسكندنافي nordic ديكور">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #f8f6f0, #e8e4dc, #d4cfc4);"></div><span class="card-number">14</span><span class="card-emoji">🕯️</span></div>
       <div class="card-body"><h3>Scandinavian</h3><p>تصميم نوردي نظيف بأجواء هيوغي</p><div class="card-tags"><span>نوردي</span><span>ديكور</span><span>هادئ</span></div></div>
     </a>
 
-    <a href="/brutalist" class="card" data-keywords="brutalist بروتالست خام جريء">
+      <a href="/brutalist" class="card" data-keywords="brutalist بروتالست خام جريء">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #fff, #000, #ff0000);"></div><span class="card-number">15</span><span class="card-emoji">🔨</span></div>
       <div class="card-body"><h3>Brutalist</h3><p>تصميم خام مضاد للتصميم مع شبكة مكسرة</p><div class="card-tags"><span>خام</span><span>جريء</span><span>فن</span></div></div>
     </a>
 
-    <a href="/art-deco" class="card" data-keywords="art-deco آرت ديكو gatsby ذهبي مجوهرات">
+      <a href="/art-deco" class="card" data-keywords="art-deco آرت ديكو gatsby ذهبي مجوهرات">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #0a1628, #d4af37, #1a2744);"></div><span class="card-number">16</span><span class="card-emoji">💎</span></div>
       <div class="card-body"><h3>Art Deco</h3><p>أناقة العشرينات مع أنماط هندسية ذهبية</p><div class="card-tags"><span>1920s</span><span>ذهبي</span><span>مجوهرات</span></div></div>
     </a>
 
-    <a href="/streetwear" class="card" data-keywords="streetwear ستريت شارع أحذية sneakers">
+      <a href="/streetwear" class="card" data-keywords="streetwear ستريت شارع أحذية sneakers">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #1a1a1a, #ff6600, #333);"></div><span class="card-number">17</span><span class="card-emoji">👟</span></div>
       <div class="card-body"><h3>Streetwear</h3><p>أزياء شارع مع غرانج ونيون برتقالي</p><div class="card-tags"><span>شارع</span><span>أحذية</span><span>هايب</span></div></div>
     </a>
 
-    <a href="/bohemian" class="card" data-keywords="bohemian بوهيمي boho يدوي">
+      <a href="/bohemian" class="card" data-keywords="bohemian بوهيمي boho يدوي">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #8b6f47, #c4a574, #deb887);"></div><span class="card-number">18</span><span class="card-emoji">🪶</span></div>
       <div class="card-body"><h3>Bohemian</h3><p>بوهو شيك ترابي مع إلهام مكرمية</p><div class="card-tags"><span>بوهو</span><span>يدوي</span><span>ترابي</span></div></div>
     </a>
 
-    <a href="/tech" class="card" data-keywords="tech تقنية apple آيفون">
+      <a href="/tech" class="card" data-keywords="tech تقنية apple آيفون">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #f5f5f7, #e0e0e0, #fafafa);"></div><span class="card-number">19</span><span class="card-emoji">📱</span></div>
       <div class="card-body"><h3>Tech</h3><p>تصميم مستوحى من Apple نظيف وسلس</p><div class="card-tags"><span>تقنية</span><span>جوال</span><span>نظيف</span></div></div>
     </a>
 
-    <a href="/candy" class="card" data-keywords="candy حلويات كاندي ملون">
+      <a href="/candy" class="card" data-keywords="candy حلويات كاندي ملون">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #ff6b9d, #ffc83d, #c060e6, #60e6c0);"></div><span class="card-number">20</span><span class="card-emoji">🍬</span></div>
       <div class="card-body"><h3>Candy</h3><p>متجر حلويات مع خطوط ورشات ملونة</p><div class="card-tags"><span>حلويات</span><span>مرح</span><span>ملون</span></div></div>
     </a>
 
-    <a href="/ocean" class="card" data-keywords="ocean بحر محيط coastal شاطئ">
+      <a href="/ocean" class="card" data-keywords="ocean بحر محيط coastal شاطئ">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #0077b6, #00b4d8, #90e0ef, #caf0f8);"></div><span class="card-number">21</span><span class="card-emoji">🌊</span></div>
       <div class="card-body"><h3>Ocean</h3><p>ساحلي مع فواصل أمواج وملمس رملي</p><div class="card-tags"><span>بحر</span><span>شاطئ</span><span>صيف</span></div></div>
     </a>
 
-    <a href="/vintage" class="card" data-keywords="vintage فينتاج سبعينات 70s">
+      <a href="/vintage" class="card" data-keywords="vintage فينتاج سبعينات 70s">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #d2691e, #cd853f, #8b4513);"></div><span class="card-number">22</span><span class="card-emoji">🌻</span></div>
       <div class="card-body"><h3>Vintage</h3><p>أجواء السبعينات مع برتقالي محروق وأزهار</p><div class="card-tags"><span>70s</span><span>ريترو</span><span>حقائب</span></div></div>
     </a>
 
-    <a href="/industrial" class="card" data-keywords="industrial صناعي ورشة جلد leather">
+      <a href="/industrial" class="card" data-keywords="industrial صناعي ورشة جلد leather">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #3d3d3d, #5c4033, #2c2c2c);"></div><span class="card-number">23</span><span class="card-emoji">⚙️</span></div>
       <div class="card-body"><h3>Industrial</h3><p>ورشة عمل مع برشام وطوب مكشوف</p><div class="card-tags"><span>صناعي</span><span>جلد</span><span>معدن</span></div></div>
     </a>
 
-    <a href="/zen" class="card" data-keywords="zen زن تأمل wellness هدوء">
+      <a href="/zen" class="card" data-keywords="zen زن تأمل wellness هدوء">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #f0ebe3, #dfd3c3, #c7b198);"></div><span class="card-number">24</span><span class="card-emoji">🧘</span></div>
       <div class="card-body"><h3>Zen</h3><p>تأمل مع أنيميشن تنفس هادئ</p><div class="card-tags"><span>تأمل</span><span>هدوء</span><span>عافية</span></div></div>
     </a>
 
-    <a href="/aurora" class="card" data-keywords="aurora شفق كريستال northern lights">
+      <a href="/aurora" class="card" data-keywords="aurora شفق كريستال northern lights">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #0f2027, #203a43, #2c5364, #00d4aa);"></div><span class="card-number">25</span><span class="card-emoji">✨</span></div>
       <div class="card-body"><h3>Aurora</h3><p>شفق قطبي مع بطاقات زجاج قزحية</p><div class="card-tags"><span>شفق</span><span>كريستال</span><span>نجوم</span></div></div>
     </a>
 
-    <a href="/marble" class="card" data-keywords="marble رخام rose gold قرطاسية">
+      <a href="/marble" class="card" data-keywords="marble رخام rose gold قرطاسية">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #f5f5f5, #e8d4d4, #b76e79);"></div><span class="card-number">26</span><span class="card-emoji">🪨</span></div>
       <div class="card-body"><h3>Marble</h3><p>رخام مع لمسات روز قولد أنيقة</p><div class="card-tags"><span>رخام</span><span>ذهبي وردي</span><span>قرطاسية</span></div></div>
     </a>
 
-    <a href="/sunset" class="card" data-keywords="sunset غروب صيف دافئ">
+      <a href="/sunset" class="card" data-keywords="sunset غروب صيف دافئ">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #f093fb, #f5576c, #ffd89b);"></div><span class="card-number">27</span><span class="card-emoji">🌅</span></div>
       <div class="card-body"><h3>Sunset</h3><p>تدرجات الساعة الذهبية الدافئة</p><div class="card-tags"><span>غروب</span><span>صيف</span><span>دافئ</span></div></div>
     </a>
 
-    <a href="/space" class="card" data-keywords="space فضاء كوني sci-fi">
+      <a href="/space" class="card" data-keywords="space فضاء كوني sci-fi">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #0a0a2a, #1a0533, #000428);"></div><span class="card-number">28</span><span class="card-emoji">🚀</span></div>
       <div class="card-body"><h3>Space</h3><p>كوني مع حقل نجوم وأنيميشن مدارات</p><div class="card-tags"><span>فضاء</span><span>خيال علمي</span><span>نجوم</span></div></div>
     </a>
 
-    <a href="/cottage" class="card" data-keywords="cottage كوتيج ريفي صابون يدوي">
+      <a href="/cottage" class="card" data-keywords="cottage كوتيج ريفي صابون يدوي">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #a8d5a2, #f0e6d3, #e8b4d0);"></div><span class="card-number">29</span><span class="card-emoji">🏡</span></div>
       <div class="card-body"><h3>Cottage</h3><p>كوتيج كور مع أزهار وإطارات قديمة</p><div class="card-tags"><span>ريفي</span><span>صابون</span><span>أزهار</span></div></div>
     </a>
 
-    <a href="/desert" class="card" data-keywords="desert صحراء عربي ليالي شرقي">
+      <a href="/desert" class="card" data-keywords="desert صحراء عربي ليالي شرقي">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #1a0a2e, #d4a574, #2d1b4e);"></div><span class="card-number">30</span><span class="card-emoji">🏜️</span></div>
       <div class="card-body"><h3>Desert</h3><p>ليالي عربية مع أقواس وفوانيس</p><div class="card-tags"><span>عربي</span><span>شرقي</span><span>تراث</span></div></div>
     </a>
 
-    <a href="/biology" class="card" data-keywords="biology أحياء خلية مجهر علم">
+      <a href="/biology" class="card" data-keywords="biology أحياء خلية مجهر علم">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #1a472a, #2d8659, #90ee90);"></div><span class="card-number">31</span><span class="card-emoji">🧬</span></div>
       <div class="card-body"><h3>Biology</h3><p>خلايا حية متحركة مع ميتوكوندريا وبلاستيدات</p><div class="card-tags"><span>أحياء</span><span>خلايا</span><span>مجهر</span></div></div>
     </a>
 
-    <a href="/chemistry" class="card" data-keywords="chemistry كيمياء مختبر عناصر">
+      <a href="/chemistry" class="card" data-keywords="chemistry كيمياء مختبر عناصر">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #1a237e, #00695c, #f9a825);"></div><span class="card-number">32</span><span class="card-emoji">⚗️</span></div>
       <div class="card-body"><h3>Chemistry</h3><p>مختبر مع فقاعات وجدول دوري وجزيئات</p><div class="card-tags"><span>كيمياء</span><span>مختبر</span><span>تفاعلات</span></div></div>
     </a>
 
-    <a href="/physics" class="card" data-keywords="physics فيزياء ذرة جسيمات كوانتم">
+      <a href="/physics" class="card" data-keywords="physics فيزياء ذرة جسيمات كوانتم">
       <div class="card-preview"><div class="gradient-bg" style="background: linear-gradient(135deg, #0a0a2a, #4a00e0, #00d4ff);"></div><span class="card-number">33</span><span class="card-emoji">⚛️</span></div>
       <div class="card-body"><h3>Physics</h3><p>85 جسيم متحرك مع مدارات ومعادلات نيون</p><div class="card-tags"><span>فيزياء</span><span>ذرات</span><span>كوانتم</span></div></div>
     </a>
+    </section>
 
-  </div>
+    <div class="empty-state glass" id="emptyState">لا توجد تصاميم مطابقة للبحث الحالي.</div>
+
+    <footer>© ADA Web Designer</footer>
+  </main>
 
   <script>
-    const search = document.getElementById('search');
-    const cards = document.querySelectorAll('.card');
-    
-    search.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase().trim();
-      cards.forEach(card => {
-        const keywords = card.dataset.keywords.toLowerCase();
-        const title = card.querySelector('h3').textContent.toLowerCase();
-        const desc = card.querySelector('p').textContent.toLowerCase();
-        const match = !query || keywords.includes(query) || title.includes(query) || desc.includes(query);
-        card.classList.toggle('hidden', !match);
-      });
-    });
+    (function () {
+      var glow = document.getElementById('glow');
+      var nav = document.getElementById('siteNav');
+      var shapes = document.querySelectorAll('.shape');
+      var cards = document.querySelectorAll('.card');
+      var search = document.getElementById('search');
+      var emptyState = document.getElementById('emptyState');
+      var pointerX = window.innerWidth / 2;
+      var pointerY = window.innerHeight / 2;
+      var currentX = pointerX;
+      var currentY = pointerY;
+
+      function updateGlow() {
+        currentX += (pointerX - currentX) * 0.14;
+        currentY += (pointerY - currentY) * 0.14;
+        glow.style.transform = 'translate3d(' + (currentX - 170) + 'px,' + (currentY - 170) + 'px,0)';
+      }
+
+      function updateShapes() {
+        var i;
+        var nx = (pointerX / window.innerWidth) - 0.5;
+        var ny = (pointerY / window.innerHeight) - 0.5;
+        for (i = 0; i < shapes.length; i += 1) {
+          var depth = parseFloat(shapes[i].getAttribute('data-depth')) || 12;
+          var tx = nx * depth;
+          var ty = ny * depth;
+          var rotate = shapes[i].className.indexOf('diamond') > -1 ? ' rotate(45deg)' : '';
+          shapes[i].style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0)' + rotate;
+        }
+      }
+
+      function tick() {
+        updateGlow();
+        updateShapes();
+        window.requestAnimationFrame(tick);
+      }
+
+      function onPointerMove(event) {
+        pointerX = event.clientX;
+        pointerY = event.clientY;
+      }
+
+      function onScroll() {
+        if (window.pageYOffset > 16) {
+          nav.className = 'site-nav scrolled';
+        } else {
+          nav.className = 'site-nav';
+        }
+      }
+
+
+      function filterCards() {
+        var query = search.value.toLowerCase().replace(/^\s+|\s+$/g, '');
+        var visible = 0;
+        var i;
+        for (i = 0; i < cards.length; i += 1) {
+          var keywords = (cards[i].getAttribute('data-keywords') || '').toLowerCase();
+          var titleNode = cards[i].getElementsByTagName('h3')[0];
+          var descNode = cards[i].getElementsByTagName('p')[0];
+          var title = titleNode ? titleNode.innerHTML.toLowerCase() : '';
+          var desc = descNode ? descNode.innerHTML.toLowerCase() : '';
+          var match = !query || keywords.indexOf(query) > -1 || title.indexOf(query) > -1 || desc.indexOf(query) > -1;
+          cards[i].className = match ? 'card' : 'card hidden';
+          if (match) {
+            visible += 1;
+          }
+        }
+        emptyState.style.display = visible ? 'none' : 'block';
+      }
+
+      document.addEventListener('mousemove', onPointerMove);
+      window.addEventListener('scroll', onScroll);
+      search.onkeyup = filterCards;
+      search.oninput = filterCards;
+      onScroll();
+      filterCards();
+      tick();
+    }());
   </script>
 </body>
 </html>

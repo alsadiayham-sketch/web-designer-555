@@ -1,166 +1,1025 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ADA POS - Download</title>
-  <meta name="description" content="تحميل ADA POS - نظام نقطة بيع متكامل لإدارة المبيعات والمخزون بسهولة" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحميل ADA POS | ADA Systems</title>
+  <meta name="description" content="تحميل ADA POS - نظام نقطة بيع متكامل لإدارة المبيعات والمخزون والمزامنة السحابية بسهولة.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root { --bg: #030712; --border: rgba(255,255,255,0.08); --text: #ffffff; --muted: #94a3b8; --shadow: 0 30px 80px rgba(2, 6, 23, 0.55); --gradient-mix: linear-gradient(135deg, rgba(124,58,237,0.96) 0%, rgba(167,139,250,0.94) 32%, rgba(6,182,212,0.92) 68%, rgba(16,185,129,0.92) 100%); --radius-xl: 30px; }
+    :root {
+      --bg: #fafafa;
+      --surface: rgba(255, 255, 255, 0.82);
+      --surface-strong: rgba(255, 255, 255, 0.94);
+      --line: rgba(124, 58, 237, 0.12);
+      --text: #1a1a2e;
+      --muted: #64748b;
+      --violet: #7c3aed;
+      --cyan: #06b6d4;
+      --shadow: 0 30px 80px rgba(15, 23, 42, 0.08);
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.06);
+      --radius: 28px;
+    }
+
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body { margin: 0; font-family: 'Tajawal', sans-serif; color: var(--text); background: var(--bg); min-height: 100vh; overflow-x: hidden; position: relative; }
-    body:before, body:after { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-    body:before { background: radial-gradient(circle at 12% 18%, rgba(124,58,237,0.2), transparent 22%), radial-gradient(circle at 86% 14%, rgba(6,182,212,0.18), transparent 18%), radial-gradient(circle at 78% 82%, rgba(16,185,129,0.14), transparent 18%), radial-gradient(circle at 16% 86%, rgba(167,139,250,0.12), transparent 18%); animation: meshMove 20s ease-in-out infinite alternate; }
-    body:after { background-image: radial-gradient(rgba(255,255,255,0.06) 0.7px, transparent 0.7px); background-size: 26px 26px; opacity: 0.18; mix-blend-mode: screen; }
-    .aurora, .grain, .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-    .aurora span { position: absolute; display: block; width: 34rem; height: 34rem; border-radius: 50%; filter: blur(70px); opacity: 0.22; animation: blobFloat 18s ease-in-out infinite; }
-    .aurora span:nth-child(1) { top: -11rem; right: -7rem; background: radial-gradient(circle, rgba(124,58,237,0.92) 0%, rgba(124,58,237,0.06) 70%, transparent 74%); }
-    .aurora span:nth-child(2) { left: -10rem; top: 34%; width: 28rem; height: 28rem; background: radial-gradient(circle, rgba(6,182,212,0.88) 0%, rgba(6,182,212,0.06) 70%, transparent 74%); animation-direction: reverse; animation-duration: 22s; }
-    .aurora span:nth-child(3) { right: 18%; bottom: -12rem; width: 30rem; height: 30rem; background: radial-gradient(circle, rgba(16,185,129,0.84) 0%, rgba(16,185,129,0.06) 70%, transparent 74%); animation-duration: 20s; }
-    .grain { opacity: 0.12; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"); mix-blend-mode: soft-light; }
-    .particles { overflow: hidden; }
-    .particle { position: absolute; display: block; border-radius: 50%; background: linear-gradient(135deg, rgba(167,139,250,0.82), rgba(16,185,129,0.76)); opacity: 0.15; animation: floatUp linear infinite; filter: blur(0.2px); }
-    .page { position: relative; z-index: 1; width: min(1200px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 40px; }
-    .hero, .section, .top-note { position: relative; background: linear-gradient(180deg, rgba(8, 13, 26, 0.84), rgba(10, 15, 28, 0.68)); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); overflow: hidden; }
-    .hero:before, .section:before, .top-note:before { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; background: linear-gradient(135deg, rgba(167,139,250,0.48), rgba(255,255,255,0.06), rgba(6,182,212,0.34), rgba(16,185,129,0.3)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
-    .top-note { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 16px 20px; margin-bottom: 18px; }
-    .top-note strong { display: block; margin-bottom: 6px; }
-    .top-note span { color: var(--muted); line-height: 1.8; }
-    .top-chip { padding: 10px 14px; border-radius: 999px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #dbe4ff; font-family: 'Inter', sans-serif; white-space: nowrap; }
-    .hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr); gap: 24px; align-items: center; min-height: 78vh; padding: 32px; }
-    .badge { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 999px; color: #ddd6fe; background: rgba(124,58,237,0.12); border: 1px solid rgba(167,139,250,0.22); font-weight: 800; margin-bottom: 22px; }
-    .badge-dot { width: 10px; height: 10px; border-radius: 50%; background: linear-gradient(135deg, #06b6d4, #10b981); box-shadow: 0 0 16px rgba(16,185,129,0.72); }
-    h1 { margin: 0 0 16px; font-size: clamp(2.7rem, 7vw, 5.2rem); line-height: 1.04; font-weight: 900; letter-spacing: -1px; }
-    .gradient-text { display: block; background: var(--gradient-mix); background-size: 200% 200%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: hueShift 9s linear infinite; }
-    .lead, .section-desc, .feature-card p, .requirement span, .step-card p, footer { color: var(--muted); line-height: 1.95; }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; align-items: center; }
-    .download-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 58px; padding: 0 28px; border-radius: 18px; border: none; text-decoration: none; color: #ffffff; font-size: 1.05rem; font-weight: 900; background: var(--gradient-mix); background-size: 200% 200%; box-shadow: 0 18px 42px rgba(124,58,237,0.3), 0 0 32px rgba(6,182,212,0.18); transition: transform 0.25s ease, box-shadow 0.25s ease; overflow: hidden; animation: pulseGlow 2.8s ease-in-out infinite, hueShift 10s linear infinite; }
-    .download-btn:before { content: ''; position: absolute; inset: 0; background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.35) 42%, transparent 70%); transform: translateX(-120%); animation: shine 3.8s ease-in-out infinite; }
-    .download-btn:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 24px 52px rgba(124,58,237,0.34), 0 0 36px rgba(16,185,129,0.2); }
-    .subnote { font-size: 0.98rem; color: #dbe4ff; display: inline-flex; gap: 8px; align-items: center; padding: 12px 16px; border-radius: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); }
-    .subnote strong { color: #ffffff; }
-    .hero-visual { position: relative; padding: 24px; border-radius: 26px; background: linear-gradient(180deg, rgba(6, 10, 19, 0.96), rgba(12, 18, 32, 0.78)); border: 1px solid rgba(255,255,255,0.08); overflow: hidden; }
-    .hero-visual:before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at top right, rgba(124,58,237,0.18), transparent 32%), radial-gradient(circle at bottom left, rgba(6,182,212,0.16), transparent 28%); pointer-events: none; }
-    .window-bar { display: flex; gap: 8px; margin-bottom: 20px; }
-    .window-bar span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.18); }
-    .window-bar span:nth-child(1) { background: #fb7185; }
-    .window-bar span:nth-child(2) { background: #fbbf24; }
-    .window-bar span:nth-child(3) { background: #34d399; }
-    .dashboard-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-    .metric, .mini-card { border-radius: 20px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); padding: 18px; }
-    .metric.big { grid-column: 1 / -1; padding: 22px; background: linear-gradient(135deg, rgba(124,58,237,0.16), rgba(6,182,212,0.08)); }
-    .metric-label, .mini-label { color: #b6c2e8; font-size: 0.95rem; margin-bottom: 8px; }
-    .metric-value { font-size: 2rem; font-weight: 900; color: #ffffff; }
-    .mini-value { font-size: 1.15rem; font-weight: 800; color: #eef2ff; }
-    .chart { margin-top: 18px; height: 10px; border-radius: 999px; background: rgba(255,255,255,0.06); overflow: hidden; position: relative; }
-    .chart:after { content: ''; position: absolute; inset: 0; width: 78%; border-radius: inherit; background: var(--gradient-mix); animation: graphMove 4s ease-in-out infinite; }
-    .section { margin-top: 24px; padding: 30px; }
-    .section-title { margin: 0 0 12px; font-size: clamp(1.9rem, 4vw, 2.7rem); font-weight: 900; }
-    .features-grid, .requirements, .steps-grid { display: grid; gap: 18px; }
-    .features-grid, .requirements { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .steps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 18px; }
-    .feature-card, .requirement, .step-card, .warning-box { padding: 22px; border-radius: 22px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
-    .feature-card:hover, .requirement:hover, .step-card:hover { transform: translateY(-4px); border-color: rgba(167,139,250,0.24); box-shadow: 0 20px 44px rgba(2, 6, 23, 0.4); }
-    .icon-wrap { width: 58px; height: 58px; display: inline-grid; place-items: center; border-radius: 18px; margin-bottom: 16px; background: linear-gradient(135deg, rgba(124,58,237,0.18), rgba(6,182,212,0.16)); border: 1px solid rgba(255,255,255,0.08); color: #dfe8ff; }
-    .icon-wrap svg { width: 28px; height: 28px; stroke: currentColor; }
-    .feature-card h3, .step-card h3, .requirement strong { margin: 0 0 10px; font-size: 1.18rem; font-weight: 900; color: #ffffff; }
-    .requirement strong { display: block; margin-bottom: 6px; }
-    .step-number { width: 42px; height: 42px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px; background: var(--gradient-mix); color: #ffffff; font-weight: 900; box-shadow: 0 12px 26px rgba(124,58,237,0.24); }
-    .warning-box { margin-top: 18px; background: rgba(239,68,68,0.08); border-color: rgba(248,113,113,0.2); }
-    .warning-box strong { display: block; margin-bottom: 8px; color: #fca5a5; }
-    footer { text-align: center; padding: 30px 0 10px; font-size: 0.98rem; }
-    @keyframes floatUp { from { transform: translate3d(0, 110vh, 0) scale(0.8); opacity: 0; } 15% { opacity: 0.2; } to { transform: translate3d(0, -20vh, 0) scale(1.15); opacity: 0; } }
-    @keyframes blobFloat { 0%, 100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(24px,-28px,0) scale(1.08); } }
-    @keyframes meshMove { 0% { transform: scale(1) rotate(0deg); } 100% { transform: scale(1.08) rotate(6deg); } }
-    @keyframes pulseGlow { 0%, 100% { box-shadow: 0 18px 42px rgba(124,58,237,0.3), 0 0 24px rgba(6,182,212,0.16); } 50% { box-shadow: 0 22px 50px rgba(16,185,129,0.34), 0 0 34px rgba(124,58,237,0.22); } }
-    @keyframes hueShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-    @keyframes shine { 0% { transform: translateX(-140%); } 45%, 100% { transform: translateX(160%); } }
-    @keyframes graphMove { 0%, 100% { width: 68%; } 50% { width: 84%; } }
-    @media (max-width: 980px) { .hero { grid-template-columns: 1fr; min-height: auto; } .features-grid, .requirements, .steps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (max-width: 640px) { .page { width: min(100% - 18px, 1200px); padding-top: 16px; } .hero, .section, .top-note { padding: 20px; } .hero { gap: 20px; } .dashboard-grid, .features-grid, .requirements, .steps-grid { grid-template-columns: 1fr; } .hero-actions { flex-direction: column; align-items: stretch; } .download-btn, .subnote { width: 100%; justify-content: center; } h1 { letter-spacing: 0; } }
+    body {
+      margin: 0;
+      font-family: 'Tajawal', 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      inset: -20%;
+      pointer-events: none;
+      z-index: -4;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.11), transparent 28%),
+        radial-gradient(circle at 80% 16%, rgba(6, 182, 212, 0.12), transparent 26%),
+        radial-gradient(circle at 72% 78%, rgba(124, 58, 237, 0.08), transparent 24%),
+        radial-gradient(circle at 14% 74%, rgba(6, 182, 212, 0.08), transparent 24%);
+      filter: blur(12px);
+      animation: meshShift 18s ease-in-out infinite alternate;
+    }
+
+    body::after {
+      transform: scale(1.06);
+      opacity: 0.85;
+      animation-duration: 24s;
+    }
+
+    @keyframes meshShift {
+      0% { transform: translate3d(-1%, 0, 0) scale(1); }
+      50% { transform: translate3d(1.2%, -1.2%, 0) scale(1.04); }
+      100% { transform: translate3d(-1%, 1.6%, 0) scale(1.02); }
+    }
+
+    .page-noise {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      pointer-events: none;
+      opacity: 0.34;
+      background-image: radial-gradient(rgba(15, 23, 42, 0.048) 0.8px, transparent 0.8px);
+      background-size: 22px 22px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.68), transparent 92%);
+    }
+
+    .glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.55;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.18), rgba(6, 182, 212, 0.08) 42%, transparent 72%);
+      transform: translate3d(-170px, -170px, 0);
+      filter: blur(12px);
+      transition: opacity 0.25s ease;
+    }
+
+    .floating-shapes {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -2;
+      overflow: hidden;
+    }
+
+    .shape {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.48);
+      border: 1px solid rgba(124, 58, 237, 0.1);
+      box-shadow: 0 12px 30px rgba(124, 58, 237, 0.07);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      opacity: 0.85;
+      animation: floatShape 10s ease-in-out infinite;
+    }
+
+    .shape.circle { border-radius: 50%; }
+    .shape.square { border-radius: 20px; }
+    .shape.diamond { border-radius: 18px; transform: rotate(45deg); }
+    .shape.s1 { top: 12%; left: 9%; width: 18px; height: 18px; animation-delay: -1s; }
+    .shape.s2 { top: 22%; right: 10%; width: 26px; height: 26px; animation-delay: -4s; }
+    .shape.s3 { top: 58%; left: 8%; width: 14px; height: 14px; animation-delay: -2s; }
+    .shape.s4 { top: 78%; right: 14%; width: 16px; height: 16px; animation-delay: -5s; }
+    .shape.s5 { top: 72%; left: 24%; width: 32px; height: 32px; animation-delay: -7s; }
+    .shape.s6 { top: 36%; right: 30%; width: 12px; height: 12px; animation-delay: -3s; }
+
+    @keyframes floatShape {
+      0% { margin-top: 0; }
+      50% { margin-top: -18px; }
+      100% { margin-top: 0; }
+    }
+
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 18px 18px 0;
+    }
+
+    .nav-shell {
+      width: min(1180px, calc(100% - 8px));
+      margin: 0 auto;
+      padding: 14px 18px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .site-nav.scrolled .nav-shell {
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .back-link,
+    .nav-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.52);
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.04);
+      font-weight: 700;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .back-link:hover,
+    .nav-chip:hover {
+      transform: translateY(-2px);
+      border-color: rgba(124, 58, 237, 0.18);
+      box-shadow: 0 18px 36px rgba(124, 58, 237, 0.09);
+    }
+
+    .nav-chip {
+      font-family: 'Inter', sans-serif;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 28px 0 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .glass {
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      gap: 26px;
+      align-items: center;
+      padding: 34px;
+      border-radius: calc(var(--radius) + 8px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(6, 182, 212, 0.02));
+      pointer-events: none;
+    }
+
+    .eyebrow,
+    .pill,
+    .tiny-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(124, 58, 237, 0.1);
+      background: rgba(255, 255, 255, 0.66);
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .eyebrow::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+      box-shadow: 0 0 0 6px rgba(124, 58, 237, 0.08);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 { margin: 0; }
+
+    .hero h1 {
+      margin-top: 18px;
+      font-size: clamp(2.8rem, 6vw, 5.25rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .gradient-text {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .lead,
+    .section-subtitle,
+    .feature-card p,
+    .req-list li,
+    .step-card p,
+    .mini-note,
+    footer {
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+      align-items: center;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      min-height: 58px;
+      padding: 0 26px;
+      border-radius: 18px;
+      text-decoration: none;
+      color: #fff;
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+      box-shadow: 0 18px 38px rgba(124, 58, 237, 0.22);
+      font-weight: 800;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 24px 46px rgba(124, 58, 237, 0.26);
+    }
+
+    .download-btn svg { width: 20px; height: 20px; }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 460px;
+      padding: 24px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, #161a29 0%, #0f172a 100%);
+      box-shadow: 0 28px 70px rgba(15, 23, 42, 0.2);
+      overflow: hidden;
+      color: #edf2ff;
+    }
+
+    .hero-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(124, 58, 237, 0.24), transparent 26%),
+        radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.18), transparent 26%);
+      pointer-events: none;
+    }
+
+    .window-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .window-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .window-dots span:nth-child(1) { background: #fb7185; }
+    .window-dots span:nth-child(2) { background: #fbbf24; }
+    .window-dots span:nth-child(3) { background: #34d399; }
+
+    .window-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      color: rgba(226, 232, 240, 0.72);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .pos-frame {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 16px;
+      min-height: 365px;
+    }
+
+    .sidebar,
+    .screen,
+    .pos-stat,
+    .invoice,
+    .quick-action,
+    .card-line {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 22px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .sidebar {
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .sidebar .logo-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+      box-shadow: 0 12px 22px rgba(124, 58, 237, 0.22);
+    }
+
+    .sidebar .nav-pill {
+      width: 100%;
+      height: 42px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sidebar .nav-pill.active::after,
+    .chart-fill,
+    .invoice-total::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.9), rgba(6, 182, 212, 0.85));
+    }
+
+    .sidebar .nav-pill.active::after {
+      opacity: 0.9;
+      inset: 6px;
+      border-radius: 10px;
+    }
+
+    .screen {
+      padding: 18px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .screen-top {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+    }
+
+    .card-line {
+      padding: 18px;
+      min-height: 124px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-line h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .mini-note {
+      font-size: 0.92rem;
+    }
+
+    .chart-track {
+      margin-top: 16px;
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chart-fill {
+      inset: 0 auto 0 0;
+      width: 72%;
+      border-radius: inherit;
+      animation: chartWave 4s ease-in-out infinite;
+    }
+
+    @keyframes chartWave {
+      0%, 100% { width: 68%; }
+      50% { width: 84%; }
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .pos-stat,
+    .quick-action,
+    .invoice {
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-label,
+    .invoice small,
+    .quick-action span {
+      color: rgba(226, 232, 240, 0.68);
+      display: block;
+      font-size: 0.86rem;
+      margin-bottom: 8px;
+    }
+
+    .stat-value,
+    .invoice strong,
+    .quick-action strong {
+      font-size: 1.1rem;
+      font-weight: 800;
+      display: block;
+    }
+
+    .invoice-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .invoice-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: rgba(241, 245, 249, 0.84);
+      font-size: 0.92rem;
+    }
+
+    .invoice-total {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+      font-weight: 800;
+    }
+
+    .invoice-total span,
+    .invoice-total strong {
+      position: relative;
+      z-index: 1;
+    }
+
+    .invoice-total::after {
+      inset: auto 0 0 0;
+      height: 2px;
+      opacity: 0.9;
+    }
+
+    .section {
+      margin-top: 26px;
+      padding: 30px;
+      border-radius: var(--radius);
+    }
+
+    .section-header {
+      max-width: 720px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.08;
+      margin-bottom: 12px;
+      letter-spacing: -0.03em;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .feature-card {
+      padding: 22px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.05);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 42px rgba(15, 23, 42, 0.08);
+      border-color: rgba(124, 58, 237, 0.16);
+    }
+
+    .feature-card.large { grid-column: span 6; }
+    .feature-card.small { grid-column: span 3; }
+
+    .icon-box {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      display: inline-grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.13), rgba(6, 182, 212, 0.12));
+      color: var(--violet);
+      margin-bottom: 16px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .icon-box svg {
+      width: 26px;
+      height: 26px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .feature-card h3 {
+      font-size: 1.18rem;
+      margin-bottom: 10px;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 22px;
+      align-items: start;
+      margin-top: 26px;
+    }
+
+    .requirements-card,
+    .steps-card {
+      padding: 28px;
+      border-radius: var(--radius);
+    }
+
+    .req-list {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0 0;
+      display: grid;
+      gap: 14px;
+    }
+
+    .req-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 18px;
+      background: rgba(255, 255, 255, 0.58);
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      border-radius: 20px;
+    }
+
+    .req-index {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.14), rgba(6, 182, 212, 0.14));
+      color: var(--violet);
+    }
+
+    .req-list strong,
+    .step-card h3 {
+      display: block;
+      color: var(--text);
+      margin-bottom: 4px;
+      font-size: 1.04rem;
+    }
+
+    .timeline {
+      position: relative;
+      margin-top: 20px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 20px;
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(124, 58, 237, 0.2), rgba(6, 182, 212, 0.16));
+    }
+
+    .step-card {
+      position: relative;
+      margin-right: 48px;
+      padding: 18px 18px 18px 20px;
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      border-radius: 22px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .step-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 22px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    .step-number {
+      position: absolute;
+      top: 18px;
+      right: -48px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      box-shadow: 0 14px 24px rgba(124, 58, 237, 0.18);
+    }
+
+    .note-box {
+      margin-top: 18px;
+      padding: 18px 20px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(6, 182, 212, 0.08));
+      border: 1px solid rgba(124, 58, 237, 0.12);
+    }
+
+    .note-box strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .cta-strip {
+      margin-top: 26px;
+      padding: 24px 28px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .cta-strip p {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    footer {
+      text-align: center;
+      padding-top: 26px;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 1040px) {
+      .hero,
+      .details-grid { grid-template-columns: 1fr; }
+      .feature-card.large { grid-column: span 12; }
+      .feature-card.small { grid-column: span 6; }
+    }
+
+    @media (max-width: 720px) {
+      .site-nav { padding: 14px 14px 0; }
+      .nav-shell,
+      .cta-strip { width: 100%; }
+      .nav-shell { flex-wrap: wrap; justify-content: center; }
+      .page { width: min(100% - 16px, 1180px); padding-top: 18px; }
+      .hero,
+      .section,
+      .requirements-card,
+      .steps-card,
+      .cta-strip { padding: 22px; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .download-btn,
+      .pill,
+      .nav-chip,
+      .back-link { width: 100%; justify-content: center; }
+      .hero-visual { min-height: auto; }
+      .pos-frame,
+      .screen-top,
+      .stats-grid,
+      .features-grid { grid-template-columns: 1fr; }
+      .feature-card.large,
+      .feature-card.small { grid-column: span 1; }
+      .timeline::before { right: 16px; }
+      .step-card { margin-right: 42px; }
+      .step-number { right: -42px; }
+    }
   </style>
 </head>
 <body>
-  <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
-  <div class="particles" aria-hidden="true" id="particles"></div>
-  <div class="grain" aria-hidden="true"></div>
+  <div class="page-noise"></div>
+  <div class="glow" id="glow"></div>
+  <div class="floating-shapes" aria-hidden="true">
+    <span class="shape circle s1" data-depth="18"></span>
+    <span class="shape square s2" data-depth="32"></span>
+    <span class="shape diamond s3" data-depth="22"></span>
+    <span class="shape circle s4" data-depth="16"></span>
+    <span class="shape square s5" data-depth="28"></span>
+    <span class="shape diamond s6" data-depth="12"></span>
+  </div>
+
+  <nav class="site-nav" id="siteNav">
+    <div class="nav-shell">
+      <a class="back-link" href="../">← العودة للرئيسية</a>
+      <div class="nav-chip">ADA POS • Windows Desktop</div>
+    </div>
+  </nav>
+
   <main class="page">
-    <section class="top-note"><div><strong>إصدار ADA POS لسطح المكتب</strong><span>واجهة تحميل حديثة لبدء التثبيت بسرعة مع خطوات واضحة وتجربة عربية متقنة.</span></div><div class="top-chip">Windows Desktop Release</div></section>
-    <section class="hero">
-      <div>
-        <div class="badge"><span class="badge-dot"></span> ADA POS • إصدار سطح المكتب</div>
+    <section class="hero glass">
+      <div class="hero-copy">
+        <span class="eyebrow">نظام نقطة بيع جاهز للعمل خلال دقائق</span>
         <h1>حمّل <span class="gradient-text">ADA POS</span></h1>
-        <p class="lead">نظام نقطة بيع متكامل - إدارة المبيعات والمخزون بسهولة</p>
+        <p class="lead">واجهة خفيفة وحديثة لإدارة المبيعات والمخزون والفواتير من مكان واحد، مع مزامنة سحابية وتحديثات تلقائية وتجربة تشغيل سلسة للمتاجر المتعددة.</p>
         <div class="hero-actions">
-          <a class="download-btn" href="https://github.com/alsadiayham-sketch/ada-pos-releases/releases/latest/download/ADA-POS-Setup.exe"><span>تحميل ADA POS الآن</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path><path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5 21H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg></a>
-          <div class="subnote">متطلبات التشغيل: <strong>Windows 10+</strong> • <strong>4GB RAM</strong> • <strong>اتصال إنترنت</strong></div>
+          <a class="download-btn" href="https://github.com/alsadiayham-sketch/ada-pos-releases/releases/latest/download/ADA-POS-Setup.exe">
+            <span>تحميل ADA POS الآن</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path></svg>
+          </a>
+          <span class="pill">حجم التثبيت خفيف • إعداد سريع • واجهة عربية</span>
+        </div>
+        <div class="hero-meta">
+          <span class="tiny-badge">Windows 10+</span>
+          <span class="tiny-badge">4GB RAM</span>
+          <span class="tiny-badge">200MB مساحة</span>
+          <span class="tiny-badge">إنترنت للمزامنة والتحديث</span>
         </div>
       </div>
-      <div class="hero-visual">
-        <div class="window-bar"><span></span><span></span><span></span></div>
-        <div class="dashboard-grid">
-          <div class="metric big"><div class="metric-label">لوحة تحكم ADA POS</div><div class="metric-value">إدارة أسرع. رؤية أوضح.</div><div class="chart"></div></div>
-          <div class="mini-card"><div class="mini-label">المبيعات اليومية</div><div class="mini-value">+24%</div></div>
-          <div class="mini-card"><div class="mini-label">المخزون</div><div class="mini-value">مُحدّث لحظيًا</div></div>
-          <div class="mini-card"><div class="mini-label">الفواتير</div><div class="mini-value">جاهزة خلال ثوانٍ</div></div>
-          <div class="mini-card"><div class="mini-label">المزامنة</div><div class="mini-value">سحابة آمنة</div></div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="window-top">
+          <div class="window-dots"><span></span><span></span><span></span></div>
+          <div class="window-label">ADA POS Dashboard</div>
+        </div>
+        <div class="pos-frame">
+          <div class="sidebar">
+            <div class="logo-mark"></div>
+            <div class="nav-pill active"></div>
+            <div class="nav-pill"></div>
+            <div class="nav-pill"></div>
+            <div class="nav-pill"></div>
+            <div class="nav-pill"></div>
+          </div>
+          <div class="screen">
+            <div class="screen-top">
+              <div class="card-line">
+                <h3>إدارة أسرع. رؤية أوضح.</h3>
+                <div class="mini-note">لوحة متابعة حيّة للمبيعات والمخزون والفروع مع مؤشرات واضحة واتجاهات يومية.</div>
+                <div class="chart-track"><div class="chart-fill"></div></div>
+              </div>
+              <div class="invoice">
+                <small>الفاتورة الحالية</small>
+                <strong>سلة بيع جاهزة خلال ثوانٍ</strong>
+                <div class="invoice-list">
+                  <div class="invoice-row"><span>عنصر 1</span><span>₪125</span></div>
+                  <div class="invoice-row"><span>عنصر 2</span><span>₪89</span></div>
+                  <div class="invoice-row"><span>خصم</span><span>-₪14</span></div>
+                </div>
+                <div class="invoice-total"><span>الإجمالي</span> <strong>₪200</strong></div>
+              </div>
+            </div>
+            <div class="stats-grid">
+              <div class="pos-stat"><span class="stat-label">المبيعات اليوم</span><strong class="stat-value">+24%</strong></div>
+              <div class="pos-stat"><span class="stat-label">المخزون</span><strong class="stat-value">محدّث لحظيًا</strong></div>
+              <div class="pos-stat"><span class="stat-label">المزامنة</span><strong class="stat-value">سحابة آمنة</strong></div>
+            </div>
+            <div class="stats-grid">
+              <div class="quick-action"><span>ماسح الباركود</span><strong>قراءة سريعة</strong></div>
+              <div class="quick-action"><span>الفروع</span><strong>متعدد المتاجر</strong></div>
+              <div class="quick-action"><span>التقارير</span><strong>قرارات أوضح</strong></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
-    <section class="section">
-      <h2 class="section-title">المزايا الرئيسية</h2>
-      <p class="section-desc">مصمم ليمنح متجرك تجربة تشغيل حديثة، مرنة، وسريعة مع واجهة عملية تسهّل إدارة كل شيء من نقطة واحدة.</p>
+
+    <section class="section glass">
+      <div class="section-header">
+        <span class="eyebrow">مزايا أساسية</span>
+        <h2 class="section-title">كل ما يحتاجه المتجر في <span class="gradient-text">واجهة واحدة</span></h2>
+        <p class="section-subtitle">احتفظ بنفس وظائف النظام الحالية، لكن داخل تجربة بصرية أخف وأكثر وضوحًا مع بطاقات زجاجية وتدرجات ناعمة ومساحات مريحة للقراءة.</p>
+      </div>
       <div class="features-grid">
-        <article class="feature-card"><div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M7 4V10M17 4V10M6 20H18C19.1046 20 20 19.1046 20 18V8C20 6.89543 19.1046 6 18 6H6C4.89543 6 4 6.89543 4 8V18C4 19.1046 4.89543 20 6 20Z" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><h3>إدارة المبيعات</h3><p>تسجيل عمليات البيع بسرعة مع تنظيم واضح للمنتجات والعملاء وطرق الدفع.</p></article>
-        <article class="feature-card"><div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none"><path d="M3 7L12 3L21 7L12 11L3 7Z" stroke-width="1.8" stroke-linejoin="round"></path><path d="M3 7V17L12 21M21 7V17L12 21M12 11V21" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><h3>تتبع المخزون</h3><p>راقب الكميات المتوفرة، التنبيهات، وحركة الأصناف بدقة لتجنب النقص أو الفاقد.</p></article>
-        <article class="feature-card"><div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3H17L20 6V20C20 20.5523 19.5523 21 19 21H5C4.44772 21 4 20.5523 4 20V4C4 3.44772 4.44772 3 5 3H7Z" stroke-width="1.8" stroke-linejoin="round"></path><path d="M8 11H16M8 15H13M15 3V7H19" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><h3>الفواتير والتقارير</h3><p>أنشئ فواتير احترافية واستعرض تقارير مالية وتشغيلية تساعدك على اتخاذ القرار.</p></article>
-        <article class="feature-card"><div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none"><path d="M7 18.5A4.5 4.5 0 1 1 8.2 9.67 5.5 5.5 0 1 1 18 18.5H7Z" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><h3>مزامنة سحابية</h3><p>وصول أسرع للبيانات مع مزامنة موثوقة تضمن استمرارية العمل عبر الأجهزة والفروع.</p></article>
-        <article class="feature-card"><div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19V9M12 19V5M20 19V11" stroke-width="1.8" stroke-linecap="round"></path><path d="M3 19H21" stroke-width="1.8" stroke-linecap="round"></path></svg></div><h3>دعم متعدد المتاجر</h3><p>إدارة أكثر من متجر أو فرع من منصة موحدة مع تتبع الأداء لكل موقع بسهولة.</p></article>
-        <article class="feature-card"><div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7V17M8 7V17M11 7V17M15 7V17M18 7V17M21 7V17" stroke-width="1.8" stroke-linecap="round"></path></svg></div><h3>ماسح الباركود</h3><p>دعم سريع لقراءة الباركود لتسريع عمليات البيع والجرد وتحسين دقة الإدخال.</p></article>
+        <article class="feature-card large">
+          <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M4 7h16"></path><path d="M7 4v6"></path><path d="M17 4v6"></path><path d="M6 20h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"></path></svg></div>
+          <h3>المبيعات والمخزون في سير عمل واحد</h3>
+          <p>أنشئ عمليات البيع بسرعة، راقب حالة الأصناف لحظيًا، وقلّل الأخطاء عبر واجهة يومية واضحة مناسبة للمتاجر النشطة.</p>
+        </article>
+        <article class="feature-card large">
+          <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M7 18.5a4.5 4.5 0 1 1 1.2-8.83A5.5 5.5 0 1 1 18 18.5H7z"></path></svg></div>
+          <h3>مزامنة سحابية وتحديثات تلقائية</h3>
+          <p>بياناتك محدثة دائمًا بين الأجهزة والفروع، مع وصول سريع للتحديثات وتحسينات النظام بدون تعقيد تقني.</p>
+        </article>
+        <article class="feature-card small">
+          <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M5 7v10"></path><path d="M8 7v10"></path><path d="M11 7v10"></path><path d="M15 7v10"></path><path d="M18 7v10"></path><path d="M21 7v10"></path></svg></div>
+          <h3>دعم الباركود</h3>
+          <p>إدخال أسرع ودقة أعلى عند البيع والجرد.</p>
+        </article>
+        <article class="feature-card small">
+          <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 12h8"></path><path d="M13 12h8"></path><path d="M12 3v8"></path><path d="M12 13v8"></path><circle cx="12" cy="12" r="2.5"></circle></svg></div>
+          <h3>متعدد المتاجر</h3>
+          <p>إدارة الفروع من مكان واحد مع متابعة مستقلة للأداء.</p>
+        </article>
+        <article class="feature-card small">
+          <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M4 19V9"></path><path d="M12 19V5"></path><path d="M20 19v-8"></path><path d="M3 19h18"></path></svg></div>
+          <h3>تقارير أوضح</h3>
+          <p>مؤشرات يومية وقراءة أسهل لاتخاذ القرار.</p>
+        </article>
+        <article class="feature-card small">
+          <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M12 3v4"></path><path d="M12 17v4"></path><path d="M4.93 4.93l2.83 2.83"></path><path d="M16.24 16.24l2.83 2.83"></path><path d="M3 12h4"></path><path d="M17 12h4"></path><path d="M4.93 19.07l2.83-2.83"></path><path d="M16.24 7.76l2.83-2.83"></path></svg></div>
+          <h3>تحديث تلقائي</h3>
+          <p>ابقَ على آخر إصدار بأقل مجهود ومن دون خطوات معقدة.</p>
+        </article>
       </div>
     </section>
-    <section class="section">
-      <h2 class="section-title">متطلبات النظام</h2>
-      <p class="section-desc">ابدأ خلال دقائق فقط. ADA POS مصمم ليعمل بسلاسة على بيئات التشغيل الشائعة للأعمال.</p>
-      <div class="requirements">
-        <div class="requirement"><strong>Windows 10+</strong><span>نظام تشغيل حديث ومستقر لتجربة استخدام أفضل.</span></div>
-        <div class="requirement"><strong>4GB RAM</strong><span>ذاكرة كافية لتشغيل النظام بسلاسة أثناء إدارة المتجر.</span></div>
-        <div class="requirement"><strong>Internet connection</strong><span>مطلوب للمزامنة السحابية، التحديثات، وبعض مزايا الربط.</span></div>
+
+    <section class="details-grid">
+      <div class="requirements-card glass">
+        <div class="section-header">
+          <span class="eyebrow">متطلبات التشغيل</span>
+          <h2 class="section-title">جاهز للعمل على بيئة <span class="gradient-text">خفيفة ومستقرة</span></h2>
+          <p class="section-subtitle">يمكن تشغيل ADA POS على أجهزة الأعمال الشائعة بدون متطلبات مبالغ فيها.</p>
+        </div>
+        <ul class="req-list">
+          <li><span class="req-index">01</span><div><strong>Windows 10 أو أحدث</strong><span>نظام تشغيل حديث يضمن توافق أفضل مع التحديثات والأمان.</span></div></li>
+          <li><span class="req-index">02</span><div><strong>ذاكرة 4GB RAM</strong><span>كافية لتشغيل التطبيق بسلاسة أثناء إدارة المبيعات اليومية.</span></div></li>
+          <li><span class="req-index">03</span><div><strong>مساحة 200MB على القرص</strong><span>تثبيت خفيف وسريع دون استهلاك كبير لمساحة الجهاز.</span></div></li>
+          <li><span class="req-index">04</span><div><strong>اتصال إنترنت</strong><span>مطلوب للمزامنة السحابية، التقارير المتصلة، والتحديثات التلقائية.</span></div></li>
+        </ul>
+      </div>
+
+      <div class="steps-card glass">
+        <div class="section-header">
+          <span class="eyebrow">دليل التثبيت</span>
+          <h2 class="section-title">خطوات بسيطة للبدء <span class="gradient-text">خلال دقائق</span></h2>
+          <p class="section-subtitle">اتبع التسلسل التالي كما هو للحفاظ على نفس آلية التثبيت الحالية دون تغيير الوظائف.</p>
+        </div>
+        <div class="timeline">
+          <div class="step-card"><span class="step-number">1</span><h3>حمّل ملف التثبيت</h3><p>اضغط على زر التحميل بالأعلى لتنزيل ملف <strong>ADA-POS-Setup.exe</strong> من آخر إصدار متاح.</p></div>
+          <div class="step-card"><span class="step-number">2</span><h3>شغّل الملف</h3><p>بعد اكتمال التنزيل افتح الملف لبدء التثبيت، مع التأكد من السماح للتطبيق بالمتابعة عند الطلب.</p></div>
+          <div class="step-card"><span class="step-number">3</span><h3>إذا ظهرت Smart App Control</h3><p>اضغط بزر الفأرة الأيمن على الملف، اختر <strong>Properties</strong> ثم فعّل <strong>Unblock</strong> أسفل النافذة واضغط <strong>OK</strong>، وبعدها أعد التشغيل.</p></div>
+          <div class="step-card"><span class="step-number">4</span><h3>أكمل التثبيت</h3><p>تابع معالج الإعداد حتى النهاية، واختر إنشاء اختصار لسطح المكتب إذا رغبت.</p></div>
+          <div class="step-card"><span class="step-number">5</span><h3>شغّل ADA POS</h3><p>افتح البرنامج بعد التثبيت، سجّل الدخول، وابدأ إدارة متجرك مباشرة.</p></div>
+        </div>
+        <div class="note-box">
+          <strong>معلومة مهمة</strong>
+          <div class="section-subtitle">قد تظهر رسائل حماية ويندوز للتطبيقات الجديدة وهذا طبيعي. تنفيذ خطوة Unblock مرة واحدة يكفي غالبًا قبل متابعة التثبيت.</div>
+        </div>
       </div>
     </section>
-    <section class="section">
-      <h2 class="section-title">خطوات التثبيت</h2>
-      <p class="section-desc">اتبع هذه الخطوات البسيطة لتثبيت النظام وبدء العمل بسرعة.</p>
-      <div class="steps-grid">
-        <div class="step-card"><div class="step-number">1</div><h3>حمّل الملف</h3><p>اضغط على زر التحميل أعلاه وانتظر انتهاء التحميل.</p></div>
-        <div class="step-card"><div class="step-number">2</div><h3>ألغِ حظر الملف</h3><p>اضغط بالزر الأيمن على الملف → خصائص (Properties) → ضع علامة ✓ على "إلغاء الحظر" (Unblock) في أسفل النافذة → موافق.</p></div>
-        <div class="step-card"><div class="step-number">3</div><h3>شغّل المثبت</h3><p>افتح الملف واتبع خطوات التثبيت. يمكنك اختيار إضافة اختصار لسطح المكتب.</p></div>
-        <div class="step-card"><div class="step-number">4</div><h3>سجّل الدخول</h3><p>أدخل اسم المتجر واسم المستخدم وكلمة المرور وابدأ العمل!</p></div>
+
+    <section class="cta-strip glass">
+      <div>
+        <span class="eyebrow">جاهز للتشغيل</span>
+        <p>احصل على آخر إصدار من ADA POS وابدأ إعداد المتجر على جهازك خلال وقت قصير.</p>
       </div>
-      <div class="warning-box"><strong>⚠️ ظهرت رسالة "Smart App Control" أو "Windows Protected"?</strong><div class="section-desc" style="margin:0;">هذا طبيعي للبرامج الجديدة. اضغط بالزر الأيمن → خصائص → Unblock → موافق، ثم شغّل الملف مرة أخرى.</div></div>
+      <a class="download-btn" href="https://github.com/alsadiayham-sketch/ada-pos-releases/releases/latest/download/ADA-POS-Setup.exe">تنزيل الإصدار الأحدث</a>
     </section>
+
     <footer>© ADA Systems</footer>
   </main>
+
   <script>
-    var container = document.getElementById('particles');
-    var total = 18;
-    var i;
-    for (i = 0; i < total; i++) {
-      var p = document.createElement('span');
-      var size = Math.random() * 8 + 4;
-      p.className = 'particle';
-      p.style.width = size + 'px';
-      p.style.height = size + 'px';
-      p.style.left = Math.random() * 100 + '%';
-      p.style.animationDuration = (Math.random() * 10 + 12) + 's';
-      p.style.animationDelay = (-Math.random() * 12) + 's';
-      p.style.opacity = (Math.random() * 0.18 + 0.08).toFixed(2);
-      container.appendChild(p);
-    }
+    (function () {
+      var glow = document.getElementById('glow');
+      var nav = document.getElementById('siteNav');
+      var shapes = document.querySelectorAll('.shape');
+      var pointerX = window.innerWidth / 2;
+      var pointerY = window.innerHeight / 2;
+      var currentX = pointerX;
+      var currentY = pointerY;
+
+      function updateGlow() {
+        currentX += (pointerX - currentX) * 0.14;
+        currentY += (pointerY - currentY) * 0.14;
+        glow.style.transform = 'translate3d(' + (currentX - 170) + 'px,' + (currentY - 170) + 'px,0)';
+      }
+
+      function updateShapes() {
+        var i;
+        var nx = (pointerX / window.innerWidth) - 0.5;
+        var ny = (pointerY / window.innerHeight) - 0.5;
+        for (i = 0; i < shapes.length; i++) {
+          var depth = parseFloat(shapes[i].getAttribute('data-depth')) || 12;
+          var tx = nx * depth;
+          var ty = ny * depth;
+          var rotate = shapes[i].className.indexOf('diamond') > -1 ? ' rotate(45deg)' : '';
+          shapes[i].style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0)' + rotate;
+        }
+      }
+
+      function tick() {
+        updateGlow();
+        updateShapes();
+        window.requestAnimationFrame(tick);
+      }
+
+      function onPointerMove(event) {
+        pointerX = event.clientX;
+        pointerY = event.clientY;
+      }
+
+      function onScroll() {
+        if (window.pageYOffset > 16) {
+          nav.className = 'site-nav scrolled';
+        } else {
+          nav.className = 'site-nav';
+        }
+      }
+
+      document.addEventListener('mousemove', onPointerMove);
+      window.addEventListener('scroll', onScroll);
+      onScroll();
+      tick();
+    }());
   </script>
 </body>
 </html>
