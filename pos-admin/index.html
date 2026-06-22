@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADA POS - Update Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --card: #12182b;
+      --border: rgba(255,255,255,0.08);
+      --text: #eef2ff;
+      --muted: #7b8ab8;
+      --accent: #8b5cf6;
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 40px 24px;
+    }
+    .container { max-width: 700px; margin: auto; }
+    h1 { font-size: 1.8rem; margin-bottom: 8px; }
+    .subtitle { color: var(--muted); margin-bottom: 40px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+    .card h2 { font-size: 1.2rem; margin-bottom: 20px; color: var(--accent); }
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block; margin-bottom: 6px;
+      font-weight: 500; color: var(--muted); font-size: 0.9rem;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1rem;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none; border-color: var(--accent);
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .toggle-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 0;
+    }
+    .toggle {
+      width: 48px; height: 26px;
+      background: var(--border);
+      border-radius: 13px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .toggle.active { background: var(--danger); }
+    .toggle::after {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      top: 3px; right: 3px;
+      transition: transform 0.3s;
+    }
+    .toggle.active::after { transform: translateX(-22px); }
+    .toggle-label { font-weight: 500; }
+    .toggle-desc { font-size: 0.8rem; color: var(--muted); }
+    .btn {
+      padding: 14px 32px;
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-save {
+      background: var(--accent);
+      color: #fff;
+      width: 100%;
+    }
+    .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+    .status-msg {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 0.9rem;
+      min-height: 24px;
+    }
+    .status-msg.success { color: var(--success); }
+    .status-msg.error { color: var(--danger); }
+    .current-info {
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+    .current-info span { color: var(--accent); font-weight: 700; }
+    .login-card {
+      max-width: 400px; margin: 100px auto;
+      text-align: center;
+    }
+    .login-card h2 { margin-bottom: 20px; }
+    #loginSection .form-group { margin-bottom: 14px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Login -->
+    <div id="loginSection">
+      <div class="card login-card">
+        <h2>🔐 ADA POS Admin</h2>
+        <div class="form-group">
+          <input type="password" id="adminPass" placeholder="كلمة المرور">
+        </div>
+        <button class="btn btn-save" onclick="adminLogin()">دخول</button>
+        <p class="status-msg" id="loginMsg"></p>
+      </div>
+    </div>
+
+    <!-- Main Panel -->
+    <div id="mainPanel" style="display:none;">
+      <h1>🔄 إدارة تحديثات ADA POS</h1>
+      <p class="subtitle">دفع التحديثات لجميع المتاجر والأجهزة المثبتة</p>
+
+      <div class="card">
+        <h2>الإصدار الحالي</h2>
+        <div class="current-info">
+          الإصدار المنشور: <span id="currentVer">-</span> |
+          آخر تحديث: <span id="lastUpdate">-</span>
+        </div>
+
+        <div class="form-group">
+          <label>رقم الإصدار الجديد</label>
+          <input type="text" id="newVersion" placeholder="مثال: 2.1.0">
+        </div>
+
+        <div class="form-group">
+          <label>رابط التحميل (Google Drive direct link)</label>
+          <input type="text" id="downloadUrl" placeholder="https://drive.google.com/uc?export=download&id=...">
+        </div>
+
+        <div class="form-group">
+          <label>ملاحظات الإصدار (ما الجديد)</label>
+          <textarea id="releaseNotes" placeholder="وصف التغييرات والإصلاحات..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>الحد الأدنى المطلوب (أقل إصدار مسموح)</label>
+          <input type="text" id="minVersion" placeholder="مثال: 2.0.0">
+        </div>
+
+        <div class="toggle-row">
+          <div class="toggle" id="forceToggle" onclick="toggleForce()"></div>
+          <div>
+            <div class="toggle-label">تحديث إلزامي</div>
+            <div class="toggle-desc">إذا مفعّل، لن يعمل التطبيق حتى يتم التحديث</div>
+          </div>
+        </div>
+
+        <button class="btn btn-save" id="saveBtn" onclick="saveUpdate()">💾 نشر التحديث</button>
+        <p class="status-msg" id="statusMsg"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var firebaseConfig = {
+      apiKey: 'AIzaSyAp3mDn6c5D3GKIV7BZ2aKIsm7MxYP0vG0',
+      authDomain: 'dimaboutique-b4f16.firebaseapp.com',
+      projectId: 'dimaboutique-b4f16',
+      storageBucket: 'dimaboutique-b4f16.appspot.com',
+      messagingSenderId: '552629390598',
+      appId: '1:552629390598:web:7b2a3f2f5e8c4a5b6d7e8f'
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    var db = firebase.firestore();
+    var updatesRef = db.collection('projects').doc('_global').collection('settings').doc('pos_updates');
+    var forceUpdate = false;
+    var ADMIN_PASS = 'ada2024!';
+
+    function adminLogin() {
+      var pass = document.getElementById('adminPass').value;
+      if (pass === ADMIN_PASS) {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('mainPanel').style.display = 'block';
+        loadCurrent();
+      } else {
+        document.getElementById('loginMsg').textContent = 'كلمة المرور غير صحيحة';
+        document.getElementById('loginMsg').className = 'status-msg error';
+      }
+    }
+
+    document.getElementById('adminPass').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') adminLogin();
+    });
+
+    function loadCurrent() {
+      updatesRef.get().then(function(doc) {
+        if (!doc.exists) return;
+        var d = doc.data();
+        document.getElementById('currentVer').textContent = d.currentVersion || '-';
+        document.getElementById('lastUpdate').textContent = d.updatedAt && d.updatedAt.toDate ? d.updatedAt.toDate().toLocaleString('ar-EG') : '-';
+        document.getElementById('newVersion').value = d.currentVersion || '';
+        document.getElementById('downloadUrl').value = d.downloadUrl || '';
+        document.getElementById('releaseNotes').value = d.releaseNotes || '';
+        document.getElementById('minVersion').value = d.minVersion || '';
+        forceUpdate = d.forceUpdate === true;
+        if (forceUpdate) document.getElementById('forceToggle').classList.add('active');
+      });
+    }
+
+    function toggleForce() {
+      forceUpdate = !forceUpdate;
+      var el = document.getElementById('forceToggle');
+      if (forceUpdate) { el.classList.add('active'); } else { el.classList.remove('active'); }
+    }
+
+    function saveUpdate() {
+      var version = document.getElementById('newVersion').value.trim();
+      var url = document.getElementById('downloadUrl').value.trim();
+      var notes = document.getElementById('releaseNotes').value.trim();
+      var minVer = document.getElementById('minVersion').value.trim();
+      var statusEl = document.getElementById('statusMsg');
+      var btn = document.getElementById('saveBtn');
+
+      if (!version || !url) {
+        statusEl.textContent = 'يرجى إدخال رقم الإصدار ورابط التحميل';
+        statusEl.className = 'status-msg error';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'جاري النشر...';
+      statusEl.textContent = '';
+
+      updatesRef.set({
+        currentVersion: version,
+        downloadUrl: url,
+        releaseNotes: notes,
+        minVersion: minVer || version,
+        forceUpdate: forceUpdate,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(function() {
+        statusEl.textContent = '✅ تم نشر التحديث بنجاح! جميع الأجهزة ستتلقى الإشعار عند تسجيل الدخول.';
+        statusEl.className = 'status-msg success';
+        btn.textContent = '💾 نشر التحديث';
+        btn.disabled = false;
+        loadCurrent();
+      }).catch(function(err) {
+        statusEl.textContent = '❌ خطأ: ' + err.message;
+        statusEl.className = 'status-msg error';
+        btn.textContent = '💾 نشر التحديث';
+        btn.disabled = false;
+      });
+    }
+  </script>
+</body>
+</html>
