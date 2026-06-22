@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoom Store | تم تأكيد الطلب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .confirmation-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+        .confirmation-card { background: var(--card); border: 1px solid var(--border); border-radius: 28px; padding: 40px; max-width: 680px; width: 100%; box-shadow: var(--shadow); text-align: center; animation: confirmSlideIn 0.6s ease; }
+        @keyframes confirmSlideIn { from { opacity: 0; transform: translateY(24px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .success-icon { width: 78px; height: 78px; margin: 0 auto 18px; border-radius: 50%; background: rgba(226,194,117,0.12); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 900; }
+        .confirmation-card h1 { font-size: 1.95rem; margin-bottom: 6px; }
+        .confirmation-card .order-id { color: var(--text-light); margin-bottom: 24px; }
+        .order-details { text-align: right; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; margin: 20px 0; }
+        .order-details h3 { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .order-item { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .order-item:last-child { border-bottom: none; }
+        .order-item-name { font-weight: 700; display: block; }
+        .order-item-qty { color: var(--muted); font-size: 0.84rem; }
+        .order-item-price { font-weight: 800; color: var(--accent); }
+        .order-summary { margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.06); }
+        .order-summary-row { display: flex; justify-content: space-between; padding: 6px 0; }
+        .order-summary-row.total { font-size: 1.28rem; font-weight: 900; color: var(--accent); }
+        .order-info { text-align: right; margin-top: 14px; color: var(--text-light); font-size: 0.92rem; }
+        .order-info span { display: block; padding: 3px 0; }
+        .order-info strong { color: var(--text); }
+        .confirmation-actions { margin-top: 25px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+        .confirmation-actions a { padding: 14px 24px; border-radius: 16px; font-family: inherit; font-weight: 800; text-decoration: none; transition: var(--transition); }
+        .btn-whatsapp-confirm { background: linear-gradient(135deg, #25d366, #5cff8a); color: #07311a; }
+        .btn-continue { background: linear-gradient(135deg, var(--primary), var(--accent)); color: #241607; }
+        .confirmation-actions a:hover { transform: translateY(-2px); }
+        .confetti { position: fixed; inset: 0; pointer-events: none; z-index: 100; overflow: hidden; }
+        .confetti-piece { position: absolute; width: 10px; height: 10px; border-radius: 50%; animation: confettiFall 3s ease-in forwards; }
+        @keyframes confettiFall { 0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+        @media (max-width: 768px) { .confirmation-card { padding: 28px 20px; } .confirmation-card h1 { font-size: 1.55rem; } }
+    </style>
+</head>
+<body>
+    <div class="confetti" id="confetti"></div>
+    <div class="confirmation-page">
+        <div class="confirmation-card">
+            <div class="success-icon">✓</div>
+            <h1>تم تأكيد طلبك بنجاح</h1>
+            <p class="order-id" id="orderId"></p>
+            <div class="order-details">
+                <h3>تفاصيل الطلب</h3>
+                <div id="orderItems"></div>
+                <div class="order-summary">
+                    <div class="order-summary-row"><span>عدد المنتجات:</span><span id="orderCount"></span></div>
+                    <div class="order-summary-row"><span>طريقة الاستلام:</span><span id="orderDelivery"></span></div>
+                    <div class="order-summary-row total"><span>المجموع:</span><span id="orderTotal"></span></div>
+                </div>
+                <div class="order-info" id="orderInfo"></div>
+            </div>
+            <p style="color: var(--text-light); font-size: 0.92rem;">سيتم التواصل معك قريباً لتأكيد الطلب وتفاصيل التسليم.</p>
+            <div class="confirmation-actions">
+                <a href="#" class="btn-whatsapp-confirm" id="whatsappConfirmBtn">إرسال الطلب عبر واتساب</a>
+                <a href="index.html" class="btn-continue">متابعة التسوق</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="data.js"></script>
+    <script>
+        let siteSettings = normalizeSettings(DEFAULT_SITE_SETTINGS);
+        document.addEventListener('DOMContentLoaded', async function () {
+            const order = JSON.parse(localStorage.getItem('zoom_last_order'));
+            if (!order) {
+                window.location.href = 'index.html';
+                return;
+            }
+            try {
+                if (window.db) {
+                    const settingsSnap = await db.collection('settings').doc('config').get();
+                    if (settingsSnap.exists) siteSettings = normalizeSettings(settingsSnap.data());
+                }
+            } catch (error) {
+                console.error(error);
+            }
+            document.getElementById('orderId').textContent = 'رقم الطلب: ' + order.id;
+            document.getElementById('orderItems').innerHTML = order.items.map(function (item) {
+                return '<div class="order-item"><div><span class="order-item-name">' + item.name + '</span><span class="order-item-qty">' + item.brand + ' • ' + item.sizeLabel + ' • x' + item.qty + '</span></div><span class="order-item-price">' + formatCurrency(item.lineTotal) + '</span></div>';
+            }).join('');
+            const totalItems = order.items.reduce(function (sum, item) { return sum + item.qty; }, 0);
+            document.getElementById('orderCount').textContent = totalItems + ' قطعة';
+            document.getElementById('orderDelivery').textContent = order.delivery === 'pickup' ? 'استلام من المعرض' : 'توصيل';
+            document.getElementById('orderTotal').textContent = formatCurrency(order.total);
+            let info = '<span><strong>الاسم:</strong> ' + order.customerName + '</span>';
+            info += '<span><strong>الهاتف:</strong> ' + order.customerPhone + '</span>';
+            if (order.delivery === 'delivery' && order.address) info += '<span><strong>العنوان:</strong> ' + order.address + '</span>';
+            if (order.notes) info += '<span><strong>ملاحظات:</strong> ' + order.notes + '</span>';
+            info += '<span><strong>التاريخ:</strong> ' + formatDateTime(order.date) + '</span>';
+            document.getElementById('orderInfo').innerHTML = info;
+            document.getElementById('whatsappConfirmBtn').href = buildWhatsAppUrl(siteSettings.whatsappNumber, buildWhatsAppMessage(order));
+            createConfetti();
+        });
+
+        function buildWhatsAppMessage(order) {
+            const itemsText = order.items.map(function (item, index) {
+                return (index + 1) + '. ' + item.name + ' (' + item.sizeLabel + ')\n   السعر: ' + item.price + ' شيكل × ' + item.qty + ' = ' + item.lineTotal + ' شيكل';
+            }).join('\n');
+            const deliveryText = order.delivery === 'pickup' ? 'استلام من المعرض' : 'توصيل إلى: ' + order.address;
+            let message = 'مرحبا، هذا تأكيد للطلب رقم ' + order.id + ' من Zoom Store:\n';
+            message += 'ـــــــــــــــــــــــــــ\n';
+            message += itemsText + '\n';
+            message += 'ـــــــــــــــــــــــــــ\n';
+            message += 'الإجمالي: ' + order.total + ' شيكل\n';
+            message += 'الاستلام: ' + deliveryText + '\n';
+            return message;
+        }
+
+        function createConfetti() {
+            const container = document.getElementById('confetti');
+            const colors = ['#c9a96e', '#e2c275', '#facc15', '#8b5cf6', '#34d399'];
+            for (let i = 0; i < 48; i += 1) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.animationDelay = Math.random() * 2 + 's';
+                piece.style.animationDuration = 2 + Math.random() * 2 + 's';
+                piece.style.width = 6 + Math.random() * 8 + 'px';
+                piece.style.height = piece.style.width;
+                container.appendChild(piece);
+            }
+            setTimeout(function () { container.remove(); }, 5000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,688 @@
+:root {
+  --soft-white: #fefefe;
+  --bamboo: #7ba05b;
+  --stone: #9e9e9e;
+  --sand: #e8dcc8;
+  --ink: #111111;
+  --mist: #f4efe7;
+  --shadow: 0 24px 60px rgba(17, 17, 17, 0.08);
+  --stone-shadow: 0 16px 30px rgba(40, 40, 40, 0.08);
+  --radius-stone: 34px 46px 38px 42px;
+  --radius-card: 28px 34px 26px 36px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top right, rgba(123, 160, 91, 0.13), transparent 22%),
+    radial-gradient(circle at bottom left, rgba(232, 220, 200, 0.85), transparent 24%),
+    linear-gradient(180deg, #fffdfa 0%, #f7f3ed 48%, #fefefe 100%);
+  font-family: "Tajawal", "Noto Sans Arabic", sans-serif;
+  line-height: 1.8;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid rgba(123, 160, 91, 0.45);
+  outline-offset: 3px;
+}
+
+.page-shell {
+  width: min(1220px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.25rem 0 3rem;
+}
+
+.hero,
+.products-section,
+.rituals-section,
+.journal-section,
+.newsletter,
+.site-footer,
+.mantra-band {
+  position: relative;
+}
+
+.hero::before,
+.products-section::before,
+.journal-section::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: -0.75rem;
+  width: 130px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(123, 160, 91, 0.85), rgba(123, 160, 91, 0.15), transparent);
+  filter: blur(0.2px);
+  opacity: 0.75;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.4rem;
+  margin-bottom: 3.5rem;
+  background: rgba(254, 254, 254, 0.68);
+  border: 1px solid rgba(158, 158, 158, 0.18);
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(17, 17, 17, 0.04);
+  backdrop-filter: blur(14px);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-family: "Zen Maru Gothic", sans-serif;
+}
+
+.brand strong,
+.section-heading h2,
+.hero h1,
+.newsletter h2,
+.journal-copy h2,
+.ritual-card h3,
+.product-body h3 {
+  font-family: "Zen Maru Gothic", sans-serif;
+}
+
+.brand small {
+  display: block;
+  color: rgba(17, 17, 17, 0.62);
+  font-size: 0.82rem;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(123, 160, 91, 0.17), rgba(232, 220, 200, 0.75));
+  box-shadow: inset 0 0 0 1px rgba(123, 160, 91, 0.15);
+  font-size: 1.5rem;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  color: rgba(17, 17, 17, 0.78);
+}
+
+.nav-links a {
+  position: relative;
+  padding-bottom: 0.2rem;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: -0.1rem;
+  width: 100%;
+  height: 2px;
+  border-radius: 999px;
+  transform: scaleX(0);
+  transform-origin: right;
+  background: var(--bamboo);
+  transition: transform 0.35s ease;
+}
+
+.nav-links a:hover::after,
+.nav-links a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.hero-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+  gap: 2.5rem;
+  align-items: center;
+  min-height: 72vh;
+}
+
+.hero-copy {
+  padding: 1rem 0 1rem 1.5rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--bamboo);
+  letter-spacing: 0.08em;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2.7rem, 5vw, 5.1rem);
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+}
+
+.haiku {
+  margin: 1.5rem 0 1rem;
+  color: rgba(17, 17, 17, 0.72);
+  font-size: 1.2rem;
+  max-width: 28rem;
+}
+
+.intro {
+  max-width: 36rem;
+  margin: 0 0 2rem;
+  color: rgba(17, 17, 17, 0.82);
+  font-size: 1.04rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+.button,
+.product-footer button,
+.subscribe-form button {
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, background-color 0.35s ease;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 152px;
+  padding: 0.95rem 1.4rem;
+  font-weight: 700;
+}
+
+.button:hover,
+.product-footer button:hover,
+.subscribe-form button:hover {
+  transform: translateY(-2px);
+}
+
+.primary {
+  background: var(--bamboo);
+  color: var(--soft-white);
+  box-shadow: 0 14px 28px rgba(123, 160, 91, 0.28);
+}
+
+.secondary {
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgba(17, 17, 17, 0.08);
+}
+
+.hero-visual {
+  position: relative;
+  min-height: 560px;
+}
+
+.floating-stone {
+  position: absolute;
+  background: rgba(254, 254, 254, 0.8);
+  border: 1px solid rgba(158, 158, 158, 0.2);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+}
+
+.stone-large {
+  inset: 1rem 2.5rem 5rem 0;
+  overflow: hidden;
+  border-radius: 42px 110px 42px 80px;
+}
+
+.stone-large img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.stone-small {
+  top: 2rem;
+  left: 0;
+  width: 230px;
+  padding: 1.2rem 1.35rem;
+  border-radius: var(--radius-card);
+}
+
+.stone-small p,
+.stone-note span {
+  margin: 0;
+  color: rgba(17, 17, 17, 0.66);
+}
+
+.stone-small strong {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 1.25rem;
+}
+
+.stone-note {
+  right: 2.2rem;
+  bottom: 1.2rem;
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: 36px 22px 30px 28px;
+}
+
+.mantra-band {
+  margin: 2rem auto 5rem;
+  padding: 1.4rem 1.6rem;
+  max-width: 850px;
+  background: rgba(232, 220, 200, 0.42);
+  border-radius: 30px;
+  text-align: center;
+  color: rgba(17, 17, 17, 0.78);
+}
+
+.section-heading {
+  margin-bottom: 2rem;
+  max-width: 760px;
+}
+
+.section-heading.narrow {
+  max-width: 620px;
+}
+
+.section-heading h2,
+.newsletter h2,
+.journal-copy h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1.3;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.4rem;
+}
+
+.product-card,
+.ritual-card,
+.journal-quote,
+.newsletter,
+.mantra-band {
+  border: 1px solid rgba(158, 158, 158, 0.18);
+  box-shadow: var(--stone-shadow);
+}
+
+.product-card {
+  overflow: hidden;
+  background: rgba(254, 254, 254, 0.86);
+  border-radius: var(--radius-stone);
+  transition: transform 0.45s ease, box-shadow 0.45s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 34px rgba(40, 40, 40, 0.12);
+}
+
+.product-image-wrap {
+  position: relative;
+  height: 245px;
+  overflow: hidden;
+}
+
+.product-image-wrap img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.tag {
+  position: absolute;
+  top: 1rem;
+  inset-inline-start: 1rem;
+  padding: 0.45rem 0.85rem;
+  background: rgba(254, 254, 254, 0.85);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.product-body {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.35rem;
+}
+
+.product-body h3 {
+  margin: 0;
+  font-size: 1.24rem;
+}
+
+.product-body p {
+  margin: 0;
+  color: rgba(17, 17, 17, 0.74);
+}
+
+.product-meta,
+.product-footer,
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.product-meta {
+  color: rgba(17, 17, 17, 0.62);
+  font-size: 0.92rem;
+}
+
+.product-footer strong {
+  font-size: 1.3rem;
+  color: var(--bamboo);
+}
+
+.product-footer button {
+  padding: 0.78rem 1rem;
+  background: rgba(123, 160, 91, 0.14);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.rituals-section {
+  padding: 6rem 0 1rem;
+}
+
+.ritual-layout {
+  display: grid;
+  grid-template-columns: 1.05fr 0.85fr 1fr;
+  gap: 1.4rem;
+}
+
+.ritual-card {
+  padding: 2rem 1.6rem;
+  background: linear-gradient(180deg, rgba(254, 254, 254, 0.84), rgba(232, 220, 200, 0.22));
+  border-radius: 34px 26px 38px 24px;
+}
+
+.ritual-card h3 {
+  margin: 0 0 0.7rem;
+  font-size: 1.4rem;
+}
+
+.ritual-card p,
+.features-list {
+  margin: 0;
+  color: rgba(17, 17, 17, 0.74);
+}
+
+.journal-section {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 2rem;
+  align-items: center;
+  padding: 6rem 0;
+}
+
+.features-list {
+  padding: 0;
+  margin-top: 1.5rem;
+  list-style: none;
+}
+
+.features-list li {
+  position: relative;
+  padding-inline-start: 1.2rem;
+  margin-bottom: 0.85rem;
+}
+
+.features-list li::before {
+  content: "•";
+  position: absolute;
+  inset-inline-start: 0;
+  color: var(--bamboo);
+}
+
+.journal-quote {
+  padding: 3rem 2.2rem;
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, rgba(123, 160, 91, 0.16), rgba(254, 254, 254, 0.9));
+  border-radius: 50px 26px 56px 30px;
+  text-align: center;
+}
+
+.journal-quote p {
+  margin: 0;
+  font-family: "Zen Maru Gothic", sans-serif;
+  font-size: clamp(1.5rem, 2.6vw, 2.4rem);
+  line-height: 1.8;
+}
+
+.newsletter {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 38px;
+}
+
+.subscribe-form {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.subscribe-form input {
+  min-width: min(100%, 320px);
+  padding: 1rem 1.2rem;
+  border: 1px solid rgba(158, 158, 158, 0.34);
+  border-radius: 999px;
+  background: rgba(254, 254, 254, 0.85);
+  outline: none;
+}
+
+.subscribe-form input:focus {
+  border-color: rgba(123, 160, 91, 0.55);
+  box-shadow: 0 0 0 4px rgba(123, 160, 91, 0.12);
+}
+
+.subscribe-form button {
+  padding: 1rem 1.35rem;
+  background: var(--ink);
+  color: var(--soft-white);
+}
+
+.site-footer {
+  margin-top: 2rem;
+  padding: 1.6rem 0 0;
+  color: rgba(17, 17, 17, 0.64);
+  border-top: 1px solid rgba(158, 158, 158, 0.2);
+}
+
+.site-footer div {
+  display: flex;
+  gap: 1rem;
+}
+
+.breathe {
+  animation: breathe 7s ease-in-out infinite;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.024);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 1100px) {
+  .products-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .hero-layout,
+  .journal-section,
+  .newsletter,
+  .ritual-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-visual {
+    min-height: 500px;
+  }
+
+  .hero-copy {
+    padding-left: 0;
+  }
+
+  .newsletter {
+    justify-items: start;
+  }
+}
+
+@media (max-width: 820px) {
+  .page-shell {
+    width: min(100% - 1rem, 1220px);
+  }
+
+  .topbar,
+  .nav-links,
+  .hero-actions,
+  .subscribe-form,
+  .site-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .topbar {
+    border-radius: 28px;
+  }
+
+  .nav-links {
+    gap: 0.8rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.25rem, 9vw, 3.5rem);
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stone-large {
+    inset: 2.5rem 0 5rem;
+  }
+
+  .stone-small {
+    left: 1rem;
+    width: min(220px, calc(100% - 2rem));
+  }
+
+  .stone-note {
+    right: 1rem;
+    left: 1rem;
+  }
+
+  .product-meta,
+  .product-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .page-shell {
+    width: min(100% - 0.75rem, 1220px);
+  }
+
+  .hero {
+    padding-top: 0.2rem;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mantra-band,
+  .newsletter,
+  .ritual-card,
+  .journal-quote,
+  .product-card {
+    border-radius: 28px;
+  }
+
+  .hero-visual {
+    min-height: 430px;
+  }
+
+  .stone-large {
+    inset: 2.7rem 0 4rem;
+    border-radius: 30px 72px 28px 56px;
+  }
+
+  .section-heading h2,
+  .newsletter h2,
+  .journal-copy h2 {
+    font-size: 1.75rem;
+  }
+}

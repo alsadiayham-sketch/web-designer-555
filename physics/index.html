@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>متجر فيزياء كوانتم</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="cosmos">
+    <div class="starfield"></div>
+    <div class="nebula nebula-a"></div>
+    <div class="nebula nebula-b"></div>
+    <div class="wave-layer wave-top">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="wave-layer wave-bottom">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="equation-cloud">
+      <span> E = mc² </span>
+      <span> F = ma </span>
+      <span> λ = h / p </span>
+      <span> ΔxΔp ≥ ħ/2 </span>
+      <span> V = IR </span>
+      <span> pV = nRT </span>
+      <span> ψ(x,t) </span>
+      <span> ΣF = 0 </span>
+      <span> a² + b² = c² </span>
+      <span> c = λν </span>
+      <span> W = Fd </span>
+      <span> Eₖ = ½mv² </span>
+    </div>
+    <div class="quark-cloud">
+      <span>up</span>
+      <span>down</span>
+      <span>strange</span>
+      <span>charm</span>
+      <span>top</span>
+      <span>bottom</span>
+    </div>
+    <div class="field-lines electric-field">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="field-lines magnetic-field">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="particle-layer" id="particleLayer"></div>
+    <div class="gravity-layer" id="gravityLayer"></div>
+    <div class="light-sources">
+      <span class="light light-a"></span>
+      <span class="light light-b"></span>
+      <span class="light light-c"></span>
+    </div>
+  </div>
+
+  <header class="topbar glass">
+    <div class="brand-block">
+      <div class="mini-atom">
+        <span class="nucleus"></span>
+        <span class="orbit orbit-a"><i></i></span>
+        <span class="orbit orbit-b"><i></i></span>
+        <span class="orbit orbit-c"><i></i></span>
+      </div>
+      <div>
+        <p class="eyebrow">متجر الأدوات العلمية المستقبلية</p>
+        <h1>فيزياء كوانتم</h1>
+      </div>
+    </div>
+    <nav>
+      <a href="#products">المنتجات</a>
+      <a href="#lab">التجارب</a>
+      <a href="#about">الطاقة</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero glass parallax-section">
+      <div class="hero-copy" data-depth="0.2">
+        <p class="eyebrow">تجربة متجر تتوهج بالطاقة الكونية</p>
+        <h2>اكتشف هدايا فيزيائية تجعل مكتبك <span>مسرّع جسيمات بصري</span></h2>
+        <p class="hero-text">موجات متحركة، ذرات تدور، ومجالات كهربائية نابضة تحيط بكل منتج. هذه النسخة صُممت لتكون عرضًا بصريًا مذهلًا لعشاق الفيزياء والديكور العلمي الفاخر.</p>
+        <div class="hero-actions">
+          <a href="#products" class="btn primary">ابدأ الاستكشاف</a>
+          <a href="#lab" class="btn secondary">شاهد المختبر</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>8</strong><span>منتجات مذهلة</span></div>
+          <div><strong>∞</strong><span>طاقة بصرية</span></div>
+          <div><strong>24/7</strong><span>وهج كوني</span></div>
+        </div>
+      </div>
+
+      <div class="hero-visual" data-depth="0.45">
+        <div class="atom-stage">
+          <div class="core-glow"></div>
+          <div class="atom-hero">
+            <span class="hero-nucleus"></span>
+            <span class="hero-orbit orbit-1"><i></i></span>
+            <span class="hero-orbit orbit-2"><i></i></span>
+            <span class="hero-orbit orbit-3"><i></i></span>
+            <span class="hero-orbit orbit-4"><i></i></span>
+          </div>
+          <div class="wave-console">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="prism-beam">
+          <div class="beam-source"></div>
+          <div class="beam-white"></div>
+          <div class="beam-rainbow"></div>
+          <div class="beam-prism"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="showcase-grid parallax-section" id="lab">
+      <article class="feature-panel glass pendulum-panel" data-depth="0.1">
+        <div class="panel-head">
+          <p class="eyebrow">حركة توافقية بسيطة</p>
+          <h3>بندول متأرجح</h3>
+        </div>
+        <div class="pendulum-wrap">
+          <span class="pivot"></span>
+          <span class="string"></span>
+          <span class="bob"></span>
+        </div>
+      </article>
+
+      <article class="feature-panel glass cradle-panel" data-depth="0.25">
+        <div class="panel-head">
+          <p class="eyebrow">حفظ الزخم والطاقة</p>
+          <h3>مهد نيوتن</h3>
+        </div>
+        <div class="cradle">
+          <span class="frame"></span>
+          <div class="balls">
+            <span class="ball ball-1"></span>
+            <span class="ball ball-2"></span>
+            <span class="ball ball-3"></span>
+            <span class="ball ball-4"></span>
+            <span class="ball ball-5"></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="feature-panel glass formula-panel" data-depth="0.35">
+        <div class="panel-head">
+          <p class="eyebrow">تدفّق المعادلات</p>
+          <h3>مجال معرفي متوهج</h3>
+        </div>
+        <div class="formula-rings">
+          <span>ħω</span>
+          <span>∇·E</span>
+          <span>τ = r × F</span>
+          <span>B = μ₀I/2πr</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="products-section" id="products">
+      <div class="section-title glass">
+        <p class="eyebrow">مختبر التسوّق الكوني</p>
+        <h2>منتجات فيزيائية تحيط بها إلكترونات ومجالات طاقة</h2>
+      </div>
+
+      <div class="products-grid">
+        <article class="product-card glass">
+          <div class="product-orbits"><span></span><span></span><span></span></div>
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=400&fit=crop" alt="مهد نيوتن"></div>
+          <div class="product-body">
+            <h3>مهد نيوتن المكتبي</h3>
+            <p>قطعة أيقونية تعرض الزخم والتصادمات في حركة معدنية أنيقة.</p>
+            <div class="meta"><span>زخم + توازن</span><strong>189 ₪</strong></div>
+          </div>
+        </article>
+
+        <article class="product-card glass">
+          <div class="product-orbits"><span></span><span></span><span></span></div>
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?w=400&h=400&fit=crop" alt="ملف تسلا"></div>
+          <div class="product-body">
+            <h3>نموذج ملف تسلا</h3>
+            <p>ومضات كهربائية مصغّرة وتأثير مختبر مستقبلي يلفت الأنظار فورًا.</p>
+            <div class="meta"><span>شحنات عالية</span><strong>349 ₪</strong></div>
+          </div>
+        </article>
+
+        <article class="product-card glass">
+          <div class="product-orbits"><span></span><span></span><span></span></div>
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=400&fit=crop" alt="كرة مغناطيسية"></div>
+          <div class="product-body">
+            <h3>كرة رفع مغناطيسي</h3>
+            <p>عرض مذهل للجاذبية المعاكسة مع قاعدة ضوئية تشبه المدار الفضائي.</p>
+            <div class="meta"><span>تعليق مغناطيسي</span><strong>429 ₪</strong></div>
+          </div>
+        </article>
+
+        <article class="product-card glass">
+          <div class="product-orbits"><span></span><span></span><span></span></div>
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=400&h=400&fit=crop" alt="ملصق فيزياء"></div>
+          <div class="product-body">
+            <h3>ملصق قوانين الفيزياء</h3>
+            <p>جدارك يتحوّل إلى سبورة لامعة مليئة بالمعادلات والهندسة الكونية.</p>
+            <div class="meta"><span>ديكور علمي</span><strong>119 ₪</strong></div>
+          </div>
+        </article>
+
+        <article class="product-card glass">
+          <div class="product-orbits"><span></span><span></span><span></span></div>
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=400&h=400&fit=crop" alt="عدة ليزر"></div>
+          <div class="product-body">
+            <h3>عدة مؤشرات ليزر</h3>
+            <p>أشعة دقيقة لتجارب الانعكاس والانكسار والعروض العلمية الساحرة.</p>
+            <div class="meta"><span>بصريات ضوئية</span><strong>159 ₪</strong></div>
+          </div>
+        </article>
+
+        <article class="product-card glass">
+          <div class="product-orbits"><span></span><span></span><span></span></div>
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400&h=400&fit=crop" alt="منشور بلوري"></div>
+          <div class="product-body">
+            <h3>مجموعة مناشير بلورية</h3>
+            <p>أطياف قوس قزح وانكسارات لونية مذهلة لعشاق الضوء والطاقة.</p>
+            <div class="meta"><span>انكسار طيفي</span><strong>139 ₪</strong></div>
+          </div>
+        </article>
+
+        <article class="product-card glass">
+          <div class="product-orbits"><span></span><span></span><span></span></div>
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1534744971734-e1628d37ea01?w=400&h=400&fit=crop" alt="جيروسكوب"></div>
+          <div class="product-body">
+            <h3>جيروسكوب معدني</h3>
+            <p>ثبات زاوي وحركة ساحرة تعطي أي مساحة لمسة مختبر فضائي فاخر.</p>
+            <div class="meta"><span>ديناميكا دورانية</span><strong>209 ₪</strong></div>
+          </div>
+        </article>
+
+        <article class="product-card glass">
+          <div class="product-orbits"><span></span><span></span><span></span></div>
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1569396116180-210c182bedb8?w=400&h=400&fit=crop" alt="مجسم أينشتاين"></div>
+          <div class="product-body">
+            <h3>مجسّم أينشتاين</h3>
+            <p>تحية بصرية لأيقونة النسبية مع حضور فني لافت ومضيء.</p>
+            <div class="meta"><span>إلهام نظري</span><strong>279 ₪</strong></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="footer-banner glass parallax-section" id="about" data-depth="0.12">
+      <div>
+        <p class="eyebrow">حيث يلتقي الفن بالعلم</p>
+        <h2>كل عنصر هنا مصمم ليشعر وكأنه تجربة في مختبر كوني حيّ</h2>
+      </div>
+      <a href="#products" class="btn primary">اشحن الطاقة الآن</a>
+    </section>
+  </main>
+
+  <script>
+    const particleLayer = document.getElementById('particleLayer');
+    const gravityLayer = document.getElementById('gravityLayer');
+
+    for (let i = 0; i < 85; i++) {
+      const particle = document.createElement('span');
+      particle.className = 'particle';
+      particle.style.left = `${Math.random() * 100}%`;
+      particle.style.top = `${Math.random() * 100}%`;
+      particle.style.width = `${2 + Math.random() * 6}px`;
+      particle.style.height = particle.style.width;
+      particle.style.setProperty('--drift-x', `${-120 + Math.random() * 240}px`);
+      particle.style.setProperty('--drift-y', `${-90 + Math.random() * 180}px`);
+      particle.style.setProperty('--duration', `${6 + Math.random() * 12}s`);
+      particle.style.setProperty('--delay', `${-Math.random() * 10}s`);
+      particle.style.setProperty('--glow', `${20 + Math.random() * 60}px`);
+      particle.style.setProperty('--hue', `${180 + Math.random() * 120}`);
+      particleLayer.appendChild(particle);
+    }
+
+    for (let i = 0; i < 26; i++) {
+      const falling = document.createElement('span');
+      falling.className = 'gravity-particle';
+      falling.style.left = `${Math.random() * 100}%`;
+      falling.style.animationDuration = `${5 + Math.random() * 7}s`;
+      falling.style.animationDelay = `${-Math.random() * 8}s`;
+      falling.style.width = `${5 + Math.random() * 7}px`;
+      falling.style.height = falling.style.width;
+      gravityLayer.appendChild(falling);
+    }
+
+    const depthNodes = document.querySelectorAll('[data-depth]');
+    const applyParallax = () => {
+      const scrollY = window.scrollY;
+      depthNodes.forEach(node => {
+        const depth = parseFloat(node.dataset.depth || 0);
+        node.style.transform = `translateY(${scrollY * depth * -0.18}px)`;
+      });
+      document.documentElement.style.setProperty('--scroll-shift', `${scrollY * 0.08}px`);
+    };
+
+    applyParallax();
+    window.addEventListener('scroll', applyParallax, { passive: true });
+  </script>
+</body>
+</html>

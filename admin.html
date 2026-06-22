@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoom Store | لوحة التحكم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <h1>لوحة التحكم</h1>
+            <p>Zoom Store</p>
+            <form onsubmit="handleLogin(event)">
+                <input type="text" id="loginUser" placeholder="اسم المستخدم" required>
+                <input type="password" id="loginPass" placeholder="كلمة المرور" required>
+                <button type="submit">دخول</button>
+                <p class="error" id="loginError"></p>
+            </form>
+        </div>
+    </div>
+
+    <div class="admin-panel" id="adminPanel" style="display:none;">
+        <nav class="admin-nav">
+            <div class="admin-nav-content">
+                <h2>Zoom Store</h2>
+                <div class="admin-tabs">
+                    <button class="tab-btn active" onclick="switchTab('dashboard', this)">لوحة المعلومات</button>
+                    <button class="tab-btn" onclick="switchTab('products', this)">المنتجات</button>
+                    <button class="tab-btn" onclick="switchTab('orders', this)">الطلبات</button>
+                    <button class="tab-btn" onclick="switchTab('settings', this)">الإعدادات</button>
+                </div>
+                <button class="logout-btn" onclick="logout()">خروج</button>
+            </div>
+        </nav>
+
+        <div class="admin-status-bar">
+            <div id="adminStatus" class="admin-status">جاري تحميل بيانات فايرستور...</div>
+            <div id="adminLoading" class="mini-loader"></div>
+        </div>
+
+        <div class="tab-content active" id="tab-dashboard">
+            <div class="tab-header"><h3>لوحة المعلومات</h3></div>
+            <div class="stats-grid" id="statsGrid"></div>
+            <div class="charts-grid">
+                <div class="chart-card"><h4>الإيراد آخر 30 يوم</h4><canvas id="revenueChart"></canvas></div>
+                <div class="chart-card"><h4>الطلبات حسب الحالة</h4><canvas id="statusChart"></canvas></div>
+                <div class="chart-card"><h4>الطلبات حسب المنطقة</h4><canvas id="regionChart"></canvas></div>
+                <div class="chart-card"><h4>أكثر المنتجات مبيعاً</h4><canvas id="topProductsChart"></canvas></div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-products">
+            <div class="tab-header">
+                <h3>إدارة المنتجات والخصومات</h3>
+                <div class="header-actions"><button class="btn-add" onclick="openProductModal()">إضافة منتج</button></div>
+            </div>
+            <div class="bulk-actions-bar" id="bulkActionsBar" style="display:none;">
+                <span id="bulkSelectedCount">0</span> منتج محدد
+                <select id="bulkStatusSelect">
+                    <option value="">تغيير الحالة...</option>
+                    <option value="normal">عادي</option>
+                    <option value="bestseller">الأكثر مبيعاً</option>
+                    <option value="special">مختار</option>
+                    <option value="soldout">نفذت الكمية</option>
+                </select>
+                <button class="btn-bulk-status" onclick="bulkChangeStatus()">تطبيق</button>
+                <input type="number" id="bulkDiscountInput" min="0" max="99" placeholder="خصم %">
+                <button class="btn-bulk-discount" onclick="bulkApplyDiscount()">تطبيق خصم</button>
+                <button class="btn-bulk-delete" onclick="bulkDeleteProducts()">حذف المحدد</button>
+            </div>
+            <div class="products-table-container">
+                <table class="admin-table" id="productsTable">
+                    <thead><tr><th><input type="checkbox" id="selectAllProducts" onchange="toggleSelectAll(this)"></th><th>صورة</th><th>اسم المنتج</th><th>الماركة</th><th>الفئة</th><th>القياسات</th><th>الأسعار</th><th>خصم</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+                    <tbody id="productsTableBody"></tbody>
+                </table>
+            </div>
+
+            <div class="tab-header nested-header">
+                <h3>إدارة الخصومات</h3>
+                <button class="btn-add" onclick="openDiscountModal()">إضافة خصم</button>
+            </div>
+            <div class="discount-info"><p>يمكنكِ إنشاء خصومات على كل المنتجات، حسب الماركة أو الفئة، أو إضافة خصم يدوي مع تاريخ انتهاء ورسالة بانر تظهر في الواجهة.</p></div>
+            <table class="admin-table" id="discountsTable">
+                <thead><tr><th>النوع</th><th>القيمة</th><th>نسبة الخصم</th><th>ينتهي</th><th>الوصف</th><th>إجراءات</th></tr></thead>
+                <tbody id="discountsTableBody"></tbody>
+            </table>
+        </div>
+
+        <div class="tab-content" id="tab-orders">
+            <div class="tab-header">
+                <h3>إدارة الطلبات</h3>
+                <div class="orders-filters">
+                    <input type="text" id="orderSearchInput" placeholder="ابحثي بالاسم أو الهاتف" oninput="renderOrdersTable()">
+                    <select id="orderStatusFilter" onchange="renderOrdersTable()">
+                        <option value="all">كل الحالات</option>
+                        <option value="new">جديد</option>
+                        <option value="processing">قيد المعالجة</option>
+                        <option value="completed">مكتمل</option>
+                        <option value="cancelled">ملغي</option>
+                    </select>
+                </div>
+            </div>
+            <div class="products-table-container">
+                <table class="admin-table">
+                    <thead><tr><th>رقم الطلب</th><th>التاريخ</th><th>العميل</th><th>الهاتف</th><th>عدد القطع</th><th>الإجمالي</th><th>التوصيل</th><th>الحالة</th></tr></thead>
+                    <tbody id="ordersTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-settings">
+            <div class="tab-header"><h3>إعدادات الموقع</h3></div>
+            <form class="settings-form" onsubmit="saveSettingsForm(event)">
+                <div class="form-group"><label>رقم WhatsApp</label><input type="text" id="settingWhatsappNumber" placeholder="0599000000"></div>
+                <div class="form-group"><label>النص الرئيسي في Hero</label><input type="text" id="settingHero" placeholder="ساعات، حقائب، واكسسوارات فاخرة..."></div>
+                <div class="form-group"><label>نص من نحن</label><textarea id="settingAbout" rows="5"></textarea></div>
+                <div class="form-group"><label>رابط Instagram</label><input type="url" id="settingInstagram" placeholder="https://instagram.com/zoom_store_tulkarm2"></div>
+                <button type="submit" class="btn-save">حفظ الإعدادات</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="productModal" style="display:none;">
+        <div class="modal">
+            <h3 id="productModalTitle">إضافة منتج جديد</h3>
+            <form onsubmit="saveProduct(event)">
+                <input type="hidden" id="productId">
+                <div class="form-row">
+                    <div class="form-group"><label>اسم المنتج</label><input type="text" id="productName" required></div>
+                    <div class="form-group"><label>الماركة</label><input type="text" id="productBrand" required list="brandsList"><datalist id="brandsList"></datalist></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>الفئة</label><input type="text" id="productCategory" required list="categoriesList"><datalist id="categoriesList"></datalist></div>
+                    <div class="form-group"><label>خصم (%)</label><input type="number" id="productDiscount" value="0" min="0" max="99"></div>
+                </div>
+                <div class="form-group"><label>القياسات والأسعار</label><div id="sizesContainer" class="sizes-container"></div><button type="button" class="btn-add-size" onclick="addSizeRow()">+ إضافة قياس</button></div>
+                <div class="form-group"><label>صورة المنتج</label>
+                    <div class="image-upload-group">
+                        <input type="file" id="productImageFile" accept="image/*" onchange="previewImage(this)">
+                        <span class="upload-or">أو</span>
+                        <input type="url" id="productImage" placeholder="رابط الصورة https://...">
+                    </div>
+                    <div id="imagePreview" class="image-preview"></div>
+                </div>
+                <div class="form-group"><label>الحالة</label><select id="productStatus"><option value="normal">عادي</option><option value="bestseller">الأكثر مبيعاً</option><option value="special">مختار</option><option value="soldout">نفذت الكمية</option></select></div>
+                <div class="modal-actions"><button type="submit" class="btn-save">حفظ</button><button type="button" class="btn-cancel" onclick="closeModal('productModal')">إلغاء</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="discountModal" style="display:none;">
+        <div class="modal small-modal">
+            <h3 id="discountModalTitle">إضافة خصم</h3>
+            <form onsubmit="saveDiscount(event)">
+                <input type="hidden" id="discountId">
+                <div class="form-group"><label>نوع الخصم</label><select id="discountType" onchange="toggleDiscountValueField()"><option value="all">على جميع المنتجات</option><option value="brand">حسب الماركة</option><option value="category">حسب الفئة</option><option value="manual">يدوي</option></select></div>
+                <div class="form-group" id="discountValueGroup" style="display:none;"><label>اختاري (يمكن اختيار أكثر من واحد)</label><div id="discountValueCheckboxes" class="checkbox-list"></div></div>
+                <div class="form-group" id="discountManualGroup" style="display:none;"><label>عنوان يدوي</label><input type="text" id="discountManualValue" placeholder="مثال: خصم العيد"></div>
+                <div class="form-group"><label>نسبة الخصم (%)</label><input type="number" id="discountPercentage" min="0" max="99" required></div>
+                <div class="form-group"><label>تاريخ الانتهاء (اختياري)</label><input type="date" id="discountExpiry"></div>
+                <div class="form-group"><label>وصف الخصم (يظهر في البانر)</label><input type="text" id="discountDescription" placeholder="خصم 15% على الساعات المختارة" required></div>
+                <div class="modal-actions"><button type="submit" class="btn-save">حفظ</button><button type="button" class="btn-cancel" onclick="closeModal('discountModal')">إلغاء</button></div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="data.js"></script>
+    <script src="seed-data.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
