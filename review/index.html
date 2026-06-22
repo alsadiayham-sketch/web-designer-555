@@ -7,475 +7,83 @@
   <meta name="description" content="شاركنا رأيك بعد إلغاء تثبيت ADA POS">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <style>
     :root {
-      --bg: #070b17;
-      --bg-soft: rgba(15, 20, 36, 0.8);
-      --card: rgba(18, 24, 43, 0.82);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --text: #eef2ff;
-      --muted: #aab6da;
-      --accent: #8b5cf6;
-      --accent-2: #14b8a6;
-      --blue: #3b82f6;
-      --success: #34d399;
-      --danger: #f87171;
-      --shadow: 0 24px 60px rgba(8, 12, 24, 0.55);
-      --radius-lg: 28px;
-      --radius-md: 18px;
+      --bg: #030712; --border: rgba(255,255,255,0.08); --text: #ffffff; --muted: #94a3b8;
+      --secondary: #06b6d4; --secondary-2: #10b981; --shadow: 0 30px 80px rgba(2, 6, 23, 0.55);
+      --gradient-mix: linear-gradient(135deg, rgba(124,58,237,0.96) 0%, rgba(167,139,250,0.94) 32%, rgba(6,182,212,0.92) 68%, rgba(16,185,129,0.92) 100%);
+      --radius-xl: 30px;
     }
-
     * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: 'Tajawal', sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top right, rgba(139, 92, 246, 0.24), transparent 28%),
-        radial-gradient(circle at bottom left, rgba(20, 184, 166, 0.2), transparent 30%),
-        radial-gradient(circle at center top, rgba(59, 130, 246, 0.14), transparent 28%),
-        linear-gradient(135deg, #04070f 0%, #07111f 45%, #0b1022 100%);
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    body:before,
-    body:after {
-      content: '';
-      position: fixed;
-      width: 28rem;
-      height: 28rem;
-      border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.22;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    body:before {
-      top: -9rem;
-      right: -7rem;
-      background: linear-gradient(135deg, var(--accent), var(--blue));
-    }
-
-    body:after {
-      left: -9rem;
-      bottom: -10rem;
-      background: linear-gradient(135deg, var(--accent-2), var(--blue));
-    }
-
-    .page {
-      position: relative;
-      z-index: 1;
-      width: min(1120px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 32px 0 48px;
-    }
-
-    .hero,
-    .form-card,
-    .info-card {
-      background: linear-gradient(180deg, rgba(17, 24, 39, 0.74), rgba(10, 14, 28, 0.82));
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-    }
-
-    .hero {
-      padding: 26px;
-      margin-bottom: 24px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero:before,
-    .form-card:before {
-      content: '';
-      position: absolute;
-      inset: -1px;
-      border-radius: inherit;
-      padding: 1px;
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.48), rgba(59, 130, 246, 0.14), rgba(20, 184, 166, 0.45));
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.08fr 0.92fr;
-      gap: 20px;
-      align-items: center;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 16px;
-      border-radius: 999px;
-      background: rgba(99, 102, 241, 0.12);
-      border: 1px solid rgba(139, 92, 246, 0.26);
-      color: #dbe4ff;
-      font-weight: 700;
-      margin-bottom: 20px;
-    }
-
-    .badge-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent-2), var(--blue));
-      box-shadow: 0 0 16px rgba(20, 184, 166, 0.75);
-    }
-
-    h1 {
-      margin: 0 0 14px;
-      font-size: clamp(2.2rem, 5vw, 4.2rem);
-      line-height: 1.06;
-      font-weight: 800;
-    }
-
-    .gradient-text {
-      display: block;
-      background: linear-gradient(135deg, #faf5ff 0%, #a78bfa 30%, #60a5fa 58%, #2dd4bf 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      background-size: 200% 200%;
-      animation: hueShift 8s linear infinite;
-    }
-
-    .lead {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.9;
-      font-size: 1.08rem;
-      max-width: 34rem;
-    }
-
-    .hero-points {
-      display: grid;
-      gap: 12px;
-      margin-top: 28px;
-    }
-
-    .point,
-    .info-card {
-      border-radius: 20px;
-    }
-
-    .point {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 14px 16px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-    }
-
-    .point-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(20, 184, 166, 0.16));
-      color: #ffffff;
-      font-size: 1.15rem;
-      flex-shrink: 0;
-    }
-
-    .point strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 1.02rem;
-    }
-
-    .point span {
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 0.98rem;
-    }
-
-    .content-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 320px;
-      gap: 24px;
-      align-items: start;
-    }
-
-    .form-card {
-      position: relative;
-      padding: 26px;
-      overflow: hidden;
-    }
-
-    .section-title {
-      margin: 0 0 10px;
-      font-size: 1.7rem;
-      font-weight: 800;
-    }
-
-    .section-subtitle {
-      margin: 0 0 24px;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    .field {
-      margin-bottom: 18px;
-    }
-
-    .field label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: 700;
-      color: #f8faff;
-    }
-
-    .input,
-    .textarea {
-      width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 18px;
-      background: rgba(8, 12, 24, 0.68);
-      color: var(--text);
-      padding: 15px 16px;
-      font-size: 1rem;
-      outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-    }
-
-    .input:focus,
-    .textarea:focus {
-      border-color: rgba(139, 92, 246, 0.7);
-      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.16);
-      transform: translateY(-1px);
-    }
-
-    .input::placeholder,
-    .textarea::placeholder {
-      color: #8fa0c9;
-    }
-
-    .textarea {
-      min-height: 168px;
-      resize: vertical;
-      line-height: 1.8;
-    }
-
-    .stars {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .star {
-      appearance: none;
-      -webkit-appearance: none;
-      border: none;
-      width: 54px;
-      height: 54px;
-      border-radius: 18px;
-      cursor: pointer;
-      font-size: 1.8rem;
-      line-height: 1;
-      color: #4c587a;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-    }
-
-    .star:hover,
-    .star.active {
-      color: #fbbf24;
-      border-color: rgba(251, 191, 36, 0.35);
-      background: rgba(251, 191, 36, 0.12);
-      box-shadow: 0 10px 24px rgba(251, 191, 36, 0.14);
-      transform: translateY(-2px);
-    }
-
-    .rating-label {
-      margin-top: 12px;
-      color: var(--muted);
-      min-height: 24px;
-      font-weight: 500;
-    }
-
-    .actions {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 8px;
-    }
-
-    .btn {
-      border: none;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      border-radius: 18px;
-      padding: 16px 26px;
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 800;
-      color: #ffffff;
-      background: linear-gradient(135deg, var(--accent), var(--blue), var(--accent-2));
-      background-size: 200% 200%;
-      box-shadow: 0 14px 36px rgba(59, 130, 246, 0.28);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      animation: hueShift 9s linear infinite;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 18px 42px rgba(59, 130, 246, 0.34);
-    }
-
-    .btn:disabled {
-      opacity: 0.7;
-      cursor: wait;
-      transform: none;
-    }
-
-    .message,
-    .error-box,
-    .info-card {
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(10, 15, 28, 0.68);
-    }
-
-    .message,
-    .error-box {
-      display: none;
-      margin-top: 18px;
-      padding: 14px 16px;
-      border-radius: 16px;
-      line-height: 1.7;
-    }
-
-    .message {
-      color: #d1fae5;
-      border-color: rgba(52, 211, 153, 0.28);
-      background: rgba(5, 150, 105, 0.12);
-    }
-
-    .error-box {
-      color: #fecaca;
-      border-color: rgba(248, 113, 113, 0.28);
-      background: rgba(127, 29, 29, 0.2);
-    }
-
-    .info-card {
-      padding: 22px;
-      position: sticky;
-      top: 24px;
-    }
-
-    .info-card h3 {
-      margin: 0 0 16px;
-      font-size: 1.25rem;
-    }
-
-    .tip-list {
-      display: grid;
-      gap: 14px;
-    }
-
-    .tip-item {
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .tip-item strong {
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    .tip-item span {
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 0.96rem;
-    }
-
-    .note {
-      margin-top: 16px;
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: rgba(139, 92, 246, 0.12);
-      border: 1px solid rgba(139, 92, 246, 0.18);
-      color: #ddd6fe;
-      line-height: 1.8;
-      font-size: 0.97rem;
-    }
-
-    @keyframes hueShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    @media (max-width: 920px) {
-      .hero-grid,
-      .content-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .info-card {
-        position: static;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .page {
-        width: min(100% - 20px, 100%);
-        padding-top: 20px;
-      }
-
-      .hero,
-      .form-card,
-      .info-card {
-        border-radius: 22px;
-      }
-
-      .hero,
-      .form-card,
-      .info-card {
-        padding: 20px;
-      }
-
-      .stars {
-        gap: 8px;
-      }
-
-      .star {
-        width: 48px;
-        height: 48px;
-        font-size: 1.6rem;
-      }
-
-      h1 {
-        font-size: 2rem;
-      }
-    }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; min-height: 100vh; font-family: 'Tajawal', sans-serif; color: var(--text); background: var(--bg); overflow-x: hidden; position: relative; }
+    body:before, body:after { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    body:before { background: radial-gradient(circle at 12% 18%, rgba(124,58,237,0.2), transparent 22%), radial-gradient(circle at 86% 14%, rgba(6,182,212,0.18), transparent 18%), radial-gradient(circle at 78% 82%, rgba(16,185,129,0.14), transparent 18%), radial-gradient(circle at 16% 86%, rgba(167,139,250,0.12), transparent 18%); animation: meshMove 20s ease-in-out infinite alternate; }
+    body:after { background-image: radial-gradient(rgba(255,255,255,0.06) 0.7px, transparent 0.7px); background-size: 26px 26px; opacity: 0.18; mix-blend-mode: screen; }
+    .aurora, .grain, .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .aurora span { position: absolute; display: block; width: 34rem; height: 34rem; border-radius: 50%; filter: blur(70px); opacity: 0.22; animation: blobFloat 18s ease-in-out infinite; }
+    .aurora span:nth-child(1) { top: -11rem; right: -7rem; background: radial-gradient(circle, rgba(124,58,237,0.92) 0%, rgba(124,58,237,0.06) 70%, transparent 74%); }
+    .aurora span:nth-child(2) { left: -10rem; top: 34%; width: 28rem; height: 28rem; background: radial-gradient(circle, rgba(6,182,212,0.88) 0%, rgba(6,182,212,0.06) 70%, transparent 74%); animation-direction: reverse; animation-duration: 22s; }
+    .aurora span:nth-child(3) { right: 18%; bottom: -12rem; width: 30rem; height: 30rem; background: radial-gradient(circle, rgba(16,185,129,0.84) 0%, rgba(16,185,129,0.06) 70%, transparent 74%); animation-duration: 20s; }
+    .grain { opacity: 0.12; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"); mix-blend-mode: soft-light; }
+    .particles span { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.22); animation: particleFloat 15s linear infinite; box-shadow: 0 0 14px rgba(255,255,255,0.1); }
+    .page { position: relative; z-index: 1; width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 48px; }
+    .hero, .form-card, .info-card, .status-strip { position: relative; background: linear-gradient(180deg, rgba(8, 13, 26, 0.84), rgba(10, 15, 28, 0.68)); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); overflow: hidden; }
+    .hero:before, .form-card:before, .info-card:before, .status-strip:before { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; background: linear-gradient(135deg, rgba(167,139,250,0.48), rgba(255,255,255,0.06), rgba(6,182,212,0.34), rgba(16,185,129,0.3)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+    .hero { padding: 30px; margin-bottom: 20px; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(300px, 0.88fr); gap: 22px; align-items: center; }
+    .badge { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 999px; background: rgba(124,58,237,0.12); border: 1px solid rgba(167,139,250,0.22); color: #ddd6fe; font-weight: 800; margin-bottom: 22px; }
+    .badge-dot { width: 10px; height: 10px; border-radius: 50%; background: linear-gradient(135deg, var(--secondary), var(--secondary-2)); box-shadow: 0 0 16px rgba(16,185,129,0.72); }
+    h1 { margin: 0 0 16px; font-size: clamp(2.6rem, 7vw, 5rem); line-height: 1.06; font-weight: 900; letter-spacing: -1px; }
+    .gradient-text { display: inline-block; background: var(--gradient-mix); background-size: 200% 200%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: hueShift 9s linear infinite; }
+    .lead, .section-subtitle, .tip-item span, .point span, .note, .info-card p { color: var(--muted); line-height: 1.95; }
+    .hero-points { display: grid; gap: 14px; margin-top: 28px; }
+    .point, .tip-item, .status-chip { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; }
+    .point { display: flex; align-items: flex-start; gap: 12px; padding: 16px; }
+    .point-icon { width: 44px; height: 44px; border-radius: 16px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.16)); font-size: 1.15rem; color: #ffffff; flex-shrink: 0; }
+    .point strong, .tip-item strong, .info-card h3 { display: block; margin-bottom: 6px; font-weight: 900; }
+    .status-strip { margin-bottom: 20px; padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+    .status-strip strong { display: block; margin-bottom: 6px; font-size: 1.08rem; }
+    .status-chip { padding: 12px 16px; color: #dbe4ff; font-family: 'Inter', sans-serif; white-space: nowrap; }
+    .content-grid { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 24px; align-items: start; }
+    .form-card { padding: 28px; }
+    .section-title { margin: 0 0 10px; font-size: 1.9rem; font-weight: 900; }
+    .field { margin-bottom: 18px; }
+    .field label { display: block; margin-bottom: 10px; font-weight: 800; color: #f8fbff; }
+    .input, .textarea { width: 100%; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; background: rgba(255,255,255,0.03); color: var(--text); padding: 15px 16px; font-size: 1rem; outline: none; transition: 0.25s ease; }
+    .input:focus, .textarea:focus { border-color: rgba(167,139,250,0.58); box-shadow: 0 0 0 4px rgba(124,58,237,0.14), 0 10px 30px rgba(2, 6, 23, 0.22); transform: translateY(-1px); background: rgba(255,255,255,0.05); }
+    .input::placeholder, .textarea::placeholder { color: #8fa0c9; }
+    .textarea { min-height: 180px; resize: vertical; }
+    .stars { display: flex; gap: 10px; flex-wrap: wrap; }
+    .star { appearance: none; -webkit-appearance: none; border: none; width: 58px; height: 58px; border-radius: 18px; cursor: pointer; font-size: 1.9rem; line-height: 1; color: #475569; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); transition: 0.2s ease; }
+    .star:hover, .star.active { color: #fbbf24; border-color: rgba(251,191,36,0.34); background: rgba(251,191,36,0.12); box-shadow: 0 14px 30px rgba(251,191,36,0.14), 0 0 24px rgba(251,191,36,0.08); transform: translateY(-2px); }
+    .rating-label { margin-top: 12px; color: var(--muted); min-height: 24px; font-weight: 700; }
+    .actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+    .btn { border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 18px; min-height: 56px; padding: 0 28px; font-family: inherit; font-size: 1rem; font-weight: 900; color: #ffffff; background: var(--gradient-mix); background-size: 200% 200%; box-shadow: 0 18px 40px rgba(124,58,237,0.28), 0 0 30px rgba(6,182,212,0.16); transition: transform 0.25s ease, box-shadow 0.25s ease; animation: hueShift 10s linear infinite; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 24px 52px rgba(124,58,237,0.34), 0 0 36px rgba(16,185,129,0.16); }
+    .btn:disabled { opacity: 0.72; cursor: wait; transform: none; }
+    .message, .error-box { display: none; margin-top: 18px; padding: 14px 16px; border-radius: 16px; line-height: 1.75; border: 1px solid rgba(255,255,255,0.08); }
+    .message { color: #d1fae5; border-color: rgba(52, 211, 153, 0.28); background: rgba(5, 150, 105, 0.12); }
+    .error-box { color: #fecaca; border-color: rgba(248, 113, 113, 0.28); background: rgba(127, 29, 29, 0.2); }
+    .info-card { padding: 24px; position: sticky; top: 24px; }
+    .tip-list { display: grid; gap: 14px; }
+    .tip-item { padding: 16px; }
+    .note { margin-top: 16px; padding: 16px; border-radius: 18px; background: rgba(124,58,237,0.12); border: 1px solid rgba(167,139,250,0.18); color: #ddd6fe; }
+    @keyframes blobFloat { 0%, 100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(24px,-28px,0) scale(1.08); } }
+    @keyframes meshMove { 0% { transform: scale(1) rotate(0deg); } 100% { transform: scale(1.08) rotate(6deg); } }
+    @keyframes hueShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    @keyframes particleFloat { 0% { transform: translate3d(0, 0, 0); opacity: 0.1; } 50% { transform: translate3d(0, -18px, 0); opacity: 0.34; } 100% { transform: translate3d(0, -36px, 0); opacity: 0.1; } }
+    @media (max-width: 920px) { .hero-grid, .content-grid { grid-template-columns: 1fr; } .info-card { position: static; } }
+    @media (max-width: 640px) { .page { width: min(100% - 18px, 1180px); padding-top: 16px; } .hero, .form-card, .info-card, .status-strip { padding: 20px; border-radius: 24px; } .stars { gap: 8px; } .star { width: 50px; height: 50px; font-size: 1.65rem; } h1 { letter-spacing: 0; } .btn { width: 100%; } }
   </style>
 </head>
 <body>
+  <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="particles" aria-hidden="true"><span style="top:12%;left:18%;animation-duration:12s"></span><span style="top:20%;left:72%;animation-duration:16s"></span><span style="top:34%;left:42%;animation-duration:14s"></span><span style="top:58%;left:84%;animation-duration:18s"></span><span style="top:72%;left:18%;animation-duration:15s"></span><span style="top:84%;left:60%;animation-duration:13s"></span></div>
+  <div class="grain" aria-hidden="true"></div>
   <div class="page">
     <section class="hero">
       <div class="hero-grid">
@@ -484,54 +92,31 @@
           <h1>ساعدنا في <span class="gradient-text">تحسين التجربة</span></h1>
           <p class="lead">إذا قمت بإلغاء تثبيت ADA POS فنحن نقدر وقتك جداً. أخبرنا ما الذي أعجبك وما الذي دفعك لاتخاذ هذا القرار، حتى نستطيع تطوير النظام بشكل أفضل.</p>
           <div class="hero-points">
-            <div class="point">
-              <div class="point-icon">★</div>
-              <div>
-                <strong>تقييم سريع وواضح</strong>
-                <span>اختر عدد النجوم المناسب لتجربتك مع النظام بكل سهولة.</span>
-              </div>
-            </div>
-            <div class="point">
-              <div class="point-icon">✦</div>
-              <div>
-                <strong>ملاحظاتك مهمة</strong>
-                <span>كل ملاحظة تساعدنا على فهم احتياجات المتاجر وتطوير الخدمة بشكل أدق.</span>
-              </div>
-            </div>
+            <div class="point"><div class="point-icon">★</div><div><strong>تقييم سريع وواضح</strong><span>اختر عدد النجوم المناسب لتجربتك مع النظام بكل سهولة.</span></div></div>
+            <div class="point"><div class="point-icon">✦</div><div><strong>ملاحظاتك مهمة</strong><span>كل ملاحظة تساعدنا على فهم احتياجات المتاجر وتطوير الخدمة بشكل أدق.</span></div></div>
           </div>
         </div>
         <div class="info-card">
           <h3>قبل الإرسال</h3>
           <div class="tip-list">
-            <div class="tip-item">
-              <strong>اذكر سبب الإزالة</strong>
-              <span>مثلاً: صعوبة الاستخدام، نقص ميزة معينة، أو رغبة في تجربة بديل آخر.</span>
-            </div>
-            <div class="tip-item">
-              <strong>شاركنا التفاصيل</strong>
-              <span>كلما كانت الملاحظات أوضح، كان بإمكاننا العمل على حلها بشكل أسرع.</span>
-            </div>
-            <div class="tip-item">
-              <strong>وقت الإرسال لا يتجاوز دقيقة</strong>
-              <span>النموذج بسيط ومباشر ويمكن تعبئته من الهاتف أو الكمبيوتر.</span>
-            </div>
+            <div class="tip-item"><strong>اذكر سبب الإزالة</strong><span>مثلاً: صعوبة الاستخدام، نقص ميزة معينة، أو رغبة في تجربة بديل آخر.</span></div>
+            <div class="tip-item"><strong>شاركنا التفاصيل</strong><span>كلما كانت الملاحظات أوضح، كان بإمكاننا العمل على حلها بشكل أسرع.</span></div>
+            <div class="tip-item"><strong>وقت الإرسال لا يتجاوز دقيقة</strong><span>النموذج بسيط ومباشر ويمكن تعبئته من الهاتف أو الكمبيوتر.</span></div>
           </div>
           <div class="note">شكراً لمشاركتك رأيك معنا. نعدك بأن كل تقييم يصل إلى الفريق لمراجعته والاستفادة منه.</div>
         </div>
       </div>
     </section>
-
+    <section class="status-strip">
+      <div><strong>ملاحظاتك تصل مباشرة إلى الفريق</strong><div class="lead">نراجع كل تقييم لفهم التجربة الفعلية وتحديد أولويات التحسين القادمة.</div></div>
+      <div class="status-chip">Firebase • Realtime • Secure</div>
+    </section>
     <section class="content-grid">
       <div class="form-card">
         <h2 class="section-title">شاركنا تقييمك</h2>
         <p class="section-subtitle">املأ البيانات التالية وسيتم حفظ تقييمك مباشرةً ليصل إلى فريق الإدارة.</p>
-
         <form id="reviewForm">
-          <div class="field">
-            <label for="storeName">اسم المتجر</label>
-            <input id="storeName" class="input" type="text" placeholder="مثال: متجر الوردة" maxlength="120" required>
-          </div>
-
+          <div class="field"><label for="storeName">اسم المتجر</label><input id="storeName" class="input" type="text" placeholder="مثال: متجر الوردة" maxlength="120" required></div>
           <div class="field">
             <label>التقييم</label>
             <div class="stars" id="stars">
@@ -543,37 +128,22 @@
             </div>
             <div class="rating-label" id="ratingLabel">اختر تقييمك من 1 إلى 5 نجوم</div>
           </div>
-
-          <div class="field">
-            <label for="feedback">ملاحظاتك</label>
-            <textarea id="feedback" class="textarea" placeholder="اكتب لنا سبب إلغاء التثبيت أو أي اقتراحات تساعدنا على التطوير..." required></textarea>
-          </div>
-
-          <div class="actions">
-            <button id="submitBtn" class="btn" type="submit">إرسال التقييم</button>
-          </div>
-
+          <div class="field"><label for="feedback">ملاحظاتك</label><textarea id="feedback" class="textarea" placeholder="اكتب لنا سبب إلغاء التثبيت أو أي اقتراحات تساعدنا على التطوير..." required></textarea></div>
+          <div class="actions"><button id="submitBtn" class="btn" type="submit">إرسال التقييم</button></div>
           <div class="error-box" id="errorBox"></div>
           <div class="message" id="successMessage">تم إرسال تقييمك بنجاح، شكراً لمشاركتك رأيك معنا.</div>
         </form>
       </div>
-
       <div class="info-card">
         <h3>ماذا يحدث بعد الإرسال؟</h3>
+        <p class="section-subtitle">التقييم يساعدنا على تحسين المنتج وتحديد المزايا الأكثر أهمية للعملاء.</p>
         <div class="tip-list">
-          <div class="tip-item">
-            <strong>حفظ مباشر وآمن</strong>
-            <span>يتم حفظ تقييمك فوراً ليظهر في لوحة الإدارة الخاصة بالفريق.</span>
-          </div>
-          <div class="tip-item">
-            <strong>قراءة وتحليل الملاحظات</strong>
-            <span>نراجع الملاحظات المتكررة ونستخدمها لتحسين المنتج وتحديد الأولويات.</span>
-          </div>
+          <div class="tip-item"><strong>حفظ مباشر وآمن</strong><span>يتم حفظ تقييمك فوراً ليظهر في لوحة الإدارة الخاصة بالفريق.</span></div>
+          <div class="tip-item"><strong>قراءة وتحليل الملاحظات</strong><span>نراجع الملاحظات المتكررة ونستخدمها لتحسين المنتج وتحديد الأولويات.</span></div>
         </div>
       </div>
     </section>
   </div>
-
   <script>
     var firebaseConfig = {
       apiKey: 'AIzaSyAp3mDn6c5D3GKIV7BZ2aKIsm7MxYP0vG0',
@@ -585,7 +155,6 @@
     };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     var db = firebase.firestore();
-
     var reviewForm = document.getElementById('reviewForm');
     var storeNameInput = document.getElementById('storeName');
     var feedbackInput = document.getElementById('feedback');
@@ -595,110 +164,39 @@
     var ratingLabel = document.getElementById('ratingLabel');
     var starButtons = document.querySelectorAll('.star');
     var selectedRating = 0;
-    var ratingTexts = {
-      1: 'ضعيف',
-      2: 'مقبول',
-      3: 'جيد',
-      4: 'جيد جداً',
-      5: 'ممتاز'
-    };
-
+    var ratingTexts = { 1: 'ضعيف', 2: 'مقبول', 3: 'جيد', 4: 'جيد جداً', 5: 'ممتاز' };
     function setRating(value) {
       var i;
       selectedRating = value;
       for (i = 0; i < starButtons.length; i++) {
         var starValue = parseInt(starButtons[i].getAttribute('data-value'), 10);
-        if (starValue <= value) {
-          starButtons[i].className = 'star active';
-        } else {
-          starButtons[i].className = 'star';
-        }
+        if (starValue <= value) { starButtons[i].className = 'star active'; } else { starButtons[i].className = 'star'; }
       }
-      if (value > 0) {
-        ratingLabel.innerHTML = 'التقييم المختار: ' + value + ' / 5 - ' + ratingTexts[value];
-      } else {
-        ratingLabel.innerHTML = 'اختر تقييمك من 1 إلى 5 نجوم';
-      }
+      if (value > 0) { ratingLabel.innerHTML = 'التقييم المختار: ' + value + ' / 5 - ' + ratingTexts[value]; } else { ratingLabel.innerHTML = 'اختر تقييمك من 1 إلى 5 نجوم'; }
     }
-
-    function showError(message) {
-      errorBox.style.display = 'block';
-      errorBox.innerHTML = message;
-      successMessage.style.display = 'none';
-    }
-
-    function hideMessages() {
-      errorBox.style.display = 'none';
-      successMessage.style.display = 'none';
-    }
-
-    function resetForm() {
-      reviewForm.reset();
-      setRating(0);
-    }
-
-    function saveReview(payload) {
-      return db.collection('projects').doc('_global').collection('reviews').add(payload);
-    }
-
-    function finishSubmit() {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = 'إرسال التقييم';
-    }
-
+    function showError(message) { errorBox.style.display = 'block'; errorBox.innerHTML = message; successMessage.style.display = 'none'; }
+    function hideMessages() { errorBox.style.display = 'none'; successMessage.style.display = 'none'; }
+    function resetForm() { reviewForm.reset(); setRating(0); }
+    function saveReview(payload) { return db.collection('projects').doc('_global').collection('reviews').add(payload); }
+    function finishSubmit() { submitBtn.disabled = false; submitBtn.innerHTML = 'إرسال التقييم'; }
     function handleSubmit(event) {
       event.preventDefault();
       hideMessages();
-
       var storeName = storeNameInput.value.replace(/^\s+|\s+$/g, '');
       var feedback = feedbackInput.value.replace(/^\s+|\s+$/g, '');
-
-      if (!storeName) {
-        showError('يرجى إدخال اسم المتجر.');
-        storeNameInput.focus();
-        return;
-      }
-
-      if (!selectedRating) {
-        showError('يرجى اختيار التقييم المناسب.');
-        return;
-      }
-
-      if (!feedback) {
-        showError('يرجى كتابة ملاحظاتك قبل الإرسال.');
-        feedbackInput.focus();
-        return;
-      }
-
+      if (!storeName) { showError('يرجى إدخال اسم المتجر.'); storeNameInput.focus(); return; }
+      if (!selectedRating) { showError('يرجى اختيار التقييم المناسب.'); return; }
+      if (!feedback) { showError('يرجى كتابة ملاحظاتك قبل الإرسال.'); feedbackInput.focus(); return; }
       submitBtn.disabled = true;
       submitBtn.innerHTML = 'جارٍ الإرسال...';
-
-      saveReview({
-        storeName: storeName,
-        rating: selectedRating,
-        feedback: feedback,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(function () {
-        successMessage.style.display = 'block';
-        successMessage.innerHTML = 'تم إرسال تقييمك بنجاح، شكراً لمشاركتك رأيك معنا.';
-        resetForm();
-        finishSubmit();
+      saveReview({ storeName: storeName, rating: selectedRating, feedback: feedback, createdAt: firebase.firestore.FieldValue.serverTimestamp() }).then(function () {
+        successMessage.style.display = 'block'; successMessage.innerHTML = 'تم إرسال تقييمك بنجاح، شكراً لمشاركتك رأيك معنا.'; resetForm(); finishSubmit();
       }).catch(function (error) {
-        showError('تعذر إرسال التقييم حالياً. يرجى المحاولة مرة أخرى.');
-        if (window.console && console.error) {
-          console.error(error);
-        }
-        finishSubmit();
+        showError('تعذر إرسال التقييم حالياً. يرجى المحاولة مرة أخرى.'); if (window.console && console.error) { console.error(error); } finishSubmit();
       });
     }
-
     var i;
-    for (i = 0; i < starButtons.length; i++) {
-      starButtons[i].addEventListener('click', function () {
-        setRating(parseInt(this.getAttribute('data-value'), 10));
-      });
-    }
-
+    for (i = 0; i < starButtons.length; i++) { starButtons[i].addEventListener('click', function () { setRating(parseInt(this.getAttribute('data-value'), 10)); }); }
     reviewForm.addEventListener('submit', handleSubmit);
     setRating(0);
   </script>
