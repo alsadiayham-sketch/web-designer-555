@@ -196,18 +196,31 @@
     var db = firebase.firestore();
     var updatesRef = db.collection('projects').doc('_global').collection('settings').doc('pos_updates');
     var forceUpdate = false;
-    var ADMIN_PASS = 'ada2024!';
+    var AUTH_REALM = 'posadmin';
 
     function adminLogin() {
       var pass = document.getElementById('adminPass').value;
-      if (pass === ADMIN_PASS) {
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('mainPanel').style.display = 'block';
-        loadCurrent();
-      } else {
-        document.getElementById('loginMsg').textContent = 'كلمة المرور غير صحيحة';
-        document.getElementById('loginMsg').className = 'status-msg error';
-      }
+      var msg = document.getElementById('loginMsg');
+      msg.textContent = '';
+      fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ realm: AUTH_REALM, username: 'admin', password: pass })
+      }).then(function(r) {
+        return r.json().then(function(d) { return { ok: r.ok, d: d }; });
+      }).then(function(res) {
+        if (res.ok && res.d.ok) {
+          document.getElementById('loginSection').style.display = 'none';
+          document.getElementById('mainPanel').style.display = 'block';
+          loadCurrent();
+        } else {
+          msg.textContent = 'كلمة المرور غير صحيحة';
+          msg.className = 'status-msg error';
+        }
+      }).catch(function() {
+        msg.textContent = 'تعذر الاتصال بالخادم. حاول مرة أخرى.';
+        msg.className = 'status-msg error';
+      });
     }
 
     document.getElementById('adminPass').addEventListener('keydown', function(e) {

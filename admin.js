@@ -1,5 +1,5 @@
-﻿const ADMIN_USER = 'zoom';
-const ADMIN_PASS = '5555';
+﻿const AUTH_REALM = 'store';
+const ADMIN_TOKEN_KEY = 'zoom_admin_token';
 const FALLBACK_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%231e1e30'/%3E%3Cpath d='M60 18c-14 4-24 17-24 32 0 19 15 34 34 34 4 0 8-.6 11-2-5 8-15 13-26 13-17 0-31-14-31-31 0-20 18-38 36-46z' fill='%23c9a96e'/%3E%3C/svg%3E";
 
 let products = [];
@@ -24,11 +24,23 @@ if (window.Chart) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (sessionStorage.getItem('zoom_admin') === 'true') {
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('adminPanel').style.display = 'block';
-        initializeAdmin();
-    }
+    var token = sessionStorage.getItem(ADMIN_TOKEN_KEY);
+    if (!token) return;
+    fetch('/api/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: token, realm: AUTH_REALM })
+    }).then(function (r) {
+        return r.json().then(function (d) { return { ok: r.ok, d: d }; });
+    }).then(function (res) {
+        if (res.ok && res.d.ok) {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            initializeAdmin();
+        } else {
+            sessionStorage.removeItem(ADMIN_TOKEN_KEY);
+        }
+    }).catch(function () { sessionStorage.removeItem(ADMIN_TOKEN_KEY); });
 });
 
 function setAdminLoading(loading) {
@@ -60,18 +72,30 @@ function handleLogin(event) {
     event.preventDefault();
     const user = document.getElementById('loginUser').value;
     const pass = document.getElementById('loginPass').value;
-    if (user === ADMIN_USER && pass === ADMIN_PASS) {
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('adminPanel').style.display = 'block';
-        sessionStorage.setItem('zoom_admin', 'true');
-        initializeAdmin();
-    } else {
-        document.getElementById('loginError').textContent = 'اسم المستخدم أو كلمة المرور غير صحيحة';
-    }
+    const errEl = document.getElementById('loginError');
+    errEl.textContent = '';
+    fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ realm: AUTH_REALM, username: user, password: pass })
+    }).then(function (r) {
+        return r.json().then(function (d) { return { ok: r.ok, d: d }; });
+    }).then(function (res) {
+        if (res.ok && res.d.ok) {
+            sessionStorage.setItem(ADMIN_TOKEN_KEY, res.d.token);
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            initializeAdmin();
+        } else {
+            errEl.textContent = 'اسم المستخدم أو كلمة المرور غير صحيحة';
+        }
+    }).catch(function () {
+        errEl.textContent = 'تعذر الاتصال بالخادم. حاول مرة أخرى.';
+    });
 }
 
 function logout() {
-    sessionStorage.removeItem('zoom_admin');
+    sessionStorage.removeItem(ADMIN_TOKEN_KEY);
     unsubscribers.forEach(function (unsubscribe) { if (typeof unsubscribe === 'function') unsubscribe(); });
     location.reload();
 }

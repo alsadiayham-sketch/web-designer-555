@@ -182,8 +182,8 @@
     };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     var db = firebase.firestore();
-    var SESSION_KEY = 'webDesigner555AdminUser';
-    var users = [ { username: 'ayham', password: 'ada2024!' }, { username: 'akram', password: 'ada2024!' }, { username: 'dana', password: 'ada2024!' } ];
+    var SESSION_KEY = 'webDesigner555AdminToken';
+    var AUTH_REALM = 'notes';
     var loginShell = document.getElementById('loginShell');
     var dashboardShell = document.getElementById('dashboardShell');
     var loginForm = document.getElementById('loginForm');
@@ -215,7 +215,7 @@
     var settingsDocRef = db.collection('projects').doc('_global').collection('settings').doc('site_config');
     var reviewsRef = db.collection('projects').doc('_global').collection('reviews');
     function trimValue(value) { return (value || '').replace(/^\s+|\s+$/g, ''); }
-    function findUser(username, password) { var i; for (i = 0; i < users.length; i++) { if (users[i].username === username && users[i].password === password) { return users[i]; } } return null; }
+    function findUser() { return null; }
     function getCurrentUser() { return sessionStorage.getItem(SESSION_KEY) || ''; }
     function showLoginError(message) { loginMessage.className = 'message error'; loginMessage.style.display = 'block'; loginMessage.innerHTML = message; }
     function hideLoginMessage() { loginMessage.style.display = 'none'; loginMessage.innerHTML = ''; }
@@ -235,12 +235,12 @@
     function setRefreshState(isLoading) { refreshBtn.disabled = isLoading; if (isLoading) { refreshBtn.innerHTML = '<span class="nav-icon">⟳</span><span>جارٍ التحديث...</span>'; } else { refreshBtn.innerHTML = '<span class="nav-icon">⟳</span><span>تحديث البيانات</span>'; } }
     function refreshDashboard() { setRefreshState(true); hideSettingsMessage(); return Promise.all([loadReviews(), loadSettings()]).then(function () { setRefreshState(false); }).catch(function () { setRefreshState(false); }); }
     function finishLogin() { loginBtn.disabled = false; loginBtn.innerHTML = 'تسجيل الدخول'; }
-    function handleLogin(event) { event.preventDefault(); hideLoginMessage(); var username = trimValue(usernameInput.value); var password = passwordInput.value; var user = findUser(username, password); if (!user) { showLoginError('بيانات الدخول غير صحيحة. حاول مرة أخرى.'); return; } loginBtn.disabled = true; loginBtn.innerHTML = 'جارٍ الدخول...'; sessionStorage.setItem(SESSION_KEY, user.username); showDashboard(user.username); refreshDashboard().then(function () { finishLogin(); }).catch(function () { finishLogin(); }); }
+    function handleLogin(event) { event.preventDefault(); hideLoginMessage(); var username = trimValue(usernameInput.value); var password = passwordInput.value; loginBtn.disabled = true; loginBtn.innerHTML = 'جارٍ الدخول...'; fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ realm: AUTH_REALM, username: username, password: password }) }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); }).then(function (res) { if (res.ok && res.d.ok) { sessionStorage.setItem(SESSION_KEY, res.d.token); showDashboard(res.d.user); refreshDashboard().then(function () { finishLogin(); }).catch(function () { finishLogin(); }); } else { finishLogin(); showLoginError('بيانات الدخول غير صحيحة. حاول مرة أخرى.'); } }).catch(function () { finishLogin(); showLoginError('تعذر الاتصال بالخادم. حاول مرة أخرى.'); }); }
     function finishSave() { saveSettingsBtn.disabled = false; saveSettingsBtn.innerHTML = 'حفظ الإعدادات'; }
     function handleSaveSettings(event) { event.preventDefault(); hideSettingsMessage(); saveSettingsBtn.disabled = true; saveSettingsBtn.innerHTML = 'جارٍ الحفظ...'; var payload = { heroTitle: trimValue(heroTitleInput.value), heroSubtitle: trimValue(heroSubtitleInput.value), aboutText: trimValue(aboutTextInput.value), updatedAt: firebase.firestore.FieldValue.serverTimestamp() }; settingsDocRef.set(payload, { merge: true }).then(function () { showSettingsMessage('تم حفظ الإعدادات بنجاح.', 'success'); finishSave(); }).catch(function (error) { showSettingsMessage('تعذر حفظ الإعدادات حالياً. يرجى المحاولة مرة أخرى.', 'error'); if (window.console && console.error) { console.error(error); } finishSave(); }); }
     function handleLogout() { sessionStorage.removeItem(SESSION_KEY); showLogin(); usernameInput.focus(); }
     function attachEvents() { var i; loginForm.addEventListener('submit', handleLogin); settingsForm.addEventListener('submit', handleSaveSettings); refreshBtn.addEventListener('click', refreshDashboard); logoutBtn.addEventListener('click', handleLogout); for (i = 0; i < navButtons.length; i++) { navButtons[i].addEventListener('click', function () { showSection(this.getAttribute('data-section')); }); } }
-    function init() { var currentUser = getCurrentUser(); attachEvents(); if (currentUser) { showDashboard(currentUser); refreshDashboard(); } else { showLogin(); } }
+    function init() { var token = getCurrentUser(); attachEvents(); if (token) { fetch('/api/verify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: token, realm: AUTH_REALM }) }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); }).then(function (res) { if (res.ok && res.d.ok) { showDashboard(res.d.user); refreshDashboard(); } else { sessionStorage.removeItem(SESSION_KEY); showLogin(); } }).catch(function () { showLogin(); }); } else { showLogin(); } }
     init();
   </script>
 </body>
