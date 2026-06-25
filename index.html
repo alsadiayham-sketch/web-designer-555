@@ -216,7 +216,10 @@
       box-shadow: 0 14px 30px rgba(124, 58, 237, 0.24);
       font-size: 0.85rem;
       letter-spacing: 0;
+      overflow: hidden;
     }
+
+    .brand-mark img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
 
     .nav-links {
       display: flex;
@@ -1285,7 +1288,7 @@
   <nav class="site-nav" id="siteNav">
     <div class="nav-shell">
       <a class="brand" href="#top" aria-label="ADA Web Designer">
-        <span class="brand-mark">ADA</span>
+        <span class="brand-mark"><img src="/favicon.ico" alt="ADA"></span>
         <span>ADA WEB DESIGNER</span>
       </a>
       <div class="nav-links">
