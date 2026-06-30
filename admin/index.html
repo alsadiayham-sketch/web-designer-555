@@ -168,7 +168,7 @@
           </div>
         </section>
         <section id="reviewsSection" class="content-section"><div class="content-card"><div class="section-head"><div><h2>التقييمات</h2><p>جميع التقييمات المحفوظة في Firestore مرتبة من الأحدث إلى الأقدم.</p></div></div><div id="reviewsContainer" class="reviews-grid"></div><div id="reviewsEmpty" class="empty-state hidden"><h3>لا توجد تقييمات حالياً</h3><p>عند وصول أول تقييم من صفحة المراجعة سيظهر هنا مباشرة.</p></div></div></section>
-        <section id="projectsSection" class="content-section"><div class="content-card"><div class="section-head"><div><h2>المشاريع</h2><p>يمكنك فتح صفحة المشاريع الحالية في تبويب جديد لمتابعة حالة المشاريع وإدارتها.</p></div><a class="projects-link" href="../projects.html" target="_blank" rel="noopener noreferrer">فتح صفحة المشاريع</a></div><div class="quick-list"><div class="quick-item"><strong>ملاحظة</strong><span>سيتم فتح الصفحة الأصلية للمشاريع الموجودة داخل الموقع نفسه.</span></div></div></div></section>
+        <section id="projectsSection" class="content-section"><div class="content-card"><div class="section-head"><div><h2>المشاريع</h2><p>إدارة المشاريع والتقويم ضمن نفس تسجيل الدخول — تنتقل داخلياً دون طلب تسجيل دخول جديد.</p></div><a class="projects-link" href="../projects.html">فتح صفحة المشاريع ↩</a></div><div class="quick-list"><div class="quick-item"><strong>ملاحظة</strong><span>تفتح صفحة المشاريع في نفس النافذة وتستخدم جلسة الدخول الحالية تلقائياً.</span></div></div></div></section>
         <section id="settingsSection" class="content-section"><div class="form-card"><div class="section-head"><div><h2>الإعدادات</h2><p>تعديل النصوص الرئيسية المخزنة في المسار projects/_global/settings/site_config.</p></div></div><form id="settingsForm"><div class="settings-grid"><div><div class="field"><label for="heroTitle">عنوان الصفحة الرئيسية</label><input id="heroTitle" class="input" type="text" placeholder="أدخل عنوان الصفحة الرئيسية"></div></div><div><div class="field"><label for="heroSubtitle">العنوان الفرعي</label><input id="heroSubtitle" class="input" type="text" placeholder="أدخل العنوان الفرعي"></div></div><div class="full"><div class="field"><label for="aboutText">نص عن الشركة</label><textarea id="aboutText" class="textarea" placeholder="اكتب النص التعريفي عن الشركة"></textarea></div></div></div><div class="save-row"><button id="saveSettingsBtn" class="btn save-btn" type="submit">حفظ الإعدادات</button><div id="settingsMessage" class="inline-message"></div></div></form></div></section>
 
         <!-- ===================== POS STORES ===================== -->
@@ -189,11 +189,12 @@
                 <div class="field"><label for="psStoreId">معرّف المتجر (إنجليزي، ثابت)</label><input id="psStoreId" class="input" type="text" placeholder="aqqad-kids2"></div>
                 <div class="field"><label for="psStoreName">اسم المتجر (للعرض)</label><input id="psStoreName" class="input" type="text" placeholder="عقاد كيدز - الفرع الثاني"></div>
                 <div class="field"><label for="psWarranty">مدة الضمان (بالأشهر)</label><input id="psWarranty" class="input" type="number" value="12" min="1"></div>
-                <div class="field"><label for="psBackend">مصدر البيانات</label>
-                  <select id="psBackend" class="input">
-                    <option value="firestore">مستقل — Firestore</option>
-                    <option value="d1">مرتبط بمشروع ويب — D1 (كتالوج مشترك)</option>
-                  </select>
+                <div class="field" style="grid-column:1 / -1;"><label>مصدر البيانات (اختر واحداً)</label>
+                  <div class="ps-choice" id="psBackendChoice">
+                    <button type="button" class="ps-choice-btn active" data-val="firestore"><span class="ps-choice-emoji">🗄️</span><strong>مستقل — Firestore</strong><span>كتالوج خاص بالمتجر</span></button>
+                    <button type="button" class="ps-choice-btn" data-val="d1"><span class="ps-choice-emoji">🔗</span><strong>مرتبط بمشروع ويب — D1</strong><span>كتالوج مُنتجات حيّ مشترك</span></button>
+                  </div>
+                  <input type="hidden" id="psBackend" value="firestore">
                 </div>
               </div>
 
@@ -201,16 +202,13 @@
               <div id="psLinkBlock" class="ps-link-block" style="display:none;">
                 <div class="ps-link-head">🔗 ربط بمشروع ويب (كتالوج مُنتجات حيّ مشترك)</div>
                 <p class="ps-hint">سيستخدم هذا المتجر نفس قاعدة منتجات المشروع المختار — أي تعديل على المخزون أو الأسعار من المتجر الإلكتروني أو من POS ينعكس فوراً على الطرفين.</p>
-                <div class="ps-grid">
-                  <div class="field"><label for="psLinkedProject">المشروع المرتبط</label>
-                    <select id="psLinkedProject" class="input">
-                      <option value="">— اختر مشروعاً —</option>
-                      <option value="aqqad" data-url="https://aqqad.pages.dev">aqqad — عقاد</option>
-                      <option value="__custom">مشروع آخر (إدخال يدوي)</option>
-                    </select>
-                  </div>
-                  <div class="field"><label for="psApiBase">رابط واجهة المشروع (API base)</label><input id="psApiBase" class="input" type="text" placeholder="https://aqqad.pages.dev"></div>
+                <label style="display:block;margin:6px 0 8px;font-weight:700;">اختر المشروع المرتبط</label>
+                <div class="ps-projects" id="psProjects">
+                  <button type="button" class="ps-proj-card" data-id="aqqad" data-url="https://aqqad.pages.dev" style="--c:#0ea5e9;"><span class="ps-proj-emoji">🛍️</span><strong>aqqad</strong><span>عقاد</span></button>
+                  <button type="button" class="ps-proj-card" data-id="__custom" data-url="" style="--c:#8b5cf6;"><span class="ps-proj-emoji">➕</span><strong>مشروع آخر</strong><span>إدخال يدوي</span></button>
                 </div>
+                <input type="hidden" id="psLinkedProject" value="">
+                <div class="field" style="margin-top:12px;"><label for="psApiBase">رابط واجهة المشروع (API base)</label><input id="psApiBase" class="input" type="text" placeholder="https://aqqad.pages.dev"></div>
                 <p class="ps-hint">💡 المنتجات والطلبات تُقرأ/تُكتب عبر هذا الرابط. حسابات الكاشير تُدار من لوحة المشروع نفسه (مشفّرة على الخادم).</p>
               </div>
 
@@ -346,6 +344,21 @@
     .ps-step strong { display:block; font-size:0.92rem; }
     .ps-step span { font-size:0.78rem; color:#6b7280; }
     .ps-form .ps-grid, .ps-modal .ps-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .ps-choice { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .ps-choice-btn { display:flex; flex-direction:column; align-items:flex-start; gap:2px; padding:14px 16px; border:2px solid rgba(0,0,0,0.1); border-radius:16px; background:#fff; cursor:pointer; text-align:right; transition:0.18s; }
+    .ps-choice-btn span:last-child { font-size:0.78rem; color:#9ca3af; }
+    .ps-choice-emoji { font-size:1.3rem; }
+    .ps-choice-btn strong { font-size:0.95rem; color:#374151; }
+    .ps-choice-btn:hover { border-color:#7c3aed; }
+    .ps-choice-btn.active { border-color:#7c3aed; background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(14,165,233,0.08)); box-shadow:0 8px 22px rgba(124,58,237,0.16); }
+    .ps-choice-btn.active strong { color:#7c3aed; }
+    .ps-projects { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; }
+    .ps-proj-card { display:flex; flex-direction:column; align-items:center; gap:3px; padding:16px 12px; border:2px solid color-mix(in srgb, var(--c,#7c3aed) 35%, transparent); border-radius:18px; background:color-mix(in srgb, var(--c,#7c3aed) 8%, #fff); cursor:pointer; transition:0.18s; }
+    .ps-proj-card .ps-proj-emoji { font-size:1.7rem; }
+    .ps-proj-card strong { color:var(--c,#7c3aed); font-size:1rem; }
+    .ps-proj-card span:last-child { font-size:0.78rem; color:#6b7280; }
+    .ps-proj-card:hover { transform:translateY(-2px); box-shadow:0 12px 26px color-mix(in srgb, var(--c,#7c3aed) 22%, transparent); }
+    .ps-proj-card.active { border-color:var(--c,#7c3aed); background:color-mix(in srgb, var(--c,#7c3aed) 18%, #fff); box-shadow:0 0 0 3px color-mix(in srgb, var(--c,#7c3aed) 22%, transparent) inset; }
     .ps-link-block { margin:16px 0; padding:16px; border:1px dashed rgba(124,58,237,0.4); border-radius:16px; background:rgba(124,58,237,0.04); }
     .ps-link-head { font-weight:900; margin-bottom:6px; }
     .ps-hint { font-size:0.82rem; color:#6b7280; margin:6px 0; line-height:1.6; }
@@ -407,13 +420,31 @@
       $('psLinkBlock').style.display = d1 ? 'block' : 'none';
       $('psAdminBlock').style.display = d1 ? 'none' : 'grid';
     }
-    function syncLinkedProject() {
-      var sel = $('psLinkedProject');
-      var opt = sel.options[sel.selectedIndex];
-      var url = opt ? opt.getAttribute('data-url') : '';
-      if (sel.value === '__custom') { $('psApiBase').value = ''; $('psApiBase').readOnly = false; }
-      else if (url) { $('psApiBase').value = url; $('psApiBase').readOnly = true; }
-      else { $('psApiBase').readOnly = false; }
+    function wireBackendChoice() {
+      var box = $('psBackendChoice'); if (!box) return;
+      var btns = box.querySelectorAll('.ps-choice-btn');
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener('click', function () {
+          for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
+          this.classList.add('active');
+          $('psBackend').value = this.getAttribute('data-val');
+          syncBackendUI();
+        });
+      }
+    }
+    function wireProjectCards() {
+      var box = $('psProjects'); if (!box) return;
+      var cards = box.querySelectorAll('.ps-proj-card');
+      for (var i = 0; i < cards.length; i++) {
+        cards[i].addEventListener('click', function () {
+          for (var j = 0; j < cards.length; j++) cards[j].classList.remove('active');
+          this.classList.add('active');
+          var id = this.getAttribute('data-id'), url = this.getAttribute('data-url') || '';
+          $('psLinkedProject').value = id;
+          if (id === '__custom') { $('psApiBase').value = ''; $('psApiBase').readOnly = false; $('psApiBase').focus(); }
+          else { $('psApiBase').value = url; $('psApiBase').readOnly = true; }
+        });
+      }
     }
 
     // ---------- stores ----------
@@ -634,8 +665,8 @@
     // ---------- wiring ----------
     function wire() {
       var add = $('psAddForm'); if (add) add.addEventListener('submit', addStore);
-      var be = $('psBackend'); if (be) be.addEventListener('change', syncBackendUI);
-      var lp = $('psLinkedProject'); if (lp) lp.addEventListener('change', syncLinkedProject);
+      wireBackendChoice();
+      wireProjectCards();
       var rb = $('psRefreshBtn'); if (rb) rb.addEventListener('click', loadStores);
       var cp = $('psCalPrev'); if (cp) cp.addEventListener('click', function () { calRef.setMonth(calRef.getMonth() - 1); renderCalendar(); });
       var cn = $('psCalNext'); if (cn) cn.addEventListener('click', function () { calRef.setMonth(calRef.getMonth() + 1); renderCalendar(); });

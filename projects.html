@@ -1418,18 +1418,33 @@
 
     async function checkSession() {
         const token = sessionStorage.getItem(SESSION_KEY);
-        if (!token) return;
-        try {
-            const r = await fetch('/api/verify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token: token, realm: AUTH_REALM })
-            });
-            const d = await r.json();
-            if (r.ok && d.ok) login(d.user);
-            else sessionStorage.removeItem(SESSION_KEY);
-        } catch (e) {
-            sessionStorage.removeItem(SESSION_KEY);
+        if (token) {
+            try {
+                const r = await fetch('/api/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: token, realm: AUTH_REALM })
+                });
+                const d = await r.json();
+                if (r.ok && d.ok) { login(d.user); return; }
+                sessionStorage.removeItem(SESSION_KEY);
+            } catch (e) {
+                sessionStorage.removeItem(SESSION_KEY);
+            }
+        }
+        // Single sign-on: accept the unified /admin session (realm 'notes') so a
+        // user already logged into /admin isn't prompted again here.
+        const adminToken = sessionStorage.getItem('webDesigner555AdminToken');
+        if (adminToken) {
+            try {
+                const r2 = await fetch('/api/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: adminToken, realm: 'notes' })
+                });
+                const d2 = await r2.json();
+                if (r2.ok && d2.ok) { login(d2.user); return; }
+            } catch (e) { /* fall through to login screen */ }
         }
     }
 
