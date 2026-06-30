@@ -147,6 +147,8 @@
           <button class="nav-btn active" data-section="welcomeSection" type="button"><span class="nav-icon">⌂</span><span>مرحباً</span></button>
           <button class="nav-btn" data-section="reviewsSection" type="button"><span class="nav-icon">★</span><span>التقييمات</span></button>
           <button class="nav-btn" data-section="projectsSection" type="button"><span class="nav-icon">▣</span><span>المشاريع</span></button>
+          <button class="nav-btn" data-section="storesSection" type="button"><span class="nav-icon">🏪</span><span>متاجر POS</span></button>
+          <button class="nav-btn" data-section="calendarSection" type="button"><span class="nav-icon">📅</span><span>تقويم الضمان</span></button>
           <button class="nav-btn" data-section="settingsSection" type="button"><span class="nav-icon">⚙</span><span>الإعدادات</span></button>
         </nav>
         <div class="sidebar-footer"><div id="sidebarUser">مرحباً</div><div class="loading-note">يمكنك التنقل بين الأقسام من القائمة الجانبية في أي وقت.</div></div>
@@ -168,6 +170,79 @@
         <section id="reviewsSection" class="content-section"><div class="content-card"><div class="section-head"><div><h2>التقييمات</h2><p>جميع التقييمات المحفوظة في Firestore مرتبة من الأحدث إلى الأقدم.</p></div></div><div id="reviewsContainer" class="reviews-grid"></div><div id="reviewsEmpty" class="empty-state hidden"><h3>لا توجد تقييمات حالياً</h3><p>عند وصول أول تقييم من صفحة المراجعة سيظهر هنا مباشرة.</p></div></div></section>
         <section id="projectsSection" class="content-section"><div class="content-card"><div class="section-head"><div><h2>المشاريع</h2><p>يمكنك فتح صفحة المشاريع الحالية في تبويب جديد لمتابعة حالة المشاريع وإدارتها.</p></div><a class="projects-link" href="../projects.html" target="_blank" rel="noopener noreferrer">فتح صفحة المشاريع</a></div><div class="quick-list"><div class="quick-item"><strong>ملاحظة</strong><span>سيتم فتح الصفحة الأصلية للمشاريع الموجودة داخل الموقع نفسه.</span></div></div></div></section>
         <section id="settingsSection" class="content-section"><div class="form-card"><div class="section-head"><div><h2>الإعدادات</h2><p>تعديل النصوص الرئيسية المخزنة في المسار projects/_global/settings/site_config.</p></div></div><form id="settingsForm"><div class="settings-grid"><div><div class="field"><label for="heroTitle">عنوان الصفحة الرئيسية</label><input id="heroTitle" class="input" type="text" placeholder="أدخل عنوان الصفحة الرئيسية"></div></div><div><div class="field"><label for="heroSubtitle">العنوان الفرعي</label><input id="heroSubtitle" class="input" type="text" placeholder="أدخل العنوان الفرعي"></div></div><div class="full"><div class="field"><label for="aboutText">نص عن الشركة</label><textarea id="aboutText" class="textarea" placeholder="اكتب النص التعريفي عن الشركة"></textarea></div></div></div><div class="save-row"><button id="saveSettingsBtn" class="btn save-btn" type="submit">حفظ الإعدادات</button><div id="settingsMessage" class="inline-message"></div></div></form></div></section>
+
+        <!-- ===================== POS STORES ===================== -->
+        <section id="storesSection" class="content-section">
+          <div class="content-card">
+            <div class="section-head"><div><h2>🏪 متاجر نقطة البيع (POS)</h2><p>أضِف متاجر ADA POS وأدِر تراخيصها ومستخدميها من نفس تسجيل الدخول.</p></div></div>
+
+            <!-- Step guide -->
+            <div class="ps-steps">
+              <div class="ps-step"><span class="ps-step-n">1</span><div><strong>عبّئ بيانات المتجر</strong><span>معرّف إنجليزي ثابت + اسم عربي للعرض.</span></div></div>
+              <div class="ps-step"><span class="ps-step-n">2</span><div><strong>اختر مصدر البيانات</strong><span>مستقل (Firestore) أو مرتبط بمشروع ويب جاهز (كتالوج مشترك).</span></div></div>
+              <div class="ps-step"><span class="ps-step-n">3</span><div><strong>حدِّد مدة الضمان</strong><span>تتحكم بصلاحية الترخيص — تابِعها من تبويب التقويم.</span></div></div>
+              <div class="ps-step"><span class="ps-step-n">4</span><div><strong>أنشئ أول مستخدم admin</strong><span>لمتاجر Firestore — لمتاجر D1 تُدار من لوحة المشروع.</span></div></div>
+            </div>
+
+            <form id="psAddForm" class="ps-form" autocomplete="off">
+              <div class="ps-grid">
+                <div class="field"><label for="psStoreId">معرّف المتجر (إنجليزي، ثابت)</label><input id="psStoreId" class="input" type="text" placeholder="aqqad-kids2"></div>
+                <div class="field"><label for="psStoreName">اسم المتجر (للعرض)</label><input id="psStoreName" class="input" type="text" placeholder="عقاد كيدز - الفرع الثاني"></div>
+                <div class="field"><label for="psWarranty">مدة الضمان (بالأشهر)</label><input id="psWarranty" class="input" type="number" value="12" min="1"></div>
+                <div class="field"><label for="psBackend">مصدر البيانات</label>
+                  <select id="psBackend" class="input">
+                    <option value="firestore">مستقل — Firestore</option>
+                    <option value="d1">مرتبط بمشروع ويب — D1 (كتالوج مشترك)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Web-project link block -->
+              <div id="psLinkBlock" class="ps-link-block" style="display:none;">
+                <div class="ps-link-head">🔗 ربط بمشروع ويب (كتالوج مُنتجات حيّ مشترك)</div>
+                <p class="ps-hint">سيستخدم هذا المتجر نفس قاعدة منتجات المشروع المختار — أي تعديل على المخزون أو الأسعار من المتجر الإلكتروني أو من POS ينعكس فوراً على الطرفين.</p>
+                <div class="ps-grid">
+                  <div class="field"><label for="psLinkedProject">المشروع المرتبط</label>
+                    <select id="psLinkedProject" class="input">
+                      <option value="">— اختر مشروعاً —</option>
+                      <option value="aqqad" data-url="https://aqqad.pages.dev">aqqad — عقاد</option>
+                      <option value="__custom">مشروع آخر (إدخال يدوي)</option>
+                    </select>
+                  </div>
+                  <div class="field"><label for="psApiBase">رابط واجهة المشروع (API base)</label><input id="psApiBase" class="input" type="text" placeholder="https://aqqad.pages.dev"></div>
+                </div>
+                <p class="ps-hint">💡 المنتجات والطلبات تُقرأ/تُكتب عبر هذا الرابط. حسابات الكاشير تُدار من لوحة المشروع نفسه (مشفّرة على الخادم).</p>
+              </div>
+
+              <!-- First admin (firestore only) -->
+              <div id="psAdminBlock" class="ps-grid">
+                <div class="field"><label for="psAdminUser">مستخدم admin الأول — اسم الدخول</label><input id="psAdminUser" class="input" type="text" placeholder="admin"></div>
+                <div class="field"><label for="psAdminPass">كلمة مرور admin الأول</label><input id="psAdminPass" class="input" type="text" placeholder="كلمة المرور"></div>
+              </div>
+
+              <div class="save-row"><button id="psAddBtn" class="btn save-btn" type="submit">إنشاء المتجر</button><div id="psAddMsg" class="inline-message"></div></div>
+            </form>
+          </div>
+
+          <div class="content-card" style="margin-top:18px;">
+            <div class="section-head"><div><h2>📋 المتاجر المسجّلة</h2><p>الترخيص والمستخدمون وحالة الربط لكل متجر.</p></div><button id="psRefreshBtn" class="ghost-btn nav-btn" type="button"><span class="nav-icon">⟳</span><span>تحديث</span></button></div>
+            <div id="psStoresWrap" class="ps-table-wrap"><p class="ps-empty">جارٍ التحميل...</p></div>
+            <div id="psStoresMsg" class="inline-message"></div>
+          </div>
+        </section>
+
+        <!-- ===================== WARRANTY CALENDAR ===================== -->
+        <section id="calendarSection" class="content-section">
+          <div class="content-card">
+            <div class="section-head"><div><h2>📅 تقويم الضمان</h2><p>تابِع تواريخ انتهاء تراخيص جميع المتاجر من مكان واحد.</p></div>
+              <div class="ps-cal-nav"><button id="psCalPrev" class="ghost-btn nav-btn" type="button">‹</button><strong id="psCalLabel">—</strong><button id="psCalNext" class="ghost-btn nav-btn" type="button">›</button></div>
+            </div>
+            <div id="psCalendar" class="ps-cal"></div>
+            <h3 style="margin:22px 0 10px;">⏳ أقرب التراخيص انتهاءً</h3>
+            <div id="psUpcoming" class="ps-upcoming"><p class="ps-empty">—</p></div>
+          </div>
+        </section>
+
       </main>
     </div>
   </div>
@@ -242,6 +317,341 @@
     function attachEvents() { var i; loginForm.addEventListener('submit', handleLogin); settingsForm.addEventListener('submit', handleSaveSettings); refreshBtn.addEventListener('click', refreshDashboard); logoutBtn.addEventListener('click', handleLogout); for (i = 0; i < navButtons.length; i++) { navButtons[i].addEventListener('click', function () { showSection(this.getAttribute('data-section')); }); } }
     function init() { var token = getCurrentUser(); attachEvents(); if (token) { fetch('/api/verify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: token, realm: AUTH_REALM }) }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); }).then(function (res) { if (res.ok && res.d.ok) { showDashboard(res.d.user); refreshDashboard(); } else { sessionStorage.removeItem(SESSION_KEY); showLogin(); } }).catch(function () { showLogin(); }); } else { showLogin(); } }
     init();
+  </script>
+
+  <!-- ===================== POS Users modal ===================== -->
+  <div class="ps-modal-overlay" id="psUsersModal">
+    <div class="ps-modal">
+      <div class="ps-modal-head"><h2 id="psUsersTitle">المستخدمون</h2><button class="ps-x" type="button" onclick="psCloseUsers()">&times;</button></div>
+      <div id="psUsersD1Note" class="ps-hint" style="display:none;"></div>
+      <div id="psUsersBody">
+        <div id="psUsersWrap"><p class="ps-empty">—</p></div>
+        <hr class="ps-hr">
+        <h3 style="margin:6px 0 12px;">➕ إضافة / تحديث مستخدم</h3>
+        <div class="ps-grid">
+          <div class="field"><label>اسم الدخول</label><input id="psUUser" class="input" type="text" placeholder="username"></div>
+          <div class="field"><label>كلمة المرور</label><input id="psUPass" class="input" type="text" placeholder="password"></div>
+          <div class="field"><label>الاسم المعروض</label><input id="psUName" class="input" type="text" placeholder="الاسم"></div>
+          <div class="field"><label>الدور</label><select id="psURole" class="input"><option value="worker">عامل (worker)</option><option value="admin">مدير (admin)</option></select></div>
+        </div>
+        <div class="save-row"><button class="btn save-btn" type="button" onclick="psSaveUser()">حفظ المستخدم</button><div id="psUsersMsg" class="inline-message"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .ps-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:6px 0 22px; }
+    .ps-step { display:flex; gap:10px; align-items:flex-start; background:rgba(124,58,237,0.06); border:1px solid rgba(124,58,237,0.16); border-radius:16px; padding:12px 14px; }
+    .ps-step-n { flex:0 0 28px; width:28px; height:28px; border-radius:50%; background:var(--gradient-mix,#7c3aed); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; }
+    .ps-step strong { display:block; font-size:0.92rem; }
+    .ps-step span { font-size:0.78rem; color:#6b7280; }
+    .ps-form .ps-grid, .ps-modal .ps-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .ps-link-block { margin:16px 0; padding:16px; border:1px dashed rgba(124,58,237,0.4); border-radius:16px; background:rgba(124,58,237,0.04); }
+    .ps-link-head { font-weight:900; margin-bottom:6px; }
+    .ps-hint { font-size:0.82rem; color:#6b7280; margin:6px 0; line-height:1.6; }
+    .ps-table-wrap { overflow-x:auto; }
+    .ps-table-wrap table { width:100%; border-collapse:collapse; }
+    .ps-table-wrap th, .ps-table-wrap td { padding:11px 10px; text-align:right; border-bottom:1px solid rgba(0,0,0,0.07); font-size:0.9rem; }
+    .ps-table-wrap th { color:#6b7280; font-weight:700; }
+    .ps-badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:0.74rem; font-weight:800; }
+    .ps-ok { background:rgba(16,185,129,0.15); color:#059669; }
+    .ps-warn { background:rgba(245,158,11,0.16); color:#b45309; }
+    .ps-bad { background:rgba(239,68,68,0.15); color:#dc2626; }
+    .ps-d1 { background:rgba(124,58,237,0.15); color:#7c3aed; }
+    .ps-row-actions { display:flex; gap:6px; flex-wrap:wrap; }
+    .ps-btn-sm { padding:6px 11px; font-size:0.8rem; border-radius:10px; font-weight:800; cursor:pointer; border:1px solid rgba(0,0,0,0.1); background:#fff; color:#374151; }
+    .ps-btn-sm:hover { border-color:#7c3aed; color:#7c3aed; }
+    .ps-btn-sm.danger { background:rgba(239,68,68,0.08); color:#dc2626; border-color:rgba(239,68,68,0.35); }
+    .ps-btn-sm.danger:hover { background:#dc2626; color:#fff; }
+    .ps-btn-sm.warn { background:rgba(245,158,11,0.1); color:#b45309; border-color:rgba(245,158,11,0.35); }
+    .ps-empty { text-align:center; color:#9ca3af; padding:18px; }
+    .ps-modal-overlay { position:fixed; inset:0; background:rgba(2,6,23,0.55); display:none; align-items:center; justify-content:center; z-index:90; padding:18px; }
+    .ps-modal-overlay.open { display:flex; }
+    .ps-modal { background:#fff; border-radius:24px; padding:24px; width:100%; max-width:640px; max-height:88vh; overflow-y:auto; box-shadow:0 30px 80px rgba(2,6,23,0.4); }
+    .ps-modal-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+    .ps-x { background:none; border:none; font-size:1.7rem; cursor:pointer; color:#9ca3af; }
+    .ps-hr { border:none; border-top:1px solid rgba(0,0,0,0.08); margin:18px 0; }
+    .ps-cal-nav { display:flex; align-items:center; gap:12px; }
+    .ps-cal-nav strong { min-width:140px; text-align:center; }
+    .ps-cal { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
+    .ps-cal-dow { text-align:center; font-weight:800; color:#6b7280; font-size:0.78rem; padding:6px 0; }
+    .ps-cal-cell { min-height:74px; border:1px solid rgba(0,0,0,0.07); border-radius:12px; padding:6px; background:#fff; }
+    .ps-cal-cell.empty { background:transparent; border:none; }
+    .ps-cal-cell.today { border-color:#7c3aed; box-shadow:0 0 0 2px rgba(124,58,237,0.18) inset; }
+    .ps-cal-day { font-size:0.78rem; color:#9ca3af; font-weight:800; }
+    .ps-cal-chip { display:block; margin-top:4px; padding:3px 6px; border-radius:8px; font-size:0.72rem; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .ps-upcoming { display:grid; gap:8px; }
+    .ps-up-row { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 14px; border:1px solid rgba(0,0,0,0.07); border-radius:14px; background:#fff; }
+    @media (max-width:780px) { .ps-steps { grid-template-columns:1fr 1fr; } .ps-form .ps-grid, .ps-modal .ps-grid { grid-template-columns:1fr; } }
+  </style>
+
+  <script>
+  (function () {
+    if (!window.firebase || !firebase.apps || !firebase.apps.length) { return; }
+    var db = firebase.firestore();
+    var registryRef = db.collection('projects').doc('_global').collection('settings').doc('pos_stores');
+    function posDocRef(id) { return db.collection('projects').doc(id).collection('settings').doc('pos'); }
+    function usersDocRef(id) { return db.collection('projects').doc(id).collection('settings').doc('pos_users'); }
+    var stores = [];
+    var curStore = null;
+    var calRef = new Date();
+    var loadedOnce = false;
+
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+    function $(id) { return document.getElementById(id); }
+    function msg(el, text, type) { var m = $(el); if (!m) return; m.className = 'inline-message ' + (type || ''); m.style.display = 'block'; m.innerHTML = text; }
+
+    // ---------- backend toggle ----------
+    function syncBackendUI() {
+      var d1 = $('psBackend').value === 'd1';
+      $('psLinkBlock').style.display = d1 ? 'block' : 'none';
+      $('psAdminBlock').style.display = d1 ? 'none' : 'grid';
+    }
+    function syncLinkedProject() {
+      var sel = $('psLinkedProject');
+      var opt = sel.options[sel.selectedIndex];
+      var url = opt ? opt.getAttribute('data-url') : '';
+      if (sel.value === '__custom') { $('psApiBase').value = ''; $('psApiBase').readOnly = false; }
+      else if (url) { $('psApiBase').value = url; $('psApiBase').readOnly = true; }
+      else { $('psApiBase').readOnly = false; }
+    }
+
+    // ---------- stores ----------
+    function loadStores() {
+      registryRef.get().then(function (doc) {
+        stores = (doc.exists && doc.data().stores) ? doc.data().stores.slice() : [];
+        renderStores(); renderCalendar(); renderUpcoming();
+        stores.forEach(function (s) { refreshWarranty(s.id); });
+      }).catch(function () { $('psStoresWrap').innerHTML = '<p class="ps-empty">تعذّر تحميل السجل.</p>'; });
+    }
+
+    function warrantyBadge(s) {
+      if (s._warranty === undefined) return '<span class="ps-badge ps-warn">...</span>';
+      if (s._warranty === null) return '<span class="ps-badge ps-bad">بلا ضمان</span>';
+      var days = Math.ceil((s._warranty - Date.now()) / 86400000);
+      if (days < 0) return '<span class="ps-badge ps-bad">منتهٍ (' + Math.abs(days) + ' يوم)</span>';
+      if (days <= 14) return '<span class="ps-badge ps-warn">' + days + ' يوم متبقٍ</span>';
+      return '<span class="ps-badge ps-ok">' + days + ' يوم متبقٍ</span>';
+    }
+
+    function renderStores() {
+      var wrap = $('psStoresWrap');
+      if (!stores.length) { wrap.innerHTML = '<p class="ps-empty">لا توجد متاجر بعد. أضِف متجراً من النموذج أعلاه.</p>'; return; }
+      var h = '<table><thead><tr><th>المتجر</th><th>المعرّف</th><th>المصدر / الربط</th><th>الضمان</th><th>إجراءات</th></tr></thead><tbody>';
+      for (var i = 0; i < stores.length; i++) {
+        var s = stores[i];
+        var src = s.type === 'd1'
+          ? '<span class="ps-badge ps-d1">D1' + (s.linkedProject ? ' · ' + esc(s.linkedProject) : '') + '</span>'
+          : 'Firestore';
+        var active = s._warranty && s._warranty > Date.now();
+        h += '<tr><td>' + esc(s.name || s.id) + '</td><td>' + esc(s.id) + '</td><td>' + src + '</td><td>' + warrantyBadge(s) + '</td>' +
+          '<td><div class="ps-row-actions">' +
+          '<button class="ps-btn-sm" type="button" onclick="psOpenUsers(\'' + esc(s.id) + '\')">👤 المستخدمون</button>' +
+          '<button class="ps-btn-sm warn" type="button" onclick="psExtend(\'' + esc(s.id) + '\')">🛡️ تمديد</button>' +
+          (active
+            ? '<button class="ps-btn-sm danger" type="button" onclick="psDisable(\'' + esc(s.id) + '\')">⛔ تعطيل</button>'
+            : '<button class="ps-btn-sm" type="button" onclick="psExtend(\'' + esc(s.id) + '\')">✅ تفعيل</button>') +
+          '</div></td></tr>';
+      }
+      wrap.innerHTML = h + '</tbody></table>';
+    }
+
+    function refreshWarranty(id) {
+      posDocRef(id).get().then(function (doc) {
+        var s = stores.filter(function (x) { return x.id === id; })[0];
+        if (!s) return;
+        if (!doc.exists || !doc.data().warrantyEnd) { s._warranty = null; }
+        else { var w = doc.data().warrantyEnd; s._warranty = w.toMillis ? w.toMillis() : new Date(w).getTime(); }
+        renderStores(); renderCalendar(); renderUpcoming();
+      }).catch(function () {});
+    }
+
+    function addStore(e) {
+      e.preventDefault();
+      var id = $('psStoreId').value.trim().toLowerCase();
+      var name = $('psStoreName').value.trim();
+      var backend = $('psBackend').value;
+      var months = parseInt($('psWarranty').value, 10) || 12;
+      msg('psAddMsg', '', '');
+      if (!id || !/^[a-z0-9\-]+$/.test(id)) { msg('psAddMsg', 'معرّف المتجر مطلوب (إنجليزي صغير وأرقام وشرطات فقط).', 'error'); return; }
+      if (stores.some(function (s) { return s.id === id; })) { msg('psAddMsg', 'هذا المعرّف مستخدم بالفعل.', 'error'); return; }
+      var linkedProject = '', apiBaseUrl = '';
+      if (backend === 'd1') {
+        apiBaseUrl = $('psApiBase').value.trim().replace(/\/+$/, '');
+        linkedProject = $('psLinkedProject').value === '__custom' ? id : $('psLinkedProject').value;
+        if (!apiBaseUrl || !/^https?:\/\//.test(apiBaseUrl)) { msg('psAddMsg', 'رابط واجهة المشروع (API) مطلوب لمتاجر D1 ويجب أن يبدأ بـ http(s)://', 'error'); return; }
+      }
+      var btn = $('psAddBtn'); btn.disabled = true; btn.textContent = 'جارٍ الإنشاء...';
+      var end = new Date(); end.setMonth(end.getMonth() + months);
+      var lic = { warrantyEnd: firebase.firestore.Timestamp.fromDate(end), createdAt: firebase.firestore.FieldValue.serverTimestamp(), storeName: name || id, dataBackend: backend };
+      if (backend === 'd1') { lic.apiBaseUrl = apiBaseUrl; lic.linkedProject = linkedProject; }
+      var tasks = [posDocRef(id).set(lic, { merge: true })];
+      if (backend === 'firestore') {
+        var u = $('psAdminUser').value.trim(), p = $('psAdminPass').value;
+        var users = (u && p) ? [{ username: u, password: p, name: u, displayName: u, role: 'admin', active: true }] : [];
+        tasks.push(usersDocRef(id).set({ users: users }));
+      }
+      Promise.all(tasks).then(function () {
+        stores.push({ id: id, name: name || id, type: backend, linkedProject: linkedProject, apiBaseUrl: apiBaseUrl, createdAt: Date.now() });
+        return registryRef.set({ stores: stores.map(function (s) { return { id: s.id, name: s.name, type: s.type, linkedProject: s.linkedProject || '', apiBaseUrl: s.apiBaseUrl || '', createdAt: s.createdAt || Date.now() }; }) }, { merge: true });
+      }).then(function () {
+        msg('psAddMsg', '✅ تم إنشاء المتجر "' + esc(name || id) + '"', 'success');
+        $('psStoreId').value = ''; $('psStoreName').value = ''; $('psAdminUser').value = ''; $('psAdminPass').value = '';
+        btn.disabled = false; btn.textContent = 'إنشاء المتجر';
+        renderStores(); refreshWarranty(id);
+      }).catch(function (err) { msg('psAddMsg', '❌ خطأ: ' + esc(err.message), 'error'); btn.disabled = false; btn.textContent = 'إنشاء المتجر'; });
+    }
+
+    window.psExtend = function (id) {
+      var months = prompt('بكم شهراً تريد تمديد/تعيين الضمان من اليوم؟', '12');
+      if (months === null) return;
+      months = parseInt(months, 10); if (isNaN(months) || months <= 0) { alert('قيمة غير صحيحة'); return; }
+      var end = new Date(); end.setMonth(end.getMonth() + months);
+      posDocRef(id).set({ warrantyEnd: firebase.firestore.Timestamp.fromDate(end) }, { merge: true })
+        .then(function () { msg('psStoresMsg', '✅ تم تحديث الضمان للمتجر ' + esc(id), 'success'); refreshWarranty(id); })
+        .catch(function (e) { alert('خطأ: ' + e.message); });
+    };
+    window.psDisable = function (id) {
+      if (!confirm('تعطيل المتجر "' + id + '"؟ لن يتمكن من تسجيل الدخول حتى تعيد تفعيله.')) return;
+      var past = new Date(Date.now() - 86400000);
+      posDocRef(id).set({ warrantyEnd: firebase.firestore.Timestamp.fromDate(past) }, { merge: true })
+        .then(function () { msg('psStoresMsg', '⛔ تم تعطيل المتجر ' + esc(id), 'success'); refreshWarranty(id); })
+        .catch(function (e) { alert('خطأ: ' + e.message); });
+    };
+
+    // ---------- users ----------
+    window.psOpenUsers = function (id) {
+      curStore = stores.filter(function (s) { return s.id === id; })[0];
+      if (!curStore) return;
+      $('psUsersTitle').textContent = 'مستخدمو: ' + (curStore.name || id);
+      msg('psUsersMsg', '', '');
+      var note = $('psUsersD1Note'), body = $('psUsersBody');
+      if (curStore.type === 'd1') {
+        note.style.display = 'block';
+        note.innerHTML = 'هذا متجر D1 مرتبط بمشروع ويب — تُدار حسابات الكاشير من لوحة تحكم المشروع (عبر /api/pos-users) لأن كلمات المرور مشفّرة على الخادم. الضمان يُدار من هنا.';
+        body.style.display = 'none';
+      } else { note.style.display = 'none'; body.style.display = 'block'; renderUsers(); }
+      $('psUsersModal').classList.add('open');
+    };
+    window.psCloseUsers = function () { $('psUsersModal').classList.remove('open'); curStore = null; };
+
+    function renderUsers() {
+      var wrap = $('psUsersWrap'); wrap.innerHTML = '<p class="ps-empty">جارٍ التحميل...</p>';
+      usersDocRef(curStore.id).get().then(function (doc) {
+        var users = (doc.exists && doc.data().users) ? doc.data().users : [];
+        if (!users.length) { wrap.innerHTML = '<p class="ps-empty">لا يوجد مستخدمون بعد.</p>'; return; }
+        var h = '<div class="ps-table-wrap"><table><thead><tr><th>المستخدم</th><th>الاسم</th><th>الدور</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>';
+        for (var i = 0; i < users.length; i++) {
+          var u = users[i];
+          h += '<tr><td>' + esc(u.username) + '</td><td>' + esc(u.displayName || u.name || '') + '</td><td>' + (u.role === 'admin' ? 'مدير' : 'عامل') + '</td>' +
+            '<td>' + (u.active === false ? '<span class="ps-badge ps-bad">معطّل</span>' : '<span class="ps-badge ps-ok">مفعّل</span>') + '</td>' +
+            '<td><div class="ps-row-actions">' +
+            '<button class="ps-btn-sm" type="button" onclick="psResetPass(\'' + esc(u.username) + '\')">🔑</button>' +
+            '<button class="ps-btn-sm warn" type="button" onclick="psToggleUser(\'' + esc(u.username) + '\')">' + (u.active === false ? 'تفعيل' : 'تعطيل') + '</button>' +
+            '<button class="ps-btn-sm danger" type="button" onclick="psDeleteUser(\'' + esc(u.username) + '\')">حذف</button>' +
+            '</div></td></tr>';
+        }
+        wrap.innerHTML = h + '</tbody></table></div>';
+      }).catch(function (e) { wrap.innerHTML = '<p class="ps-empty">خطأ: ' + esc(e.message) + '</p>'; });
+    }
+
+    function mutateUsers(id, fn, okMsg) {
+      return usersDocRef(id).get().then(function (doc) {
+        var users = (doc.exists && doc.data().users) ? doc.data().users : [];
+        var next = fn(users);
+        if (next === false) return;
+        return usersDocRef(id).set({ users: next }, { merge: true }).then(function () { msg('psUsersMsg', okMsg, 'success'); renderUsers(); });
+      }).catch(function (e) { msg('psUsersMsg', '❌ ' + esc(e.message), 'error'); });
+    }
+
+    window.psSaveUser = function () {
+      if (!curStore) return;
+      var username = $('psUUser').value.trim(), pass = $('psUPass').value, name = $('psUName').value.trim(), role = $('psURole').value;
+      if (!username) { msg('psUsersMsg', 'اسم الدخول مطلوب', 'error'); return; }
+      mutateUsers(curStore.id, function (users) {
+        var ex = users.filter(function (u) { return u.username === username; })[0];
+        if (ex) { if (pass) ex.password = pass; ex.displayName = name || ex.displayName || username; ex.name = name || ex.name || username; ex.role = role; ex.active = true; }
+        else { if (!pass) { msg('psUsersMsg', 'كلمة المرور مطلوبة لمستخدم جديد', 'error'); return false; } users.push({ username: username, password: pass, name: name || username, displayName: name || username, role: role, active: true }); }
+        return users;
+      }, '✅ تم حفظ المستخدم').then(function () { $('psUUser').value = ''; $('psUPass').value = ''; $('psUName').value = ''; });
+    };
+    window.psResetPass = function (username) {
+      if (!curStore) return; var np = prompt('كلمة المرور الجديدة للمستخدم "' + username + '":'); if (!np) return;
+      mutateUsers(curStore.id, function (users) { var u = users.filter(function (x) { return x.username === username; })[0]; if (!u) return false; u.password = np; return users; }, '🔑 تم تغيير كلمة المرور');
+    };
+    window.psToggleUser = function (username) {
+      if (!curStore) return;
+      mutateUsers(curStore.id, function (users) { var u = users.filter(function (x) { return x.username === username; })[0]; if (!u) return false; u.active = (u.active === false); return users; }, '✅ تم تحديث حالة المستخدم');
+    };
+    window.psDeleteUser = function (username) {
+      if (!curStore) return; if (!confirm('حذف المستخدم "' + username + '"؟')) return;
+      mutateUsers(curStore.id, function (users) { return users.filter(function (x) { return x.username !== username; }); }, '🗑️ تم حذف المستخدم');
+    };
+
+    // ---------- warranty calendar ----------
+    var AR_MONTHS = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+    var AR_DOW = ['أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
+    function chipClass(ms) { var d = Math.ceil((ms - Date.now()) / 86400000); if (d < 0) return 'ps-bad'; if (d <= 14) return 'ps-warn'; return 'ps-ok'; }
+
+    function renderCalendar() {
+      var wrap = $('psCalendar'); if (!wrap) return;
+      var y = calRef.getFullYear(), m = calRef.getMonth();
+      $('psCalLabel').textContent = AR_MONTHS[m] + ' ' + y;
+      var first = new Date(y, m, 1), startDow = first.getDay(), days = new Date(y, m + 1, 0).getDate();
+      var byDay = {};
+      stores.forEach(function (s) {
+        if (!s._warranty) return; var d = new Date(s._warranty);
+        if (d.getFullYear() === y && d.getMonth() === m) { var k = d.getDate(); (byDay[k] = byDay[k] || []).push(s); }
+      });
+      var h = '';
+      for (var i = 0; i < 7; i++) h += '<div class="ps-cal-dow">' + AR_DOW[i] + '</div>';
+      for (var b = 0; b < startDow; b++) h += '<div class="ps-cal-cell empty"></div>';
+      var today = new Date();
+      for (var day = 1; day <= days; day++) {
+        var isToday = today.getFullYear() === y && today.getMonth() === m && today.getDate() === day;
+        h += '<div class="ps-cal-cell' + (isToday ? ' today' : '') + '"><div class="ps-cal-day">' + day + '</div>';
+        (byDay[day] || []).forEach(function (s) { h += '<span class="ps-cal-chip ' + chipClass(s._warranty) + '" title="' + esc(s.name || s.id) + '">' + esc(s.name || s.id) + '</span>'; });
+        h += '</div>';
+      }
+      wrap.innerHTML = h;
+    }
+
+    function renderUpcoming() {
+      var wrap = $('psUpcoming'); if (!wrap) return;
+      var withW = stores.filter(function (s) { return s._warranty; }).slice().sort(function (a, b) { return a._warranty - b._warranty; });
+      if (!withW.length) { wrap.innerHTML = '<p class="ps-empty">لا توجد بيانات ضمان بعد.</p>'; return; }
+      var h = '';
+      withW.forEach(function (s) {
+        var d = Math.ceil((s._warranty - Date.now()) / 86400000);
+        var label = d < 0 ? ('منتهٍ منذ ' + Math.abs(d) + ' يوم') : (d + ' يوم متبقٍ');
+        var cls = chipClass(s._warranty);
+        var dt = new Date(s._warranty).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+        h += '<div class="ps-up-row"><div><strong>' + esc(s.name || s.id) + '</strong> <span style="color:#9ca3af;font-size:0.82rem;">' + esc(dt) + '</span></div><span class="ps-badge ' + cls + '">' + label + '</span></div>';
+      });
+      wrap.innerHTML = h;
+    }
+
+    // ---------- wiring ----------
+    function wire() {
+      var add = $('psAddForm'); if (add) add.addEventListener('submit', addStore);
+      var be = $('psBackend'); if (be) be.addEventListener('change', syncBackendUI);
+      var lp = $('psLinkedProject'); if (lp) lp.addEventListener('change', syncLinkedProject);
+      var rb = $('psRefreshBtn'); if (rb) rb.addEventListener('click', loadStores);
+      var cp = $('psCalPrev'); if (cp) cp.addEventListener('click', function () { calRef.setMonth(calRef.getMonth() - 1); renderCalendar(); });
+      var cn = $('psCalNext'); if (cn) cn.addEventListener('click', function () { calRef.setMonth(calRef.getMonth() + 1); renderCalendar(); });
+      // lazy-load store data the first time the user opens stores/calendar
+      var navs = document.querySelectorAll('.nav-btn[data-section]');
+      for (var i = 0; i < navs.length; i++) {
+        navs[i].addEventListener('click', function () {
+          var sec = this.getAttribute('data-section');
+          if ((sec === 'storesSection' || sec === 'calendarSection') && !loadedOnce) { loadedOnce = true; loadStores(); }
+        });
+      }
+      syncBackendUI();
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
+    else wire();
+  })();
   </script>
 </body>
 </html>
