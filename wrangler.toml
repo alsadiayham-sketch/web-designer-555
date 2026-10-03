@@ -1,0 +1,7 @@
+name = "web-designer-555"
+compatibility_date = "2026-10-03"
+pages_build_output_dir = "."
+
+[[kv_namespaces]]
+binding = "AUTH_USERS_KV"
+id = "d5e391bd891042378d652228494d9492"
