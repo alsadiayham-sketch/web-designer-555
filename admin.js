@@ -1,5 +1,6 @@
 ﻿const ADMIN_USER = 'zoom';
 const ADMIN_PASS = '5555';
+const ADMIN_PASSWORD_ITERATIONS = 120000;
 const FALLBACK_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%231e1e30'/%3E%3Cpath d='M60 18c-14 4-24 17-24 32 0 19 15 34 34 34 4 0 8-.6 11-2-5 8-15 13-26 13-17 0-31-14-31-31 0-20 18-38 36-46z' fill='%23c9a96e'/%3E%3C/svg%3E";
 
 let products = [];
@@ -9,6 +10,8 @@ let siteSettings = normalizeSettings(DEFAULT_SITE_SETTINGS);
 let unsubscribers = [];
 let charts = {};
 let isInitializing = false;
+let admins = [];
+let currentAdmin = null;
 
 const adminReady = {
     products: false,
@@ -24,10 +27,14 @@ if (window.Chart) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (sessionStorage.getItem('zoom_admin') === 'true') {
+    const storedSession = sessionStorage.getItem('zoom_admin');
+    if (storedSession && storedSession !== 'true') {
+        try { currentAdmin = JSON.parse(storedSession); } catch (error) { currentAdmin = null; }
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('adminPanel').style.display = 'block';
         initializeAdmin();
+    } else if (storedSession === 'true') {
+        sessionStorage.removeItem('zoom_admin');
     }
 });
 
@@ -56,17 +63,52 @@ function setAdminStatus(message, type) {
     }
 }
 
-function handleLogin(event) {
+async function handleLogin(event) {
     event.preventDefault();
-    const user = document.getElementById('loginUser').value;
+    const user = document.getElementById('loginUser').value.trim();
     const pass = document.getElementById('loginPass').value;
-    if (user === ADMIN_USER && pass === ADMIN_PASS) {
+    const errorElement = document.getElementById('loginError');
+    errorElement.textContent = '';
+    try {
+        const adminSnapshot = await db.collection('admins').get();
+        let matchedAdmin = null;
+        for (let index = 0; index < adminSnapshot.docs.length; index += 1) {
+            const candidate = adminSnapshot.docs[index];
+            const data = candidate.data();
+            if (String(data.username || '').toLowerCase() === user.toLowerCase() && data.active !== false && await verifyAdminPassword(pass, data)) {
+                matchedAdmin = Object.assign({ id: candidate.id }, data);
+                break;
+            }
+        }
+
+        if (!matchedAdmin && adminSnapshot.empty && user === ADMIN_USER && pass === ADMIN_PASS) {
+            const passwordData = await createPasswordData(pass);
+            await db.collection('admins').doc(ADMIN_USER).set({
+                username: ADMIN_USER,
+                displayName: 'المشرف الرئيسي',
+                active: true,
+                createdAt: new Date().toISOString(),
+                passwordChangedAt: new Date().toISOString(),
+                passwordHash: passwordData.passwordHash,
+                passwordSalt: passwordData.passwordSalt,
+                passwordIterations: passwordData.passwordIterations
+            });
+            matchedAdmin = { id: ADMIN_USER, username: ADMIN_USER, displayName: 'المشرف الرئيسي' };
+        }
+
+        if (!matchedAdmin) {
+            errorElement.textContent = 'اسم المستخدم أو كلمة المرور غير صحيحة';
+            return;
+        }
+
+        currentAdmin = { id: matchedAdmin.id, username: matchedAdmin.username, displayName: matchedAdmin.displayName || matchedAdmin.username };
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('adminPanel').style.display = 'block';
-        sessionStorage.setItem('zoom_admin', 'true');
+        sessionStorage.setItem('zoom_admin', JSON.stringify(currentAdmin));
         initializeAdmin();
-    } else {
-        document.getElementById('loginError').textContent = 'اسم المستخدم أو كلمة المرور غير صحيحة';
+    } catch (error) {
+        console.error(error);
+        errorElement.textContent = 'تعذر الوصول إلى حسابات المشرفين. تحققي من إعدادات فايرستور.';
     }
 }
 
@@ -76,6 +118,154 @@ function logout() {
     location.reload();
 }
 
+function randomBytesBase64(length) {
+    const bytes = new Uint8Array(length);
+    window.crypto.getRandomValues(bytes);
+    let binary = '';
+    bytes.forEach(function (byte) { binary += String.fromCharCode(byte); });
+    return btoa(binary);
+}
+
+function bytesToBase64(bytes) {
+    let binary = '';
+    new Uint8Array(bytes).forEach(function (byte) { binary += String.fromCharCode(byte); });
+    return btoa(binary);
+}
+
+async function hashAdminPassword(password, saltBase64, iterations) {
+    const encoder = new TextEncoder();
+    const key = await window.crypto.subtle.importKey('raw', encoder.encode(password), { name: 'PBKDF2' }, false, ['deriveBits']);
+    const salt = Uint8Array.from(atob(saltBase64), function (character) { return character.charCodeAt(0); });
+    const derivedBits = await window.crypto.subtle.deriveBits(
+        { name: 'PBKDF2', salt: salt, iterations: iterations || ADMIN_PASSWORD_ITERATIONS, hash: 'SHA-256' },
+        key,
+        256
+    );
+    return bytesToBase64(derivedBits);
+}
+
+async function createPasswordData(password) {
+    const passwordSalt = randomBytesBase64(16);
+    return {
+        passwordSalt: passwordSalt,
+        passwordHash: await hashAdminPassword(password, passwordSalt, ADMIN_PASSWORD_ITERATIONS),
+        passwordIterations: ADMIN_PASSWORD_ITERATIONS
+    };
+}
+
+async function verifyAdminPassword(password, admin) {
+    if (!admin.passwordHash || !admin.passwordSalt) return false;
+    const hash = await hashAdminPassword(password, admin.passwordSalt, admin.passwordIterations);
+    return hash === admin.passwordHash;
+}
+
+function formatAdminDate(value) {
+    if (!value) return '-';
+    const date = new Date(value);
+    return isNaN(date.getTime()) ? '-' : date.toLocaleString('ar-PS');
+}
+
+function escapeAdminHtml(value) {
+    return String(value).replace(/[&<>"']/g, function (character) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character];
+    });
+}
+
+function escapeAdminAttribute(value) {
+    return String(value).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
+
+function renderAdminsTable() {
+    const tbody = document.getElementById('adminsTableBody');
+    if (!tbody) return;
+    if (!admins.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">لا توجد حسابات مشرفين.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = admins.map(function (admin) {
+        const isCurrent = currentAdmin && admin.id === currentAdmin.id;
+        return '<tr><td>' + escapeAdminHtml(admin.username) + (isCurrent ? ' (أنتِ)' : '') + '</td><td>' + escapeAdminHtml(admin.displayName || '-') + '</td><td>' + formatAdminDate(admin.createdAt) + '</td><td>' + formatAdminDate(admin.passwordChangedAt) + '</td><td class="actions"><button class="btn-edit" onclick="openAdminModal(\'' + escapeAdminAttribute(admin.id) + '\')">إعادة تعيين كلمة المرور</button>' + (admins.length > 1 && !isCurrent ? '<button class="btn-delete" onclick="deleteAdmin(\'' + escapeAdminAttribute(admin.id) + '\')">حذف</button>' : '') + '</td></tr>';
+    }).join('');
+}
+
+function subscribeToAdmins() {
+    unsubscribers.push(db.collection('admins').onSnapshot(function (snapshot) {
+        admins = snapshot.docs.map(function (docSnap) { return Object.assign({ id: docSnap.id }, docSnap.data()); })
+            .filter(function (admin) { return admin.active !== false; })
+            .sort(function (a, b) { return String(a.username).localeCompare(String(b.username)); });
+        renderAdminsTable();
+    }, function (error) {
+        console.error(error);
+        setAdminStatus('تعذر تحميل حسابات المشرفين.', 'error');
+    }));
+}
+
+function openAdminModal(adminId) {
+    const admin = adminId ? admins.find(function (entry) { return entry.id === adminId; }) : null;
+    document.getElementById('adminModalTitle').textContent = admin ? 'إعادة تعيين كلمة المرور' : 'إضافة مشرف';
+    document.getElementById('adminId').value = admin ? admin.id : '';
+    document.getElementById('adminUsername').value = admin ? admin.username : '';
+    document.getElementById('adminUsername').readOnly = !!admin;
+    document.getElementById('adminDisplayName').value = admin ? (admin.displayName || '') : '';
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('adminPasswordConfirm').value = '';
+    document.getElementById('adminPasswordLabel').textContent = admin ? 'كلمة المرور الجديدة' : 'كلمة المرور';
+    document.getElementById('adminModal').style.display = 'flex';
+}
+
+async function saveAdmin(event) {
+    event.preventDefault();
+    const adminId = document.getElementById('adminId').value;
+    const username = document.getElementById('adminUsername').value.trim();
+    const displayName = document.getElementById('adminDisplayName').value.trim();
+    const password = document.getElementById('adminPassword').value;
+    const confirmation = document.getElementById('adminPasswordConfirm').value;
+    if (password.length < 8) return alert('يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.');
+    if (password !== confirmation) return alert('تأكيد كلمة المرور غير مطابق.');
+    if (!/^[a-zA-Z0-9._-]{3,40}$/.test(username)) return alert('استخدمي حروفاً وأرقاماً و . _ - فقط لاسم المستخدم.');
+    if (!adminId && admins.some(function (admin) { return admin.username.toLowerCase() === username.toLowerCase(); })) {
+        return alert('اسم المستخدم مستخدم بالفعل.');
+    }
+
+    setAdminLoading(true);
+    try {
+        const passwordData = await createPasswordData(password);
+        const now = new Date().toISOString();
+        const ref = adminId ? db.collection('admins').doc(adminId) : db.collection('admins').doc(username.toLowerCase());
+        const data = adminId ? Object.assign({}, passwordData, { passwordChangedAt: now }) : Object.assign({
+            username: username.toLowerCase(),
+            displayName: displayName,
+            active: true,
+            createdAt: now,
+            passwordChangedAt: now
+        }, passwordData);
+        if (adminId) data.displayName = displayName || username;
+        await ref.set(data, { merge: true });
+        closeModal('adminModal');
+        setAdminStatus(adminId ? 'تمت إعادة تعيين كلمة المرور.' : 'تمت إضافة المشرف بنجاح.', 'success');
+    } catch (error) {
+        console.error(error);
+        setAdminStatus('تعذر حفظ حساب المشرف.', 'error');
+    } finally {
+        setAdminLoading(false);
+    }
+}
+
+async function deleteAdmin(adminId) {
+    const admin = admins.find(function (entry) { return entry.id === adminId; });
+    if (!admin || admins.length <= 1 || !confirm('حذف المشرف ' + admin.username + '؟')) return;
+    setAdminLoading(true);
+    try {
+        await db.collection('admins').doc(adminId).update({ active: false });
+        setAdminStatus('تم حذف المشرف.', 'success');
+    } catch (error) {
+        console.error(error);
+        setAdminStatus('تعذر حذف المشرف.', 'error');
+    } finally {
+        setAdminLoading(false);
+    }
+}
+
 function switchTab(tab, button) {
     document.querySelectorAll('.tab-content').forEach(function (content) { content.classList.remove('active'); });
     document.querySelectorAll('.tab-btn').forEach(function (tabButton) { tabButton.classList.remove('active'); });
@@ -83,6 +273,7 @@ function switchTab(tab, button) {
     if (button) button.classList.add('active');
     if (tab === 'dashboard') renderDashboard();
     if (tab === 'orders') renderOrdersTable();
+    if (tab === 'admins') renderAdminsTable();
 }
 
 async function initializeAdmin() {
@@ -171,6 +362,8 @@ function subscribeToCollections() {
         setAdminStatus('تعذر تحميل الإعدادات.', 'error');
         setAdminLoading(false);
     }));
+
+    subscribeToAdmins();
 }
 
 function checkAdminReady() {

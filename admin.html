@@ -29,6 +29,7 @@
                     <button class="tab-btn active" onclick="switchTab('dashboard', this)">لوحة المعلومات</button>
                     <button class="tab-btn" onclick="switchTab('products', this)">المنتجات</button>
                     <button class="tab-btn" onclick="switchTab('orders', this)">الطلبات</button>
+                    <button class="tab-btn" onclick="switchTab('admins', this)">المشرفون</button>
                     <button class="tab-btn" onclick="switchTab('settings', this)">الإعدادات</button>
                 </div>
                 <button class="logout-btn" onclick="logout()">خروج</button>
@@ -110,6 +111,20 @@
             </div>
         </div>
 
+        <div class="tab-content" id="tab-admins">
+            <div class="tab-header">
+                <h3>إدارة المشرفين</h3>
+                <button class="btn-add" onclick="openAdminModal()">إضافة مشرف</button>
+            </div>
+            <div class="discount-info"><p>يمكن للمشرفين المسجلين إضافة مشرفين آخرين أو إعادة تعيين كلمات مرورهم. لا يتم تخزين كلمات المرور بصورتها الأصلية.</p></div>
+            <div class="products-table-container">
+                <table class="admin-table">
+                    <thead><tr><th>اسم المستخدم</th><th>الاسم</th><th>تاريخ الإنشاء</th><th>آخر تغيير لكلمة المرور</th><th>إجراءات</th></tr></thead>
+                    <tbody id="adminsTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="tab-content" id="tab-settings">
             <div class="tab-header"><h3>إعدادات الموقع</h3></div>
             <form class="settings-form" onsubmit="saveSettingsForm(event)">
@@ -162,6 +177,20 @@
                 <div class="form-group"><label>تاريخ الانتهاء (اختياري)</label><input type="date" id="discountExpiry"></div>
                 <div class="form-group"><label>وصف الخصم (يظهر في البانر)</label><input type="text" id="discountDescription" placeholder="خصم 15% على الساعات المختارة" required></div>
                 <div class="modal-actions"><button type="submit" class="btn-save">حفظ</button><button type="button" class="btn-cancel" onclick="closeModal('discountModal')">إلغاء</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="adminModal" style="display:none;">
+        <div class="modal small-modal">
+            <h3 id="adminModalTitle">إضافة مشرف</h3>
+            <form onsubmit="saveAdmin(event)">
+                <input type="hidden" id="adminId">
+                <div class="form-group"><label>اسم المستخدم</label><input type="text" id="adminUsername" autocomplete="username" required minlength="3"></div>
+                <div class="form-group"><label>الاسم الظاهر</label><input type="text" id="adminDisplayName" required></div>
+                <div class="form-group"><label id="adminPasswordLabel">كلمة المرور</label><input type="password" id="adminPassword" autocomplete="new-password" required minlength="8"></div>
+                <div class="form-group"><label>تأكيد كلمة المرور</label><input type="password" id="adminPasswordConfirm" autocomplete="new-password" required minlength="8"></div>
+                <div class="modal-actions"><button type="submit" class="btn-save">حفظ</button><button type="button" class="btn-cancel" onclick="closeModal('adminModal')">إلغاء</button></div>
             </form>
         </div>
     </div>
