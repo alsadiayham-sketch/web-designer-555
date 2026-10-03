@@ -118,6 +118,5 @@ body { font-family: 'Tajawal', sans-serif; background: radial-gradient(circle at
 .checkbox-item { display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: var(--text-light); cursor: pointer; }
 .checkbox-item:hover { border-color: rgba(201,169,110,0.35); }
 .checkbox-item input[type='checkbox'] { accent-color: #7fbfbf; width: 16px; height: 16px; }
-.admin-table td .btn-edit, .admin-table td .btn-delete { font-size: 0.86rem; }
 @media (max-width: 1000px) { .stats-grid, .charts-grid, .form-row, .order-meta { grid-template-columns: 1fr; } }
 @media (max-width: 780px) { .admin-nav-content, .tab-header { flex-direction: column; align-items: stretch; } .size-row { grid-template-columns: 1fr 1fr; } .size-row .btn-remove-size { grid-column: span 2; } }

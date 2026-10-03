@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rts-royal.pages.dev/sitemap.xml

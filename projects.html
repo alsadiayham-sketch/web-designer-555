@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Tracker | Web Designer</title>
-    <link rel="icon" href="logo.png">
+    <link rel="icon" href="/favicon.ico">
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <style>
@@ -88,6 +88,7 @@
         }
 
         .login-icon svg { width: 32px; height: 32px; color: white; }
+        .login-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
         .login-title { text-align: center; color: white; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
         .login-subtitle { text-align: center; color: rgba(255,255,255,0.58); font-size: 14px; margin-bottom: 32px; }
 
@@ -198,6 +199,7 @@
         }
 
         .header-logo svg { width: 20px; height: 20px; color: white; }
+        .header-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
         .header-title { font-size: 18px; font-weight: 700; }
         .header-user { font-size: 12px; color: var(--text-muted); }
         .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -1012,7 +1014,7 @@
     <div id="loginScreen" class="login-screen">
         <div class="login-box">
             <div class="login-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <img src="/favicon.ico" alt="ADA">
             </div>
             <h1 class="login-title">Project Tracker</h1>
             <p class="login-subtitle">Web Design Projects Management</p>
@@ -1039,7 +1041,7 @@
             <div class="header-inner">
                 <div class="header-brand">
                     <div class="header-logo">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        <img src="/favicon.ico" alt="ADA">
                     </div>
                     <div>
                         <div class="header-title">Project Tracker</div>
@@ -1372,12 +1374,9 @@
     </div>
 
     <script>
-    const VALID_USERS = [
-        { username: 'ayham', password: '12344' },
-        { username: 'dana', password: '12344' },
-        { username: 'akram', password: '12344' }
-    ];
-
+    // Credentials are verified server-side (Cloudflare Pages Function /api/login).
+    // No usernames/passwords live in client code. SESSION_KEY holds a signed token.
+    const AUTH_REALM = 'projects';
     const SESSION_KEY = 'wd_projects_session';
     const COLLECTION = 'web_projects';
     const CALENDAR_COLLECTION = 'calendar_events';
@@ -1417,16 +1416,40 @@
     let currentCalendarMonth = startOfMonth(new Date());
     let selectedCalendarDate = formatDateInput(new Date());
 
-    function checkSession() {
-        const saved = sessionStorage.getItem(SESSION_KEY);
-        if (saved && VALID_USERS.some(u => u.username === saved)) {
-            login(saved);
+    async function checkSession() {
+        const token = sessionStorage.getItem(SESSION_KEY);
+        if (token) {
+            try {
+                const r = await fetch('/api/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: token, realm: AUTH_REALM })
+                });
+                const d = await r.json();
+                if (r.ok && d.ok) { login(d.user); return; }
+                sessionStorage.removeItem(SESSION_KEY);
+            } catch (e) {
+                sessionStorage.removeItem(SESSION_KEY);
+            }
+        }
+        // Single sign-on: accept the unified /admin session (realm 'notes') so a
+        // user already logged into /admin isn't prompted again here.
+        const adminToken = sessionStorage.getItem('webDesigner555AdminToken');
+        if (adminToken) {
+            try {
+                const r2 = await fetch('/api/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: adminToken, realm: 'notes' })
+                });
+                const d2 = await r2.json();
+                if (r2.ok && d2.ok) { login(d2.user); return; }
+            } catch (e) { /* fall through to login screen */ }
         }
     }
 
     function login(username) {
         currentUser = username;
-        sessionStorage.setItem(SESSION_KEY, username);
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('dashboard').classList.add('active');
         document.getElementById('currentUser').textContent = username;
@@ -1451,16 +1474,27 @@
         document.getElementById('dueAlertBanner').innerHTML = '';
     }
 
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
         e.preventDefault();
-        const username = document.getElementById('loginUsername').value.toLowerCase().trim();
+        const username = document.getElementById('loginUsername').value.trim();
         const password = document.getElementById('loginPassword').value;
-        const user = VALID_USERS.find(u => u.username === username && u.password === password);
-        if (user) {
-            document.getElementById('loginError').style.display = 'none';
-            login(user.username);
-        } else {
-            document.getElementById('loginError').style.display = 'block';
+        const errEl = document.getElementById('loginError');
+        try {
+            const r = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ realm: AUTH_REALM, username: username, password: password })
+            });
+            const d = await r.json();
+            if (r.ok && d.ok) {
+                sessionStorage.setItem(SESSION_KEY, d.token);
+                errEl.style.display = 'none';
+                login(d.user);
+            } else {
+                errEl.style.display = 'block';
+            }
+        } catch (err) {
+            errEl.style.display = 'block';
         }
     });
 

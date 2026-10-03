@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADA POS - إدارة المتاجر والمستخدمين</title>
+  <link rel="icon" href="/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --card: #12182b;
+      --border: rgba(255,255,255,0.08);
+      --text: #eef2ff;
+      --muted: #7b8ab8;
+      --accent: #8b5cf6;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warn: #f59e0b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 40px 24px; }
+    .container { max-width: 1000px; margin: auto; }
+    h1 { font-size: 1.8rem; margin-bottom: 8px; }
+    .subtitle { color: var(--muted); margin-bottom: 32px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-bottom: 24px; }
+    .card h2 { font-size: 1.15rem; margin-bottom: 18px; color: var(--accent); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 500; color: var(--muted); font-size: 0.85rem; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 11px 14px; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text); font-family: inherit; font-size: 0.95rem;
+    }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent); }
+    .btn { padding: 12px 24px; border: none; border-radius: 10px; font-family: inherit; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+    .btn-save { background: var(--accent); color: #fff; width: 100%; }
+    .btn-save:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-sm { padding: 7px 12px; font-size: 0.82rem; border-radius: 8px; }
+    .btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--accent); }
+    .btn-danger { background: rgba(239,68,68,0.12); color: var(--danger); border: 1px solid rgba(239,68,68,0.4); }
+    .btn-danger:hover { background: var(--danger); color: #fff; }
+    .btn-warn { background: rgba(245,158,11,0.12); color: var(--warn); border: 1px solid rgba(245,158,11,0.4); }
+    .btn-warn:hover { background: var(--warn); color: #fff; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 11px 10px; text-align: right; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    th { color: var(--muted); font-weight: 500; }
+    .badge { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+    .badge-ok { background: rgba(16,185,129,0.15); color: var(--success); }
+    .badge-warn { background: rgba(245,158,11,0.15); color: var(--warn); }
+    .badge-bad { background: rgba(239,68,68,0.15); color: var(--danger); }
+    .badge-d1 { background: rgba(139,92,246,0.15); color: var(--accent); }
+    .row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .status-msg { text-align: center; margin-top: 12px; font-size: 0.9rem; min-height: 22px; }
+    .status-msg.success { color: var(--success); }
+    .status-msg.error { color: var(--danger); }
+    .login-card { max-width: 400px; margin: 100px auto; text-align: center; }
+    .login-card h2 { margin-bottom: 20px; }
+    .nav-links { margin-bottom: 24px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; padding: 6px 12px; border: 1px solid var(--border); border-radius: 8px; }
+    .nav-links a:hover { border-color: var(--accent); color: var(--text); }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 26px; width: 100%; max-width: 640px; max-height: 88vh; overflow-y: auto; }
+    .modal h2 { color: var(--accent); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+    .modal .close-x { background: none; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer; }
+    .hint { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
+    .empty { text-align: center; color: var(--muted); padding: 18px; }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Login -->
+    <div id="loginSection">
+      <div class="card login-card">
+        <h2>🔐 إدارة متاجر ADA POS</h2>
+        <div class="form-group">
+          <input type="password" id="adminPass" placeholder="كلمة المرور">
+        </div>
+        <button class="btn btn-save" onclick="adminLogin()">دخول</button>
+        <p class="status-msg" id="loginMsg"></p>
+      </div>
+    </div>
+
+    <!-- Main Panel -->
+    <div id="mainPanel" style="display:none;">
+      <h1>🏪 إدارة المتاجر والمستخدمين</h1>
+      <p class="subtitle">إضافة المتاجر والمستخدمين، تصفير كلمات المرور، فحص الضمان، وتعطيل/تفعيل المتاجر</p>
+      <div class="nav-links">
+        <a href="/pos-admin/">🔄 إدارة التحديثات</a>
+        <a href="/admin/">⚙️ إعدادات الموقع</a>
+      </div>
+
+      <!-- Add store -->
+      <div class="card">
+        <h2>➕ إضافة متجر جديد</h2>
+        <div class="grid">
+          <div class="form-group">
+            <label>معرّف المتجر (projectId) — بالإنجليزية بدون مسافات</label>
+            <input type="text" id="newStoreId" placeholder="مثال: aqqad-kids2">
+          </div>
+          <div class="form-group">
+            <label>اسم المتجر (للعرض)</label>
+            <input type="text" id="newStoreName" placeholder="مثال: عقاد كيدز - الفرع الثاني">
+          </div>
+          <div class="form-group">
+            <label>نوع المتجر</label>
+            <select id="newStoreType">
+              <option value="firestore">Firestore (افتراضي)</option>
+              <option value="d1">D1 (خادم آمن)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>مدة الضمان (بالأشهر)</label>
+            <input type="number" id="newStoreWarranty" value="12" min="1">
+          </div>
+          <div class="form-group">
+            <label>مستخدم admin أول — اسم الدخول (لمتاجر Firestore)</label>
+            <input type="text" id="newStoreAdminUser" placeholder="admin">
+          </div>
+          <div class="form-group">
+            <label>كلمة مرور admin الأول</label>
+            <input type="text" id="newStoreAdminPass" placeholder="كلمة المرور">
+          </div>
+        </div>
+        <button class="btn btn-save" id="addStoreBtn" onclick="addStore()">إنشاء المتجر</button>
+        <p class="status-msg" id="addStoreMsg"></p>
+      </div>
+
+      <!-- Stores list -->
+      <div class="card">
+        <h2>📋 المتاجر المسجّلة</h2>
+        <div id="storesTableWrap">
+          <p class="empty">جاري التحميل...</p>
+        </div>
+        <p class="status-msg" id="storesMsg"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Users modal -->
+  <div class="modal-overlay" id="usersModal">
+    <div class="modal">
+      <h2><span id="usersModalTitle">المستخدمون</span><button class="close-x" onclick="closeUsers()">&times;</button></h2>
+      <div id="usersD1Note" style="display:none;" class="hint"></div>
+      <div id="usersFirestoreBody">
+        <div id="usersTableWrap"><p class="empty">—</p></div>
+        <hr style="border-color:var(--border);margin:18px 0;">
+        <h2 style="font-size:1rem;">➕ إضافة / تحديث مستخدم</h2>
+        <div class="grid">
+          <div class="form-group"><label>اسم الدخول</label><input type="text" id="uUser" placeholder="username"></div>
+          <div class="form-group"><label>كلمة المرور</label><input type="text" id="uPass" placeholder="password"></div>
+          <div class="form-group"><label>الاسم المعروض</label><input type="text" id="uName" placeholder="الاسم"></div>
+          <div class="form-group"><label>الدور</label>
+            <select id="uRole"><option value="worker">عامل (worker)</option><option value="admin">مدير (admin)</option></select>
+          </div>
+        </div>
+        <button class="btn btn-save" onclick="saveUser()">حفظ المستخدم</button>
+        <p class="status-msg" id="usersMsg"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var firebaseConfig = {
+      apiKey: 'AIzaSyAp3mDn6c5D3GKIV7BZ2aKIsm7MxYP0vG0',
+      authDomain: 'dimaboutique-b4f16.firebaseapp.com',
+      projectId: 'dimaboutique-b4f16',
+      storageBucket: 'dimaboutique-b4f16.appspot.com',
+      messagingSenderId: '552629390598',
+      appId: '1:552629390598:web:7b2a3f2f5e8c4a5b6d7e8f'
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    var db = firebase.firestore();
+    var AUTH_REALM = 'posadmin';
+    var registryRef = db.collection('projects').doc('_global').collection('settings').doc('pos_stores');
+    var stores = [];
+    var currentStore = null; // store being managed in users modal
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+    function posDocRef(storeId) { return db.collection('projects').doc(storeId).collection('settings').doc('pos'); }
+    function usersDocRef(storeId) { return db.collection('projects').doc(storeId).collection('settings').doc('pos_users'); }
+
+    function adminLogin() {
+      var pass = document.getElementById('adminPass').value;
+      var msg = document.getElementById('loginMsg');
+      msg.textContent = '';
+      fetch('/api/login', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ realm: AUTH_REALM, username: 'admin', password: pass })
+      }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (res.ok && res.d.ok) {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('mainPanel').style.display = 'block';
+            loadStores();
+          } else { msg.textContent = 'كلمة المرور غير صحيحة'; msg.className = 'status-msg error'; }
+        }).catch(function () { msg.textContent = 'تعذر الاتصال بالخادم.'; msg.className = 'status-msg error'; });
+    }
+    document.getElementById('adminPass').addEventListener('keydown', function (e) { if (e.key === 'Enter') adminLogin(); });
+
+    function loadStores() {
+      registryRef.get().then(function (doc) {
+        stores = (doc.exists && doc.data().stores) ? doc.data().stores.slice() : [];
+        renderStores();
+        stores.forEach(function (s) { refreshWarranty(s.id); });
+      }).catch(function () {
+        document.getElementById('storesTableWrap').innerHTML = '<p class="empty">تعذّر تحميل السجل.</p>';
+      });
+    }
+
+    function warrantyBadge(s) {
+      if (s._warranty === undefined) return '<span class="badge badge-warn">...</span>';
+      if (s._warranty === null) return '<span class="badge badge-bad">لا يوجد ضمان</span>';
+      var days = Math.ceil((s._warranty - Date.now()) / 86400000);
+      if (days < 0) return '<span class="badge badge-bad">منتهٍ (' + Math.abs(days) + ' يوم)</span>';
+      if (days <= 14) return '<span class="badge badge-warn">' + days + ' يوم متبقٍ</span>';
+      return '<span class="badge badge-ok">' + days + ' يوم متبقٍ</span>';
+    }
+
+    function renderStores() {
+      var wrap = document.getElementById('storesTableWrap');
+      if (!stores.length) { wrap.innerHTML = '<p class="empty">لا توجد متاجر مسجّلة بعد. أضف متجراً جديداً أعلاه.</p>'; return; }
+      var html = '<table><thead><tr><th>المتجر</th><th>المعرّف</th><th>النوع</th><th>الضمان</th><th>إجراءات</th></tr></thead><tbody>';
+      for (var i = 0; i < stores.length; i++) {
+        var s = stores[i];
+        html += '<tr>' +
+          '<td>' + esc(s.name || s.id) + '</td>' +
+          '<td>' + esc(s.id) + '</td>' +
+          '<td>' + (s.type === 'd1' ? '<span class="badge badge-d1">D1</span>' : 'Firestore') + '</td>' +
+          '<td>' + warrantyBadge(s) + '</td>' +
+          '<td><div class="row-actions">' +
+            '<button class="btn btn-sm btn-secondary" onclick="openUsers(\'' + esc(s.id) + '\')">👤 المستخدمون</button>' +
+            '<button class="btn btn-sm btn-warn" onclick="extendWarranty(\'' + esc(s.id) + '\')">🛡️ تمديد الضمان</button>' +
+            (s._warranty && s._warranty > Date.now()
+              ? '<button class="btn btn-sm btn-danger" onclick="disableStore(\'' + esc(s.id) + '\')">⛔ تعطيل</button>'
+              : '<button class="btn btn-sm btn-secondary" onclick="extendWarranty(\'' + esc(s.id) + '\')">✅ تفعيل</button>') +
+          '</div></td></tr>';
+      }
+      html += '</tbody></table>';
+      wrap.innerHTML = html;
+    }
+
+    function refreshWarranty(storeId) {
+      posDocRef(storeId).get().then(function (doc) {
+        var s = stores.filter(function (x) { return x.id === storeId; })[0];
+        if (!s) return;
+        if (!doc.exists || !doc.data().warrantyEnd) { s._warranty = null; }
+        else { var w = doc.data().warrantyEnd; s._warranty = w.toMillis ? w.toMillis() : new Date(w).getTime(); }
+        renderStores();
+      }).catch(function () {});
+    }
+
+    function addStore() {
+      var id = document.getElementById('newStoreId').value.trim().toLowerCase();
+      var name = document.getElementById('newStoreName').value.trim();
+      var type = document.getElementById('newStoreType').value;
+      var months = parseInt(document.getElementById('newStoreWarranty').value, 10) || 12;
+      var adminUser = document.getElementById('newStoreAdminUser').value.trim();
+      var adminPass = document.getElementById('newStoreAdminPass').value;
+      var msg = document.getElementById('addStoreMsg');
+      msg.className = 'status-msg';
+      if (!id || !/^[a-z0-9\-]+$/.test(id)) { msg.textContent = 'معرّف المتجر مطلوب (أحرف إنجليزية صغيرة وأرقام وشرطات فقط)'; msg.className = 'status-msg error'; return; }
+      if (stores.some(function (s) { return s.id === id; })) { msg.textContent = 'هذا المعرّف مستخدم بالفعل'; msg.className = 'status-msg error'; return; }
+      var btn = document.getElementById('addStoreBtn'); btn.disabled = true; btn.textContent = 'جاري الإنشاء...';
+      var end = new Date(); end.setMonth(end.getMonth() + months);
+      var tasks = [];
+      tasks.push(posDocRef(id).set({
+        warrantyEnd: firebase.firestore.Timestamp.fromDate(end),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        storeName: name || id
+      }));
+      if (type === 'firestore') {
+        var users = [];
+        if (adminUser && adminPass) users.push({ username: adminUser, password: adminPass, name: adminUser, displayName: adminUser, role: 'admin', active: true });
+        tasks.push(usersDocRef(id).set({ users: users }));
+      }
+      Promise.all(tasks).then(function () {
+        stores.push({ id: id, name: name || id, type: type, createdAt: Date.now() });
+        return registryRef.set({ stores: stores.map(function (s) { return { id: s.id, name: s.name, type: s.type, createdAt: s.createdAt || Date.now() }; }) }, { merge: true });
+      }).then(function () {
+        msg.textContent = '✅ تم إنشاء المتجر "' + (name || id) + '"'; msg.className = 'status-msg success';
+        document.getElementById('newStoreId').value = ''; document.getElementById('newStoreName').value = '';
+        document.getElementById('newStoreAdminUser').value = ''; document.getElementById('newStoreAdminPass').value = '';
+        btn.disabled = false; btn.textContent = 'إنشاء المتجر';
+        renderStores(); refreshWarranty(id);
+      }).catch(function (e) {
+        msg.textContent = '❌ خطأ: ' + e.message; msg.className = 'status-msg error';
+        btn.disabled = false; btn.textContent = 'إنشاء المتجر';
+      });
+    }
+
+    function extendWarranty(storeId) {
+      var months = prompt('بكم شهراً تريد تمديد/تعيين الضمان من اليوم؟', '12');
+      if (months === null) return;
+      months = parseInt(months, 10); if (isNaN(months) || months <= 0) { alert('قيمة غير صحيحة'); return; }
+      var end = new Date(); end.setMonth(end.getMonth() + months);
+      posDocRef(storeId).set({ warrantyEnd: firebase.firestore.Timestamp.fromDate(end) }, { merge: true }).then(function () {
+        var m = document.getElementById('storesMsg'); m.textContent = '✅ تم تحديث الضمان للمتجر ' + storeId; m.className = 'status-msg success';
+        refreshWarranty(storeId);
+      }).catch(function (e) { alert('خطأ: ' + e.message); });
+    }
+
+    function disableStore(storeId) {
+      if (!confirm('تعطيل المتجر "' + storeId + '"؟ لن يتمكن من تسجيل الدخول حتى تعيد تفعيله.')) return;
+      var past = new Date(Date.now() - 86400000);
+      posDocRef(storeId).set({ warrantyEnd: firebase.firestore.Timestamp.fromDate(past) }, { merge: true }).then(function () {
+        var m = document.getElementById('storesMsg'); m.textContent = '⛔ تم تعطيل المتجر ' + storeId; m.className = 'status-msg success';
+        refreshWarranty(storeId);
+      }).catch(function (e) { alert('خطأ: ' + e.message); });
+    }
+
+    // ---------- Users management (Firestore stores) ----------
+    function openUsers(storeId) {
+      currentStore = stores.filter(function (s) { return s.id === storeId; })[0];
+      if (!currentStore) return;
+      document.getElementById('usersModalTitle').textContent = 'مستخدمو: ' + (currentStore.name || storeId);
+      document.getElementById('usersMsg').textContent = '';
+      var d1Note = document.getElementById('usersD1Note');
+      var fsBody = document.getElementById('usersFirestoreBody');
+      if (currentStore.type === 'd1') {
+        d1Note.style.display = 'block';
+        d1Note.innerHTML = 'هذا متجر D1 — تُدار حسابات الكاشير من لوحة تحكم المتجر الخاصة (عبر /api/pos-users على نطاق المتجر) لأن كلمات المرور مشفّرة على الخادم. الضمان يُدار من هنا.';
+        fsBody.style.display = 'none';
+      } else {
+        d1Note.style.display = 'none';
+        fsBody.style.display = 'block';
+        renderUsers();
+      }
+      document.getElementById('usersModal').classList.add('open');
+    }
+    function closeUsers() { document.getElementById('usersModal').classList.remove('open'); currentStore = null; }
+
+    function renderUsers() {
+      var wrap = document.getElementById('usersTableWrap');
+      wrap.innerHTML = '<p class="empty">جاري التحميل...</p>';
+      usersDocRef(currentStore.id).get().then(function (doc) {
+        var users = (doc.exists && doc.data().users) ? doc.data().users : [];
+        if (!users.length) { wrap.innerHTML = '<p class="empty">لا يوجد مستخدمون بعد.</p>'; return; }
+        var html = '<table><thead><tr><th>المستخدم</th><th>الاسم</th><th>الدور</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>';
+        for (var i = 0; i < users.length; i++) {
+          var u = users[i];
+          html += '<tr>' +
+            '<td>' + esc(u.username) + '</td>' +
+            '<td>' + esc(u.displayName || u.name || '') + '</td>' +
+            '<td>' + (u.role === 'admin' ? 'مدير' : 'عامل') + '</td>' +
+            '<td>' + (u.active === false ? '<span class="badge badge-bad">معطّل</span>' : '<span class="badge badge-ok">مفعّل</span>') + '</td>' +
+            '<td><div class="row-actions">' +
+              '<button class="btn btn-sm btn-secondary" onclick="resetPass(\'' + esc(u.username) + '\')">🔑 كلمة المرور</button>' +
+              '<button class="btn btn-sm btn-warn" onclick="toggleUser(\'' + esc(u.username) + '\')">' + (u.active === false ? 'تفعيل' : 'تعطيل') + '</button>' +
+              '<button class="btn btn-sm btn-danger" onclick="deleteUser(\'' + esc(u.username) + '\')">حذف</button>' +
+            '</div></td></tr>';
+        }
+        html += '</tbody></table>';
+        wrap.innerHTML = html;
+      }).catch(function (e) { wrap.innerHTML = '<p class="empty">خطأ: ' + esc(e.message) + '</p>'; });
+    }
+
+    function mutateUsers(storeId, fn, okMsg) {
+      return usersDocRef(storeId).get().then(function (doc) {
+        var users = (doc.exists && doc.data().users) ? doc.data().users : [];
+        var next = fn(users);
+        if (next === false) return;
+        return usersDocRef(storeId).set({ users: next }, { merge: true }).then(function () {
+          var m = document.getElementById('usersMsg'); m.textContent = okMsg; m.className = 'status-msg success';
+          renderUsers();
+        });
+      }).catch(function (e) { var m = document.getElementById('usersMsg'); m.textContent = '❌ ' + e.message; m.className = 'status-msg error'; });
+    }
+
+    function saveUser() {
+      if (!currentStore) return;
+      var username = document.getElementById('uUser').value.trim();
+      var pass = document.getElementById('uPass').value;
+      var name = document.getElementById('uName').value.trim();
+      var role = document.getElementById('uRole').value;
+      var m = document.getElementById('usersMsg'); m.className = 'status-msg';
+      if (!username) { m.textContent = 'اسم الدخول مطلوب'; m.className = 'status-msg error'; return; }
+      mutateUsers(currentStore.id, function (users) {
+        var existing = users.filter(function (u) { return u.username === username; })[0];
+        if (existing) {
+          if (pass) existing.password = pass;
+          existing.displayName = name || existing.displayName || username;
+          existing.name = name || existing.name || username;
+          existing.role = role; existing.active = true;
+        } else {
+          if (!pass) { document.getElementById('usersMsg').textContent = 'كلمة المرور مطلوبة لمستخدم جديد'; document.getElementById('usersMsg').className = 'status-msg error'; return false; }
+          users.push({ username: username, password: pass, name: name || username, displayName: name || username, role: role, active: true });
+        }
+        return users;
+      }, '✅ تم حفظ المستخدم').then(function () {
+        document.getElementById('uUser').value = ''; document.getElementById('uPass').value = ''; document.getElementById('uName').value = '';
+      });
+    }
+
+    function resetPass(username) {
+      if (!currentStore) return;
+      var np = prompt('كلمة المرور الجديدة للمستخدم "' + username + '":');
+      if (!np) return;
+      mutateUsers(currentStore.id, function (users) {
+        var u = users.filter(function (x) { return x.username === username; })[0];
+        if (!u) return false; u.password = np; return users;
+      }, '🔑 تم تغيير كلمة المرور للمستخدم ' + username);
+    }
+    function toggleUser(username) {
+      if (!currentStore) return;
+      mutateUsers(currentStore.id, function (users) {
+        var u = users.filter(function (x) { return x.username === username; })[0];
+        if (!u) return false; u.active = (u.active === false); return users;
+      }, '✅ تم تحديث حالة المستخدم ' + username);
+    }
+    function deleteUser(username) {
+      if (!currentStore) return;
+      if (!confirm('حذف المستخدم "' + username + '"؟')) return;
+      mutateUsers(currentStore.id, function (users) {
+        return users.filter(function (x) { return x.username !== username; });
+      }, '🗑️ تم حذف المستخدم ' + username);
+    }
+  </script>
+</body>
+</html>

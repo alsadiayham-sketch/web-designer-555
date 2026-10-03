@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADA POS | نظام نقطة البيع</title>
+  <meta name="description" content="اكتشف تجربة ADA POS: واجهة تشغيل واضحة، تقارير عملية، وكتالوج مبيعات مصمم ليعمل بسرعة كل يوم.">
+  <link rel="canonical" href="https://rts-royal.pages.dev/pos/">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#f7f8fc; --surface:#fff; --ink:#15182a; --muted:#667085; --line:#e7e9f2; --accent:#7c3aed; --cyan:#06b6d4; --radius:28px; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:radial-gradient(circle at 10% 10%,#ede9fe,transparent 28%),var(--bg); font-family:'Tajawal',sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:auto; }
+    .top { padding:22px 0; display:flex; justify-content:space-between; align-items:center; gap:18px; }
+    .brand { font-weight:900; letter-spacing:.08em; }
+    .back { border:1px solid var(--line); border-radius:999px; padding:11px 18px; background:var(--surface); font-weight:800; }
+    .hero { padding:54px 0 30px; display:grid; grid-template-columns:.8fr 1.2fr; gap:42px; align-items:center; }
+    .kicker { color:var(--accent); font-weight:900; }
+    h1 { font-size:clamp(2.8rem,7vw,6.4rem); line-height:.98; margin:16px 0; }
+    .lead { color:var(--muted); font-size:1.15rem; line-height:2; max-width:600px; }
+    .actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:24px; }
+    .button { padding:14px 20px; border-radius:16px; font-weight:900; border:1px solid var(--line); }
+    .button.primary { color:#fff; border-color:transparent; background:linear-gradient(135deg,var(--accent),var(--cyan)); }
+    .device { min-height:460px; padding:24px; border-radius:36px; background:linear-gradient(145deg,#161b35,#252c56); box-shadow:0 30px 80px rgba(55,48,163,.28); transform:rotate(-2deg); }
+    .device-screen { height:100%; min-height:410px; border-radius:24px; background:#f8fafc; padding:18px; display:grid; grid-template-columns:74px 1fr; gap:14px; }
+    .device-tabs { display:grid; align-content:start; gap:10px; }
+    .device-tabs span { height:46px; border-radius:14px; background:#e9e7ff; }
+    .device-main { display:grid; gap:12px; grid-template-rows:auto 1fr auto; }
+    .device-head,.device-row { border-radius:16px; background:#fff; border:1px solid #e6e9f2; }
+    .device-head { height:54px; }
+    .device-cards { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    .device-card { border-radius:18px; background:linear-gradient(145deg,#dbeafe,#ede9fe); }
+    .device-row { height:88px; }
+    .tabs-layout { display:grid; grid-template-columns:260px 1fr; gap:24px; padding:80px 0; align-items:start; }
+    .tabs { display:grid; gap:10px; position:sticky; top:20px; }
+    .tab { text-align:right; padding:17px 18px; border:1px solid var(--line); border-radius:18px; background:var(--surface); cursor:pointer; font-weight:900; }
+    .tab.active { color:#fff; border-color:transparent; background:linear-gradient(135deg,var(--accent),var(--cyan)); }
+    .panel { display:none; padding:32px; border:1px solid var(--line); border-radius:var(--radius); background:rgba(255,255,255,.8); box-shadow:0 22px 60px rgba(15,23,42,.07); }
+    .panel.active { display:block; animation:panelIn .5s ease; }
+    .panel h2 { margin-top:0; font-size:2rem; }
+    .panel p { color:var(--muted); line-height:2; }
+    .feature-list { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; padding:0; list-style:none; }
+    .feature-list li { padding:14px; border-radius:14px; background:#f4f3ff; font-weight:800; }
+    @keyframes panelIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+    @media (max-width:780px) { .hero,.tabs-layout { grid-template-columns:1fr; } .device { min-height:350px; } .device-screen { min-height:300px; } .tabs { position:static; grid-template-columns:repeat(2,1fr); } .feature-list { grid-template-columns:1fr; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; } }
+  </style>
+</head>
+<body>
+  <header class="shell top"><a class="brand" href="/">ADA WEB DESIGNER</a><a class="back" href="/">العودة للموقع</a></header>
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <div class="kicker">ADA POS / تجربة تشغيل يومية</div>
+        <h1>كل عملية بيع، أوضح وأسرع.</h1>
+        <p class="lead">نظام نقطة بيع مصمم حول إيقاع فريقك: كتالوج واضح، فواتير أسرع، ومؤشرات تساعدك على معرفة ما يحدث الآن.</p>
+        <div class="actions"><a class="button primary" href="https://www.instagram.com/ada_webdesigner/" target="_blank" rel="noopener">اطلب عرضاً مخصصاً</a><a class="button" href="#features">شاهد التفاصيل</a></div>
+      </div>
+      <div class="device" aria-label="معاينة واجهة ADA POS"><div class="device-screen"><div class="device-tabs"><span></span><span></span><span></span><span></span></div><div class="device-main"><div class="device-head"></div><div class="device-cards"><div class="device-card"></div><div class="device-card"></div><div class="device-card"></div><div class="device-card"></div></div><div class="device-row"></div></div></div></div>
+    </section>
+    <section class="tabs-layout" id="features">
+      <nav class="tabs" aria-label="تفاصيل POS">
+        <button class="tab active" data-tab="overview" type="button">نظرة عامة</button>
+        <button class="tab" data-tab="sales" type="button">فكرة البيع</button>
+        <button class="tab" data-tab="operations" type="button">التشغيل اليومي</button>
+        <button class="tab" data-tab="reports" type="button">التقارير</button>
+      </nav>
+      <div>
+        <article class="panel active" data-panel="overview"><h2>مصمم ليشعر فريقك بالثقة</h2><p>من أول نقرة إلى إغلاق الفاتورة، نرتب المعلومات حسب الأولوية ونقلل الخطوات غير الضرورية.</p><ul class="feature-list"><li>كتالوج سريع وواضح</li><li>صلاحيات للفريق</li><li>تحديثات سحابية</li><li>واجهة عربية مريحة</li></ul></article>
+        <article class="panel" data-panel="sales"><h2>فكرة البيع تبدأ من الوضوح</h2><p>لا نعرض كل شيء دفعة واحدة. نبرز المنتج، السعر، الخيارات، والخطوة التالية في لحظة القرار حتى يتحول الاهتمام إلى عملية بيع.</p></article>
+        <article class="panel" data-panel="operations"><h2>تشغيل يومي بلا تعقيد</h2><p>شاشات مرتبة للموظف، حالات واضحة للطلبات، ومسار ثابت يمكن تدريبه بسرعة حتى في أكثر ساعات اليوم ازدحاماً.</p></article>
+        <article class="panel" data-panel="reports"><h2>قرارات أفضل من بيانات مفهومة</h2><p>تقارير مرئية تساعدك على متابعة المبيعات والأصناف والأداء دون الغرق في جداول لا تنتهي.</p></article>
+      </div>
+    </section>
+  </main>
+  <script>
+    document.querySelectorAll('.tab').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var id = button.dataset.tab;
+        document.querySelectorAll('.tab').forEach(function (item) { item.classList.toggle('active', item === button); });
+        document.querySelectorAll('.panel').forEach(function (panel) { panel.classList.toggle('active', panel.dataset.panel === id); });
+      });
+    });
+  </script>
+</body>
+</html>

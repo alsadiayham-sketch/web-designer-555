@@ -1,433 +1,1905 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoom Store | زووم ستور</title>
-    <meta name="description" content="زووم ستور الفلسطيني للإكسسوارات والحقائب والأساور بستايل ناعم ولطيف مع توصيل لكل فلسطين.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
-    <link rel="icon" href="logo.png">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADA Web Designer | مواقع ومتاجر وأنظمة POS</title>
+  <link rel="icon" href="/favicon.ico">
+  <meta name="description" content="ADA تصمم مواقع ومتاجر إلكترونية وأنظمة نقاط بيع عصرية وسريعة للعلامات التجارية التي تريد أن تظهر بشكل أكبر وتبيع بثقة.">
+  <meta name="keywords" content="تصميم مواقع, متجر إلكتروني, نظام نقاط بيع, POS, ADA Web Designer">
+  <link rel="canonical" href="https://rts-royal.pages.dev/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ADA Web Designer | تجارب رقمية استثنائية">
+  <meta property="og:description" content="نصمم مواقع ومتاجر وأنظمة POS تجمع بين الجمال والوضوح والاستعداد للبيع.">
+  <meta property="og:url" content="https://rts-royal.pages.dev/">
+  <meta property="og:image" content="https://rts-royal.pages.dev/logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "ADA Web Designer",
+    "url": "https://rts-royal.pages.dev/",
+    "logo": "https://rts-royal.pages.dev/logo.png",
+    "description": "تصميم مواقع ومتاجر إلكترونية وأنظمة نقاط بيع عصرية وسريعة.",
+    "areaServed": "PS",
+    "sameAs": ["https://www.instagram.com/ada_webdesigner/"]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fafafa;
+      --surface: rgba(255, 255, 255, 0.82);
+      --surface-strong: rgba(255, 255, 255, 0.94);
+      --line: rgba(124, 58, 237, 0.12);
+      --text: #1a1a2e;
+      --muted: #64748b;
+      --violet: #7c3aed;
+      --cyan: #06b6d4;
+      --shadow: 0 30px 80px rgba(15, 23, 42, 0.08);
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.06);
+      --radius: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Tajawal', 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      inset: -20%;
+      z-index: -3;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.11), transparent 28%),
+        radial-gradient(circle at 80% 18%, rgba(6, 182, 212, 0.1), transparent 26%),
+        radial-gradient(circle at 72% 78%, rgba(168, 85, 247, 0.08), transparent 24%),
+        radial-gradient(circle at 16% 76%, rgba(34, 211, 238, 0.07), transparent 22%);
+      animation: meshShift 18s ease-in-out infinite alternate;
+      filter: blur(12px);
+    }
+
+    body::after {
+      z-index: -4;
+      opacity: 0.7;
+      animation-duration: 24s;
+      transform: scale(1.08);
+    }
+
+    @keyframes meshShift {
+      0% {
+        transform: translate3d(-1%, 0, 0) scale(1);
+      }
+      50% {
+        transform: translate3d(1.5%, -1.5%, 0) scale(1.04);
+      }
+      100% {
+        transform: translate3d(-1%, 1.5%, 0) scale(1.02);
+      }
+    }
+
+    .page-noise {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: 0.35;
+      background-image: radial-gradient(rgba(15, 23, 42, 0.045) 0.8px, transparent 0.8px);
+      background-size: 22px 22px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.55), transparent 88%);
+    }
+
+    .glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.5;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.16), rgba(6, 182, 212, 0.06) 42%, transparent 70%);
+      transform: translate3d(-160px, -160px, 0);
+      transition: opacity 0.3s ease;
+      filter: blur(12px);
+    }
+
+    .floating-shapes {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .shape {
+      position: absolute;
+      border: 1px solid rgba(124, 58, 237, 0.1);
+      background: rgba(255, 255, 255, 0.5);
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.07);
+      backdrop-filter: blur(10px);
+      opacity: 0.8;
+    }
+
+    .shape.circle {
+      border-radius: 50%;
+    }
+
+    .shape.square {
+      border-radius: 18px;
+    }
+
+    .shape.s1 { top: 14%; left: 8%; width: 14px; height: 14px; }
+    .shape.s2 { top: 22%; right: 12%; width: 22px; height: 22px; }
+    .shape.s3 { top: 56%; left: 10%; width: 18px; height: 18px; }
+    .shape.s4 { top: 68%; right: 15%; width: 12px; height: 12px; }
+    .shape.s5 { top: 82%; left: 24%; width: 28px; height: 28px; }
+    .shape.s6 { top: 36%; right: 28%; width: 10px; height: 10px; }
+
+    .particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.28), rgba(6, 182, 212, 0.1));
+      box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.6);
+      animation: floatDot 10s ease-in-out infinite;
+    }
+
+    .particle.p1 { top: 18%; left: 18%; animation-delay: -2s; }
+    .particle.p2 { top: 28%; right: 16%; animation-delay: -5s; }
+    .particle.p3 { top: 62%; left: 14%; animation-delay: -1s; }
+    .particle.p4 { top: 76%; right: 24%; animation-delay: -7s; }
+    .particle.p5 { top: 48%; right: 40%; animation-delay: -4s; }
+
+    @keyframes floatDot {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(0, -18px, 0) scale(1.08); }
+      100% { transform: translate3d(0, 0, 0) scale(1); }
+    }
+
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      padding: 18px 20px 0;
+    }
+
+    .nav-shell {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      direction: ltr;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+    }
+
+    .theme-toggle {
+      min-width: 44px;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface-strong);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    .language-toggle {
+      color: var(--text);
+      font-weight: 800;
+      opacity: 1;
+    }
+
+    body[data-theme="dark"] {
+      --bg: #0b1020;
+      --surface: rgba(18, 25, 45, 0.82);
+      --surface-strong: rgba(22, 31, 55, 0.96);
+      --line: rgba(148, 163, 184, 0.24);
+      --text: #f8fafc;
+      --muted: #b7c2d6;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.36);
+    }
+
+    body[data-theme="dark"] .nav-shell,
+    body[data-theme="dark"] .section-card,
+    body[data-theme="dark"] .ceo-card,
+    body[data-theme="dark"] .feedback-card,
+    body[data-theme="dark"] .sales-card,
+    body[data-theme="dark"] .cta-card {
+      background: var(--surface);
+      border-color: var(--line);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 700ms ease, transform 700ms ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .editorial-section {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 100px 20px 20px;
+    }
+
+    .editorial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .ceo-card,
+    .feedback-card,
+    .sales-card {
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .ceo-card {
+      grid-column: span 2;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.14), var(--surface));
+    }
+
+    .editorial-kicker {
+      color: var(--violet);
+      font-weight: 900;
+      letter-spacing: .04em;
+    }
+
+    .feedback-track {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(260px, 1fr);
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 8px 2px 18px;
+    }
+
+    .feedback-card {
+      scroll-snap-align: start;
+    }
+
+    .feedback-card p,
+    .ceo-card p,
+    .sales-card p {
+      color: var(--muted);
+      line-height: 1.95;
+    }
+
+    .hero-media-frame {
+      width: min(100%, 520px);
+      margin: auto;
+      overflow: hidden;
+      border-radius: 32px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      animation: heroMediaFloat 7s ease-in-out infinite;
+    }
+
+    .hero-media-frame img,
+    .hero-media-frame video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+    }
+
+    @keyframes heroMediaFloat {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-12px) rotate(1deg); }
+    }
+
+    @media (max-width: 780px) {
+      .editorial-grid { grid-template-columns: 1fr; }
+      .ceo-card { grid-column: auto; }
+      .nav-shell { flex-wrap: wrap; }
+      .nav-links { order: 3; width: 100%; justify-content: center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+      .hero-media-frame { animation: none; }
+    }
+
+    .site-nav.scrolled .nav-shell {
+      background: rgba(255, 255, 255, 0.72);
+      border-color: rgba(124, 58, 237, 0.08);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-decoration: none;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+      box-shadow: 0 14px 30px rgba(124, 58, 237, 0.24);
+      font-size: 0.85rem;
+      letter-spacing: 0;
+      overflow: hidden;
+    }
+
+    .brand-mark img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      direction: rtl;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: rgba(26, 26, 46, 0.8);
+      font-size: 0.98rem;
+      font-weight: 600;
+      transition: color 0.25s ease, transform 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--violet);
+      transform: translateY(-1px);
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      position: relative;
+      padding: 48px 20px 24px;
+    }
+
+    .hero-inner {
+      max-width: 1220px;
+      margin: 0 auto;
+      min-height: calc(100vh - 120px);
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero-copy,
+    .hero-visual {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    body.loaded .hero-copy,
+    body.loaded .hero-visual {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body.loaded .hero-visual {
+      transition-delay: 0.15s;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      box-shadow: var(--shadow-soft);
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+    }
+
+    .hero-title {
+      margin: 0;
+      font-size: clamp(3.6rem, 10vw, 8.2rem);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+      font-family: 'Inter', 'Tajawal', sans-serif;
+      font-weight: 800;
+    }
+
+    .hero-title .gradient {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--violet) 10%, #8b5cf6 42%, var(--cyan) 88%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 18px 40px rgba(124, 58, 237, 0.16));
+    }
+
+    .hero-subtitle {
+      margin: 22px 0 18px;
+      font-size: clamp(1.35rem, 3vw, 2.2rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    .hero-description {
+      margin: 0;
+      max-width: 560px;
+      font-size: 1.08rem;
+      line-height: 1.95;
+      color: var(--muted);
+    }
+
+    .hero-actions {
+      margin-top: 32px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 156px;
+      padding: 15px 22px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.98rem;
+      transition: transform 0.28s ease, box-shadow 0.28s ease, background 0.28s ease, color 0.28s ease;
+    }
+
+    .button.primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+      box-shadow: 0 24px 40px rgba(124, 58, 237, 0.22);
+    }
+
+    .button.secondary {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .button:hover {
+      transform: translateY(-3px);
+    }
+
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    .phone-aura {
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.16), rgba(6, 182, 212, 0.08) 42%, transparent 72%);
+      filter: blur(14px);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: auraPulse 6s ease-in-out infinite;
+    }
+
+    @keyframes auraPulse {
+      0% { transform: translate(-50%, -50%) scale(0.96); opacity: 0.7; }
+      50% { transform: translate(-50%, -50%) scale(1.06); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(0.98); opacity: 0.75; }
+    }
+
+    .hero-phone-wrapper {
+      transform: perspective(1400px) rotateY(-12deg) rotateX(7deg);
+      animation: heroFloat 7s ease-in-out infinite;
+      transform-style: preserve-3d;
+      will-change: transform;
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes heroFloat {
+      0% { transform: perspective(1400px) rotateY(-12deg) rotateX(7deg) translateY(0); }
+      50% { transform: perspective(1400px) rotateY(-6deg) rotateX(4deg) translateY(-12px); }
+      100% { transform: perspective(1400px) rotateY(-12deg) rotateX(7deg) translateY(0); }
+    }
+
+    .phone {
+      width: 280px;
+      height: 560px;
+      border-radius: 50px;
+      background: linear-gradient(180deg, #1c2036 0%, #0f1222 100%);
+      padding: 12px;
+      box-shadow: 0 50px 100px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      position: relative;
+      transform-style: preserve-3d;
+    }
+
+    .phone::before,
+    .phone::after {
+      content: '';
+      position: absolute;
+      left: -3px;
+      width: 4px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
+    }
+
+    .phone::before {
+      top: 118px;
+      height: 46px;
+    }
+
+    .phone::after {
+      top: 176px;
+      height: 78px;
+    }
+
+    .phone-button {
+      position: absolute;
+      right: -3px;
+      top: 154px;
+      width: 4px;
+      height: 90px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
+    }
+
+    .phone-notch {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 126px;
+      height: 30px;
+      border-radius: 0 0 18px 18px;
+      background: #0a0c15;
+      z-index: 4;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.24);
+    }
+
+    .phone-notch::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 11px;
+      transform: translateX(-50%);
+      width: 48px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 38px;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(180deg, #ffffff, #f5f7fb);
+    }
+
+    .phone-screen-content {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.55s ease, transform 0.55s ease;
+      transform: scale(0.985);
+      padding: 18px 16px 16px;
+    }
+
+    .phone-screen-content.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      color: rgba(26, 26, 46, 0.7);
+      margin-bottom: 18px;
+      direction: ltr;
+    }
+
+    .status-icons {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .status-icons span {
+      width: 18px;
+      height: 8px;
+      border-radius: 99px;
+      border: 1px solid rgba(26, 26, 46, 0.14);
+    }
+
+    .mini-card {
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      box-shadow: 0 16px 28px rgba(15, 23, 42, 0.07);
+    }
+
+    .screen-ecommerce {
+      background:
+        radial-gradient(circle at top right, rgba(124, 58, 237, 0.12), transparent 26%),
+        linear-gradient(180deg, #fcfcff 0%, #f5f7fb 100%);
+    }
+
+    .screen-ecommerce .store-hero {
+      padding: 18px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.18), rgba(6, 182, 212, 0.12));
+      margin-bottom: 14px;
+    }
+
+    .store-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .store-badge {
+      width: 42px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(26, 26, 46, 0.12);
+    }
+
+    .store-chip {
+      width: 62px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .store-lines span,
+    .panel-lines span {
+      display: block;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(26, 26, 46, 0.11);
+      margin-bottom: 8px;
+    }
+
+    .store-lines span:first-child { width: 72%; height: 14px; }
+    .store-lines span:last-child { width: 48%; }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .product-card {
+      padding: 10px;
+    }
+
+    .product-thumb {
+      height: 72px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.22), rgba(6, 182, 212, 0.18));
+      margin-bottom: 10px;
+    }
+
+    .product-thumb.alt {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(124, 58, 237, 0.12));
+    }
+
+    .product-line {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(26, 26, 46, 0.12);
+      margin-bottom: 7px;
+    }
+
+    .product-line.short { width: 54%; }
+    .product-line.price { width: 36%; background: rgba(124, 58, 237, 0.36); }
+
+    .product-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .product-actions span {
+      height: 26px;
+      border-radius: 999px;
+      display: block;
+    }
+
+    .product-actions span:first-child {
+      flex: 1;
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+    }
+
+    .product-actions span:last-child {
+      width: 34px;
+      background: rgba(26, 26, 46, 0.08);
+    }
+
+    .screen-pos {
+      padding: 0;
+      background: linear-gradient(180deg, #15182b 0%, #0f1220 100%);
+      color: #f8fafc;
+    }
+
+    .pos-shell {
+      display: grid;
+      grid-template-columns: 68px 1fr;
+      height: 100%;
+    }
+
+    .pos-sidebar {
+      padding: 68px 10px 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .pos-sidebar span {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .pos-sidebar span.active {
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.9), rgba(6, 182, 212, 0.85));
+    }
+
+    .pos-main {
+      padding: 58px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .pos-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .pos-title,
+    .pos-chip,
+    .pos-row span,
+    .pos-total-bar span,
+    .dash-row span,
+    .mobile-card span,
+    .mobile-nav span {
+      display: block;
+    }
+
+    .pos-title {
+      width: 92px;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    .pos-chip {
+      width: 44px;
+      height: 28px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .pos-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .pos-product {
+      height: 88px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.22), rgba(6, 182, 212, 0.08));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .pos-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .pos-row {
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pos-row .w1 { width: 42%; height: 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.22); }
+    .pos-row .w2 { width: 18%; height: 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.15); }
+    .pos-row .w3 { width: 24px; height: 24px; border-radius: 8px; background: rgba(124, 58, 237, 0.5); }
+
+    .pos-total-bar {
+      margin-top: auto;
+      padding: 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.92), rgba(6, 182, 212, 0.88));
+      box-shadow: 0 18px 28px rgba(6, 182, 212, 0.18);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pos-total-bar .t1 { width: 72px; height: 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.45); }
+    .pos-total-bar .t2 { width: 54px; height: 14px; border-radius: 999px; background: rgba(255, 255, 255, 0.8); }
+
+    .screen-dashboard {
+      background: linear-gradient(180deg, #fcfdff 0%, #f3f7ff 100%);
+    }
+
+    .dash-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .dash-title {
+      width: 96px;
+      height: 14px;
+      border-radius: 999px;
+      background: rgba(26, 26, 46, 0.14);
+    }
+
+    .dash-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.24), rgba(6, 182, 212, 0.2));
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .stat-card {
+      padding: 12px 10px;
+    }
+
+    .stat-card span {
+      display: block;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(26, 26, 46, 0.12);
+      margin-bottom: 8px;
+    }
+
+    .stat-card span:last-child {
+      width: 58%;
+      height: 14px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.5), rgba(6, 182, 212, 0.35));
+      margin-bottom: 0;
+    }
+
+    .chart-card {
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .chart-head {
+      width: 88px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(26, 26, 46, 0.13);
+      margin-bottom: 14px;
+    }
+
+    .bars {
+      height: 128px;
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .bars span {
+      flex: 1;
+      border-radius: 14px 14px 8px 8px;
+      background: linear-gradient(180deg, rgba(124, 58, 237, 0.8), rgba(6, 182, 212, 0.42));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+
+    .bars span:nth-child(1) { height: 38%; }
+    .bars span:nth-child(2) { height: 65%; }
+    .bars span:nth-child(3) { height: 48%; }
+    .bars span:nth-child(4) { height: 82%; }
+    .bars span:nth-child(5) { height: 58%; }
+
+    .table-card {
+      padding: 14px;
+    }
+
+    .dash-row {
+      display: grid;
+      grid-template-columns: 1.4fr 0.7fr 0.6fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .dash-row span {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(26, 26, 46, 0.11);
+    }
+
+    .dash-row span:last-child {
+      background: rgba(124, 58, 237, 0.28);
+    }
+
+    .screen-mobile {
+      background: linear-gradient(180deg, #fbfbff 0%, #f6f9ff 100%);
+    }
+
+    .mobile-top {
+      padding: 16px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.18), rgba(6, 182, 212, 0.11));
+      margin-bottom: 14px;
+    }
+
+    .mobile-top .panel-lines span:first-child { width: 66%; height: 14px; }
+    .mobile-top .panel-lines span:last-child { width: 46%; }
+
+    .mobile-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .mobile-card {
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 56px 1fr 30px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .mobile-card .thumb {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.22), rgba(6, 182, 212, 0.15));
+    }
+
+    .mobile-card .line-stack span {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(26, 26, 46, 0.11);
+      margin-bottom: 7px;
+    }
+
+    .mobile-card .line-stack span:first-child { width: 84%; }
+    .mobile-card .line-stack span:last-child { width: 48%; margin-bottom: 0; }
+
+    .mobile-card .cta-dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.92), rgba(6, 182, 212, 0.84));
+    }
+
+    .mobile-nav {
+      margin-top: auto;
+      padding: 12px 10px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      box-shadow: 0 18px 30px rgba(15, 23, 42, 0.07);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .mobile-nav span {
+      width: 26px;
+      height: 26px;
+      border-radius: 10px;
+      background: rgba(26, 26, 46, 0.08);
+    }
+
+    .mobile-nav span.active {
+      width: 44px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.85), rgba(6, 182, 212, 0.7));
+    }
+
+    .showcase {
+      padding: 42px 20px 56px;
+      position: relative;
+    }
+
+    .showcase-inner {
+      max-width: 1220px;
+      margin: 0 auto;
+    }
+
+    .section-heading {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 44px;
+    }
+
+    .section-heading .label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      box-shadow: var(--shadow-soft);
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 12px;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 1.08;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 1.05rem;
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: minmax(320px, 0.95fr) minmax(0, 1.05fr);
+      gap: 64px;
+      align-items: start;
+    }
+
+    .phone-column {
+      position: relative;
+      min-height: 100%;
+    }
+
+    .phone-sticky {
+      position: sticky;
+      top: 120px;
+      display: flex;
+      justify-content: center;
+      padding: 22px 0 30px;
+    }
+
+    .phone-wrapper {
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 0.15s linear;
+    }
+
+    .section-list {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      padding: 18px 0 80px;
+    }
+
+    .scroll-section {
+      min-height: 72vh;
+      display: flex;
+      align-items: center;
+      opacity: 0.35;
+      transform: translateY(24px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .scroll-section.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-card {
+      width: 100%;
+      padding: 34px;
+      border-radius: 32px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      box-shadow: 0 30px 70px rgba(15, 23, 42, 0.08);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section-card::before {
+      content: '';
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.12), transparent 68%);
+      transform: translate(-35%, -35%);
+    }
+
+    .section-number {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: rgba(100, 116, 139, 0.8);
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .section-card h3 {
+      margin: 0 0 12px;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      line-height: 1.15;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-card p {
+      margin: 0 0 20px;
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 1.03rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-points {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-points span {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(124, 58, 237, 0.06);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.96rem;
+    }
+
+    .cta-section {
+      padding: 34px 20px 18px;
+    }
+
+    .cta-card {
+      max-width: 1220px;
+      margin: 0 auto;
+      border-radius: 36px;
+      padding: 44px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(248, 250, 252, 0.86));
+      border: 1px solid rgba(124, 58, 237, 0.08);
+      box-shadow: 0 30px 70px rgba(15, 23, 42, 0.08);
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .cta-card::after {
+      content: '';
+      position: absolute;
+      inset: auto -40px -70px auto;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.18), transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-card h3 {
+      margin: 0 0 12px;
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      line-height: 1.15;
+    }
+
+    .cta-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 1.04rem;
+      max-width: 600px;
+    }
+
+    .cta-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .instagram-button {
+      min-width: 220px;
+      padding: 16px 24px;
+      border-radius: 999px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 1rem;
+      text-align: center;
+      background: linear-gradient(135deg, #f58529 0%, #dd2a7b 45%, #8134af 72%, #515bd4 100%);
+      box-shadow: 0 24px 40px rgba(221, 42, 123, 0.2);
+      transition: transform 0.28s ease, box-shadow 0.28s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .instagram-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 28px 50px rgba(221, 42, 123, 0.28);
+    }
+
+    footer {
+      padding: 26px 20px 42px;
+      text-align: center;
+      color: rgba(100, 116, 139, 0.95);
+      font-size: 0.96rem;
+    }
+
+    @media (max-width: 1080px) {
+      .hero-inner,
+      .showcase-grid,
+      .cta-card {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy {
+        text-align: center;
+      }
+
+      .hero-description {
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      .hero-actions,
+      .cta-actions {
+        justify-content: center;
+      }
+
+      .showcase-grid {
+        gap: 24px;
+      }
+
+      .phone-sticky {
+        position: relative;
+        top: 0;
+      }
+
+      .section-list {
+        padding-top: 0;
+      }
+
+      .scroll-section {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .site-nav {
+        padding: 14px 12px 0;
+      }
+
+      .nav-shell {
+        padding: 14px 18px;
+        border-radius: 28px;
+      }
+
+      .nav-links {
+        gap: 12px 16px;
+        justify-content: flex-end;
+      }
+
+      .nav-links a {
+        font-size: 0.92rem;
+      }
+
+      .hero {
+        padding-top: 24px;
+      }
+
+      .hero-title {
+        font-size: clamp(3.2rem, 18vw, 5.4rem);
+      }
+
+      .hero-subtitle {
+        font-size: 1.22rem;
+      }
+
+      .hero-description,
+      .section-heading p,
+      .section-card p,
+      .cta-card p {
+        font-size: 0.98rem;
+      }
+
+      .phone,
+      .hero-phone-wrapper .phone {
+        width: 240px;
+        height: 492px;
+        border-radius: 42px;
+      }
+
+      .phone-screen {
+        border-radius: 31px;
+      }
+
+      .section-card,
+      .cta-card {
+        padding: 28px 22px;
+      }
+
+      .section-points {
+        grid-template-columns: 1fr;
+      }
+
+      .glow {
+        display: none;
+      }
+    }
+  </style>
 </head>
-<body id="top">
-    <div class="page-decor" aria-hidden="true">
-        <span class="floating-shape shape-heart">❤</span>
-        <span class="floating-shape shape-star">✦</span>
-        <span class="floating-shape shape-cloud">☁</span>
-        <span class="floating-shape shape-sparkle">✧</span>
-        <span class="floating-shape shape-bow">🎀</span>
+<body>
+  <div class="page-noise"></div>
+  <div class="glow" id="glow"></div>
+
+  <div class="floating-shapes" aria-hidden="true">
+    <span class="shape circle s1" data-depth="0.12"></span>
+    <span class="shape square s2" data-depth="0.18"></span>
+    <span class="shape circle s3" data-depth="0.08"></span>
+    <span class="shape square s4" data-depth="0.14"></span>
+    <span class="shape circle s5" data-depth="0.1"></span>
+    <span class="shape square s6" data-depth="0.2"></span>
+  </div>
+
+  <nav class="site-nav" id="siteNav">
+    <div class="nav-shell">
+      <a class="brand" href="#top" aria-label="ADA Web Designer">
+        <span class="brand-mark"><img src="/favicon.ico" alt="ADA"></span>
+        <span>ADA WEB DESIGNER</span>
+      </a>
+      <div class="nav-links">
+        <a href="#services">خدماتنا</a>
+        <a href="gallery/">معرض التصاميم</a>
+        <a href="pos/">نظام نقطة البيع</a>
+        <a href="https://www.instagram.com/ada_webdesigner/" target="_blank" rel="noopener noreferrer">تواصل معنا</a>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="تبديل المظهر">☾</button>
+      </div>
     </div>
+  </nav>
 
-    <div class="discount-banner" id="discountBanner" style="display:none;">
-        <div class="banner-scroll"><span id="bannerText"></span></div>
-    </div>
+  <main id="top">
+    <section class="hero">
+      <div class="particles" aria-hidden="true">
+        <span class="particle p1"></span>
+        <span class="particle p2"></span>
+        <span class="particle p3"></span>
+        <span class="particle p4"></span>
+        <span class="particle p5"></span>
+      </div>
 
-    <nav class="navbar" id="navbar">
-        <div class="container nav-container">
-            <a href="#top" class="logo" aria-label="الصفحة الرئيسية">
-                <span class="logo-frame">
-                    <img src="logo.png" alt="Zoom Store" class="logo-img" id="logoImg">
-                </span>
-                <div class="logo-copy">
-                    <span id="logoText" class="logo-text">Zoom Store</span>
-                    <span class="logo-subtitle">Palestinian Accessories ✦</span>
-                </div>
-            </a>
-
-            <div class="nav-search">
-                <span class="search-icon">🔎</span>
-                <input type="text" id="navSearchInput" placeholder="ابحثي عن حقيبة، اسوارة أو اكسسوار..." autocomplete="off">
-                <div class="search-dropdown" id="navSearchDropdown"></div>
-            </div>
-
-            <ul class="nav-links">
-                <li><a href="#products">المنتجات</a></li>
-                <li><a href="#about">عن المتجر</a></li>
-                <li><a href="#delivery">التوصيل</a></li>
-                <li><a href="#contact">تواصل</a></li>
-            </ul>
-
-            <div class="nav-actions">
-                <div class="cart-icon" id="cartIcon" onclick="toggleCart()" aria-label="سلة التسوق">
-                    <span class="cart-icon-emoji">🛍️</span>
-                    <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
-                </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="فتح القائمة">
-                    <span></span><span></span><span></span>
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="#products" onclick="toggleMobileMenu()">المنتجات</a>
-        <a href="#about" onclick="toggleMobileMenu()">عن المتجر</a>
-        <a href="#delivery" onclick="toggleMobileMenu()">التوصيل</a>
-        <a href="#contact" onclick="toggleMobileMenu()">تواصل</a>
-    </div>
-
-    <main>
-        <section class="hero section-shell">
-            <div class="hero-cloud hero-cloud-one" aria-hidden="true"></div>
-            <div class="hero-cloud hero-cloud-two" aria-hidden="true"></div>
-            <div class="hero-sparkles" aria-hidden="true">
-                <span>✦</span>
-                <span>❤</span>
-                <span>✧</span>
-                <span>☁</span>
-            </div>
-            <div class="container hero-layout">
-                <div class="hero-content" data-animate>
-                    <span class="section-chip">🎀 ستايل ناعم • تفاصيل فلسطينية • لمسة كيوت</span>
-                    <span class="hero-handle" dir="ltr">@web_designer_5555</span>
-                    <h1 id="heroTitle">Zoom Store</h1>
-                    <p class="hero-arabic">إكسسوارات فلسطينية حالمة بلمسة كاوايي لطيفة</p>
-                    <p class="hero-subtitle" id="heroSubtitle">حقائب، أساور، واكسسوارات بتفاصيل ناعمة وألوان باستيل وتغليف جميل يوصلك لكل فلسطين.</p>
-                    <div class="hero-badges">
-                        <div class="hero-badge soft-card">
-                            <strong>👜 حقائب لطيفة</strong>
-                            <span>قطع يومية وهدايا تحبّيها من أول نظرة</span>
-                        </div>
-                        <div class="hero-badge soft-card">
-                            <strong>🎁 تغليف جميل</strong>
-                            <span>ستايل ناعم مناسب للهدية والمفاجآت الحلوة</span>
-                        </div>
-                        <div class="hero-badge soft-card">
-                            <strong>🇵🇸 من فلسطين</strong>
-                            <span>اختيارات محلية بلمسة مبهجة وخدمة دافئة</span>
-                        </div>
+      <div class="hero-inner">
+        <div class="hero-visual">
+          <div class="phone-aura"></div>
+          <div class="hero-phone-wrapper" aria-hidden="true">
+            <div class="phone">
+              <span class="phone-button"></span>
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <div class="phone-screen-content screen-ecommerce active">
+                  <div class="status-row">
+                    <span>9:41</span>
+                    <div class="status-icons"><span></span><span></span></div>
+                  </div>
+                  <div class="store-hero mini-card">
+                    <div class="store-head">
+                      <div class="store-badge"></div>
+                      <div class="store-chip"></div>
                     </div>
-                    <div class="hero-actions">
-                        <a href="#products" class="btn-primary">ابدئي التسوق ✨</a>
-                        <a href="#contact" class="btn-secondary">راسلينا الآن 💌</a>
+                    <div class="store-lines">
+                      <span></span>
+                      <span></span>
                     </div>
-                </div>
-
-                <div class="hero-visual" data-animate>
-                    <div class="hero-card soft-card">
-                        <span class="hero-card-sticker sticker-top">new drop ✦</span>
-                        <img src="logo.png" id="heroLogo" alt="Zoom Store" class="hero-logo-img">
-                        <div class="hero-visual-copy">
-                            <h2>Soft &amp; Cute</h2>
-                            <p>متجر حقائب وإكسسوارات فلسطيني بستايل مريح، رومانسي، وملفت بطريقة لطيفة.</p>
-                        </div>
-                        <div class="hero-mini-tags">
-                            <span>🎀 bags</span>
-                            <span>🧿 bracelets</span>
-                            <span>✨ accessories</span>
-                        </div>
+                  </div>
+                  <div class="product-grid">
+                    <div class="product-card mini-card">
+                      <div class="product-thumb"></div>
+                      <div class="product-line"></div>
+                      <div class="product-line short"></div>
+                      <div class="product-line price"></div>
+                      <div class="product-actions"><span></span><span></span></div>
                     </div>
-                    <div class="hero-floating note-one">☁ شحن لطيف</div>
-                    <div class="hero-floating note-two">❤ trendy picks</div>
-                    <div class="hero-floating note-three">✦ gift ready</div>
+                    <div class="product-card mini-card">
+                      <div class="product-thumb alt"></div>
+                      <div class="product-line"></div>
+                      <div class="product-line short"></div>
+                      <div class="product-line price"></div>
+                      <div class="product-actions"><span></span><span></span></div>
+                    </div>
+                    <div class="product-card mini-card">
+                      <div class="product-thumb alt"></div>
+                      <div class="product-line"></div>
+                      <div class="product-line short"></div>
+                      <div class="product-line price"></div>
+                      <div class="product-actions"><span></span><span></span></div>
+                    </div>
+                    <div class="product-card mini-card">
+                      <div class="product-thumb"></div>
+                      <div class="product-line"></div>
+                      <div class="product-line short"></div>
+                      <div class="product-line price"></div>
+                      <div class="product-actions"><span></span><span></span></div>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
-            <div class="section-wave wave-bottom" aria-hidden="true">
-                <svg viewBox="0 0 1440 150" preserveAspectRatio="none"><path d="M0,64L34.3,74.7C68.6,85,137,107,206,117.3C274.3,128,343,128,411,117.3C480,107,549,85,617,85.3C685.7,85,754,107,823,117.3C891.4,128,960,128,1029,117.3C1097.1,107,1166,85,1234,74.7C1302.9,64,1371,64,1406,64L1440,64L1440,150L1405.7,150C1371.4,150,1303,150,1234,150C1165.7,150,1097,150,1029,150C960,150,891,150,823,150C754.3,150,686,150,617,150C548.6,150,480,150,411,150C342.9,150,274,150,206,150C137.1,150,69,150,34,150L0,150Z"></path></svg>
-            </div>
-        </section>
-
-        <section id="products" class="filter-section section-shell">
-            <div class="container">
-                <div class="section-heading" data-animate>
-                    <span class="section-chip">🛍️ منتجاتنا اللطيفة</span>
-                    <h2 class="section-title">اختاري قطعتك المفضلة</h2>
-                    <p class="section-subtitle">كل شيء هنا مرتب بلطف: بحث سريع، فلاتر واضحة، وكروت منتجات ناعمة تحافظ على تجربة الشراء نفسها بدون أي تغيير في الوظائف.</p>
-                </div>
-
-                <p class="store-notice" id="storeNotice" style="display:none;"></p>
-
-                <div class="products-toolbar soft-card" data-animate>
-                    <div class="products-search">
-                        <span class="search-icon">🔍</span>
-                        <input type="text" id="productsSearchInput" placeholder="ابحثي باسم المنتج أو الماركة أو الفئة" autocomplete="off">
-                        <div class="search-dropdown" id="productsSearchDropdown"></div>
-                    </div>
-
-                    <div class="filter-toggle-bar">
-                        <button class="filter-btn active" data-filter="all" onclick="filterProducts('all')">الكل 🌷</button>
-                        <button class="filter-btn status-btn" data-filter="special" onclick="filterProducts('special')">مميز ✦</button>
-                        <button class="filter-btn status-btn" data-filter="bestseller" onclick="filterProducts('bestseller')">الأكثر طلباً ❤</button>
-                        <button class="filter-toggle-btn" onclick="toggleFilters()">الفلاتر ▼</button>
-                    </div>
-                </div>
-
-                <div class="filter-panel soft-card" id="filterPanel" style="display:none;" data-animate>
-                    <div class="filter-group">
-                        <h4>الماركات</h4>
-                        <div id="brandFilters"></div>
-                    </div>
-                    <div class="filter-group">
-                        <h4>الفئات</h4>
-                        <div id="categoryFilters"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="products-section section-shell">
-            <div class="container products-shell">
-                <div class="store-loading soft-card" id="storeLoading">
-                    <div class="spinner"></div>
-                    <p>لحظة صغيرة... نرتّب المنتجات اللطيفة لكِ ✨</p>
-                </div>
-                <div class="products-grid" id="productsGrid"></div>
-            </div>
-        </section>
-
-        <div class="section-wave wave-soft" aria-hidden="true">
-            <svg viewBox="0 0 1440 140" preserveAspectRatio="none"><path d="M0,64L24,74.7C48,85,96,107,144,117.3C192,128,240,128,288,117.3C336,107,384,85,432,69.3C480,53,528,43,576,48C624,53,672,75,720,85.3C768,96,816,96,864,90.7C912,85,960,75,1008,74.7C1056,75,1104,85,1152,96C1200,107,1248,117,1296,112C1344,107,1392,85,1416,74.7L1440,64L1440,140L1416,140C1392,140,1344,140,1296,140C1248,140,1200,140,1152,140C1104,140,1056,140,1008,140C960,140,912,140,864,140C816,140,768,140,720,140C672,140,624,140,576,140C528,140,480,140,432,140C384,140,336,140,288,140C240,140,192,140,144,140C96,140,48,140,24,140L0,140Z"></path></svg>
+          </div>
         </div>
 
-        <section id="about" class="about-section section-shell">
-            <div class="container">
-                <div class="section-heading split-heading" data-animate>
-                    <div>
-                        <span class="section-chip">☁ عن زووم ستور</span>
-                        <h2 class="section-title">مش بس متجر... تجربة ناعمة كاملة</h2>
-                    </div>
-                    <p class="section-subtitle">زووم ستور مساحة فلسطينية صغيرة لكن مليانة ذوق: حقائب، أساور، واكسسوارات بتفاصيل حلوة، اهتمام بالتغليف، ولمسة أنثوية دافئة في كل طلب.</p>
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span>تصميم مواقع ومتاجر ونقاط بيع بمعايير عالمية</div>
+          <h1 class="hero-title"><span class="gradient">ADA</span></h1>
+          <p class="hero-subtitle">نصمم تجارب رقمية استثنائية</p>
+          <p class="hero-description">من الواجهة الأولى حتى لوحة التحكم ونظام نقطة البيع، نبني تجارب رقمية أنيقة وسريعة ومقنعة بصريًا لتجعل علامتك تبدو أكبر، أذكى، وأكثر جاهزية للبيع.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#services">اكتشف خدماتنا</a>
+            <a class="button secondary" href="https://www.instagram.com/ada_webdesigner/" target="_blank" rel="noopener noreferrer">ابدأ مشروعك</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="showcase" id="services">
+      <div class="showcase-inner">
+        <div class="section-heading">
+          <div class="label"><span class="eyebrow-dot"></span>تجربة عرض تفاعلية</div>
+          <h2>هاتف واحد، أربع عوالم رقمية مصممة بإتقان.</h2>
+          <p>مرر للأسفل وشاهد كيف يتحول الهاتف إلى متجر إلكتروني، ونظام نقطة بيع، ولوحة تحكم تحليلية، وتجربة موبايل متجاوبة — كلها داخل رحلة بصرية واحدة تعكس أسلوب ADA في التصميم.</p>
+        </div>
+
+        <div class="showcase-grid">
+          <div class="section-list">
+            <article class="scroll-section active" data-index="0">
+              <div class="section-card">
+                <span class="section-number">01</span>
+                <h3>متاجر إلكترونية</h3>
+                <p>نبني متاجر ناعمة بصريًا وسريعة جدًا، مع سلة مشتريات محكمة، ربط واتساب مباشر، وصفحات منتجات مصممة لرفع التحويل وإبراز الهوية.</p>
+                <div class="section-points">
+                  <span>سلة شراء سلسة</span>
+                  <span>طلب عبر واتساب</span>
+                  <span>بطاقات منتجات جذابة</span>
+                  <span>رحلة شراء واضحة</span>
                 </div>
+              </div>
+            </article>
 
-                <div class="about-grid">
-                    <article class="about-card about-story soft-card" data-animate>
-                        <span class="mini-chip">🇵🇸 فلسطيني • Cute • Giftable</span>
-                        <p id="aboutText">في زووم ستور نختار لكِ قطعاً تضيف لمسة فرح بسيطة على يومك: حقيبة جميلة، اسوارة ناعمة، أو اكسسوار صغير يكمّل اللوك. نهتم أن تكون التجربة لطيفة من أول تصفّح وحتى وصول الطلب لبابك.</p>
-                    </article>
+            <article class="scroll-section" data-index="1">
+              <div class="section-card">
+                <span class="section-number">02</span>
+                <h3>نظام نقطة البيع</h3>
+                <p>نصمم واجهات POS قوية وسهلة للموظف، تدعم مزامنة سحابية، قراءة باركود، وإدارة طلبات وفواتير في تجربة تشغيل يومية بلا تعقيد.</p>
+                <div class="section-points">
+                  <span>مزامنة سحابية فورية</span>
+                  <span>دعم الباركود والفواتير</span>
+                  <span>واجهة مريحة للكاشير</span>
+                  <span>سرعة في العمليات</span>
+                </div>
+              </div>
+            </article>
 
-                    <article class="about-card profile-card soft-card" data-animate>
-                        <div class="profile-ring">
-                            <img src="profile.png" alt="صاحبة المتجر" class="profile-avatar">
+            <article class="scroll-section" data-index="2">
+              <div class="section-card">
+                <span class="section-number">03</span>
+                <h3>لوحات تحكم ذكية</h3>
+                <p>نحوّل البيانات إلى تجربة إدارة واضحة عبر مؤشرات أداء، رسوم مرنة، وصلاحيات منظمة تساعدك على اتخاذ قرارات أسرع بثقة أكبر.</p>
+                <div class="section-points">
+                  <span>إحصاءات مباشرة</span>
+                  <span>تقارير مرئية أنيقة</span>
+                  <span>صلاحيات وإدارة محتوى</span>
+                  <span>تحليل سلوك المبيعات</span>
+                </div>
+              </div>
+            </article>
+
+          </div>
+
+          <div class="phone-column">
+            <div class="phone-sticky">
+              <div class="phone-wrapper" id="phoneWrapper" aria-hidden="true">
+                <div class="phone">
+                  <span class="phone-button"></span>
+                  <div class="phone-notch"></div>
+                  <div class="phone-screen">
+                    <div class="phone-screen-content screen-ecommerce active">
+                      <div class="status-row">
+                        <span>9:41</span>
+                        <div class="status-icons"><span></span><span></span></div>
+                      </div>
+                      <div class="store-hero mini-card">
+                        <div class="store-head">
+                          <div class="store-badge"></div>
+                          <div class="store-chip"></div>
                         </div>
-                        <h3>وجه لطيف خلف التفاصيل</h3>
-                        <p>ذوق أنثوي، ترتيب جميل، وتواصل سريع يخليكِ تشعري أن الطلب معمول لكِ خصيصاً.</p>
-                    </article>
-
-                    <article class="about-card sticker-card soft-card" data-animate>
-                        <span class="card-icon">🎀</span>
-                        <h3>قطع تهديها وتحبيها</h3>
-                        <p>ألوان ناعمة، خامات جميلة، وتفاصيل مناسبة للهدايا والإطلالات اليومية.</p>
-                    </article>
-
-                    <article class="about-card features-card soft-card" data-animate>
-                        <div class="feature"><span class="feature-icon">👜</span><span>حقائب واكسسوارات أنيقة بستايل عصري لطيف</span></div>
-                        <div class="feature"><span class="feature-icon">🧿</span><span>أساور وتفاصيل صغيرة تكمل اللوك بسرعة</span></div>
-                        <div class="feature"><span class="feature-icon">💌</span><span>تواصل مباشر وسهل عبر واتساب وإنستغرام</span></div>
-                        <div class="feature"><span class="feature-icon">🚚</span><span>توصيل لكل فلسطين مع تجربة مرتبة وواضحة</span></div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section class="brands-section section-shell">
-            <div class="container">
-                <div class="section-heading brands-heading" data-animate>
-                    <span class="section-chip">✦ ماركات نحبها</span>
-                    <h2 class="section-title">ركن الماركات بأسلوب باستيل</h2>
-                    <p class="section-subtitle">شريط لطيف يمكنكِ تمريره واكتشاف العلامات المتوفرة بسهولة.</p>
-                </div>
-                <div class="brands-carousel soft-card" data-animate>
-                    <div class="brands-grid" id="brandsGrid"></div>
-                </div>
-            </div>
-        </section>
-
-        <section id="delivery" class="delivery-section section-shell">
-            <div class="container">
-                <div class="section-heading" data-animate>
-                    <span class="section-chip">📦 التوصيل</span>
-                    <h2 class="section-title">يوصل الطلب بلطف وسرعة</h2>
-                    <p class="section-subtitle">رتبنا خيارات التوصيل في بطاقات ناعمة وواضحة حتى تختاري الأنسب لكِ خلال ثوانٍ.</p>
-                </div>
-
-                <div class="delivery-grid">
-                    <article class="delivery-card soft-card" data-animate>
-                        <span class="delivery-icon">🌸</span>
-                        <h3>الضفة الغربية</h3>
-                        <p>خلال 1 - 3 أيام عمل مع متابعة مرتبة للطلب.</p>
-                        <strong>₪20</strong>
-                    </article>
-                    <article class="delivery-card soft-card" data-animate>
-                        <span class="delivery-icon">☁</span>
-                        <h3>القدس</h3>
-                        <p>توصيل آمن ومنظم مع تغليف جميل ومريح.</p>
-                        <strong>₪30</strong>
-                    </article>
-                    <article class="delivery-card soft-card" data-animate>
-                        <span class="delivery-icon">✨</span>
-                        <h3>الداخل</h3>
-                        <p>تنسيق مسبق وخدمة لطيفة حتى وصول القطع إليك.</p>
-                        <strong>₪50</strong>
-                    </article>
-                    <article class="delivery-card soft-card" data-animate>
-                        <span class="delivery-icon">🎁</span>
-                        <h3>استلام محلي</h3>
-                        <p>استلام مجاني بترتيب مسبق إذا كان ذلك الأنسب لكِ.</p>
-                        <strong>Free</strong>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="contact-section section-shell">
-            <div class="container">
-                <div class="contact-card soft-card" data-animate>
-                    <div class="contact-copy">
-                        <span class="section-chip">💬 جاهزة لطلبك؟</span>
-                        <h2 class="section-title">خلّي الإكسسوار الجاي يوصل مع شوية فرح</h2>
-                        <p class="section-subtitle">إذا بدكِ مساعدة في الاختيار أو حابة تطلبي فوراً، راسلينا عبر واتساب أو إنستغرام. الحساب الرسمي يبقى كما هو: <strong dir="ltr">@web_designer_5555</strong>.</p>
-                    </div>
-                    <div class="contact-actions">
-                        <a href="https://wa.me/0599000000" class="social-btn whatsapp" target="_blank" id="whatsappLink">
-                            <span>📱 WhatsApp</span>
-                            <small>سؤال سريع أو طلب مباشر</small>
-                        </a>
-                        <a href="https://www.instagram.com/web_designer_5555" class="social-btn instagram" target="_blank" id="instagramLink">
-                            <span>📸 Instagram</span>
-                            <small dir="ltr">@web_designer_5555</small>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <div class="modal-overlay pdp-overlay" id="pdpModal" style="display:none;" onclick="closePDP(event)">
-        <div class="pdp-modal" onclick="event.stopPropagation()">
-            <button class="pdp-close" onclick="closePDP()">✕</button>
-            <div class="pdp-content">
-                <div class="pdp-image soft-card" id="pdpImage"></div>
-                <div class="pdp-info">
-                    <span class="product-brand" id="pdpBrand"></span>
-                    <h2 id="pdpName"></h2>
-                    <div class="pdp-meta" id="pdpMeta"></div>
-                    <div class="pdp-size-section" id="pdpSizeSection" style="display:none;">
-                        <label>القياس:</label>
-                        <div class="pdp-size-options" id="pdpSizes"></div>
-                    </div>
-                    <div class="pdp-price" id="pdpPrice"></div>
-                    <div class="pdp-qty">
-                        <label>الكمية:</label>
-                        <div class="qty-selector">
-                            <button onclick="changePDPQty(-1)">−</button>
-                            <span id="pdpQty">1</span>
-                            <button onclick="changePDPQty(1)">+</button>
+                        <div class="store-lines">
+                          <span></span>
+                          <span></span>
                         </div>
+                      </div>
+                      <div class="product-grid">
+                        <div class="product-card mini-card">
+                          <div class="product-thumb"></div>
+                          <div class="product-line"></div>
+                          <div class="product-line short"></div>
+                          <div class="product-line price"></div>
+                          <div class="product-actions"><span></span><span></span></div>
+                        </div>
+                        <div class="product-card mini-card">
+                          <div class="product-thumb alt"></div>
+                          <div class="product-line"></div>
+                          <div class="product-line short"></div>
+                          <div class="product-line price"></div>
+                          <div class="product-actions"><span></span><span></span></div>
+                        </div>
+                        <div class="product-card mini-card">
+                          <div class="product-thumb alt"></div>
+                          <div class="product-line"></div>
+                          <div class="product-line short"></div>
+                          <div class="product-line price"></div>
+                          <div class="product-actions"><span></span><span></span></div>
+                        </div>
+                        <div class="product-card mini-card">
+                          <div class="product-thumb"></div>
+                          <div class="product-line"></div>
+                          <div class="product-line short"></div>
+                          <div class="product-line price"></div>
+                          <div class="product-actions"><span></span><span></span></div>
+                        </div>
+                      </div>
                     </div>
-                    <button class="btn-add-cart pdp-add-btn" id="pdpAddBtn" onclick="addFromPDP()">أضيفي إلى السلة</button>
+
+                    <div class="phone-screen-content screen-pos">
+                      <div class="pos-shell">
+                        <div class="pos-main">
+                          <div class="pos-top">
+                            <span class="pos-title"></span>
+                            <span class="pos-chip"></span>
+                          </div>
+                          <div class="pos-grid">
+                            <div class="pos-product"></div>
+                            <div class="pos-product"></div>
+                          </div>
+                          <div class="pos-list">
+                            <div class="pos-row"><span class="w1"></span><span class="w2"></span><span class="w3"></span></div>
+                            <div class="pos-row"><span class="w1"></span><span class="w2"></span><span class="w3"></span></div>
+                            <div class="pos-row"><span class="w1"></span><span class="w2"></span><span class="w3"></span></div>
+                          </div>
+                          <div class="pos-total-bar"><span class="t1"></span><span class="t2"></span></div>
+                        </div>
+                        <div class="pos-sidebar">
+                          <span class="active"></span>
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="phone-screen-content screen-dashboard">
+                      <div class="status-row">
+                        <span>9:41</span>
+                        <div class="status-icons"><span></span><span></span></div>
+                      </div>
+                      <div class="dash-header">
+                        <div class="dash-title"></div>
+                        <div class="dash-avatar"></div>
+                      </div>
+                      <div class="stats-grid">
+                        <div class="stat-card mini-card"><span></span><span></span></div>
+                        <div class="stat-card mini-card"><span></span><span></span></div>
+                        <div class="stat-card mini-card"><span></span><span></span></div>
+                      </div>
+                      <div class="chart-card mini-card">
+                        <div class="chart-head"></div>
+                        <div class="bars"><span></span><span></span><span></span><span></span><span></span></div>
+                      </div>
+                      <div class="table-card mini-card">
+                        <div class="dash-row"><span></span><span></span><span></span></div>
+                        <div class="dash-row"><span></span><span></span><span></span></div>
+                        <div class="dash-row"><span></span><span></span><span></span></div>
+                        <div class="dash-row"><span></span><span></span><span></span></div>
+                      </div>
+                    </div>
+
+                    <div class="phone-screen-content screen-mobile">
+                      <div class="status-row">
+                        <span>9:41</span>
+                        <div class="status-icons"><span></span><span></span></div>
+                      </div>
+                      <div class="mobile-top">
+                        <div class="panel-lines">
+                          <span></span>
+                          <span></span>
+                        </div>
+                      </div>
+                      <div class="mobile-list">
+                        <div class="mobile-card mini-card">
+                          <span class="thumb"></span>
+                          <span class="line-stack"><span></span><span></span></span>
+                          <span class="cta-dot"></span>
+                        </div>
+                        <div class="mobile-card mini-card">
+                          <span class="thumb"></span>
+                          <span class="line-stack"><span></span><span></span></span>
+                          <span class="cta-dot"></span>
+                        </div>
+                        <div class="mobile-card mini-card">
+                          <span class="thumb"></span>
+                          <span class="line-stack"><span></span><span></span></span>
+                          <span class="cta-dot"></span>
+                        </div>
+                      </div>
+                      <div class="mobile-nav"><span></span><span class="active"></span><span></span><span></span></div>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
+      </div>
+    </section>
 
-    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
-    <div class="cart-sidebar" id="cartSidebar">
-        <div class="cart-header">
-            <h3>سلة التسوق</h3>
-            <button class="cart-close" onclick="toggleCart()">✕</button>
+    <section class="editorial-section reveal" id="ceoMessage">
+      <div class="editorial-grid">
+        <article class="ceo-card">
+          <div class="editorial-kicker">رسالة القيادة</div>
+          <h2 id="ceoName">Ahmad Dawabsheh</h2>
+          <p id="ceoText">نؤمن أن التصميم الجيد لا يكتفي بأن يبدو جميلاً؛ بل يجعل الفكرة أوضح، والقرار أسرع، وتجربة العميل أكثر ثقة.</p>
+        </article>
+        <article class="sales-card">
+          <div class="editorial-kicker">فكرة البيع</div>
+          <h2>كل تفصيلة تقرّب العميل من القرار</h2>
+          <p id="salesIdea">نبني مساراً واضحاً من أول انطباع حتى الطلب أو الشراء، مع محتوى يجيب قبل أن يسأل العميل.</p>
+          <a class="button secondary" href="pos/">استكشف صفحة POS</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="editorial-section reveal" id="feedbacks">
+      <div class="section-heading">
+        <div class="label"><span class="eyebrow-dot"></span>أصوات العملاء</div>
+        <h2>تجارب حقيقية من أصحاب المشاريع</h2>
+      </div>
+      <div class="feedback-track" id="feedbackTrack">
+        <article class="feedback-card"><strong>متجر عقاد</strong><p>واجهة واضحة وسريعة، وأصبح فريقنا ينجز الطلبات بثقة أكبر.</p></article>
+        <article class="feedback-card"><strong>علامة ناشئة</strong><p>أصبح لدينا حضور بصري يعبّر عنا ويشرح قيمتنا من أول زيارة.</p></article>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="cta-card">
+        <div>
+          <h3>جاهز لتصميم يلفت النظر ويبيع أكثر؟</h3>
+          <p>دعنا نحول فكرتك إلى تجربة رقمية فاخرة — موقع، متجر، أو نظام نقطة بيع — بأسلوب نظيف، عصري، ومخصص بالكامل لهويتك التجارية.</p>
         </div>
-        <div class="cart-items" id="cartItems">
-            <div class="cart-empty"><span>🛒</span><p>السلة فارغة</p></div>
+        <div class="cta-actions">
+          <a class="instagram-button" href="https://www.instagram.com/ada_webdesigner/" target="_blank" rel="noopener noreferrer">راسلنا على Instagram</a>
         </div>
-        <div class="cart-footer" id="cartFooter" style="display:none;">
-            <div class="cart-total"><span>المجموع:</span><span id="cartTotal">₪0</span></div>
-            <a href="checkout.html" class="btn-checkout" id="checkoutBtn">إتمام الطلب</a>
-            <button class="btn-clear-cart" onclick="clearCart()">تفريغ السلة</button>
-        </div>
-    </div>
+      </div>
+    </section>
+  </main>
 
-    <footer class="footer">
-        <div class="container footer-content">
-            <p>© 2026 Zoom Store — فلسطين ✦</p>
-            <span>حقائب • أساور • اكسسوارات</span>
-        </div>
-    </footer>
+  <footer>© 2026 ADA Web Designer — Crafted for brands that want to stand out.</footer>
 
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js"></script>
-    <script src="data.js"></script>
-    <script src="script.js"></script>
-    <script>
-        (function () {
-            var observer;
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="landing.js"></script>
+  <script>
+    (function () {
+      var body = document.body;
+      var siteNav = document.getElementById('siteNav');
+      var showcase = document.getElementById('services');
+      var phoneWrapper = document.getElementById('phoneWrapper');
+      var screens = document.querySelectorAll('#phoneWrapper .phone-screen-content');
+      var sections = document.querySelectorAll('.scroll-section');
+      var shapes = document.querySelectorAll('.shape');
+      var glow = document.getElementById('glow');
+      var ticking = false;
+      var mouseX = window.innerWidth / 2;
+      var mouseY = window.innerHeight / 2;
 
-            function registerReveal(scope) {
-                if (!observer) return;
-                (scope || document).querySelectorAll('[data-animate], .product-card, .brand-tile, .delivery-card, .about-card, .feature, .social-btn').forEach(function (el) {
-                    if (el.dataset.revealReady === 'true') return;
-                    el.dataset.revealReady = 'true';
-                    el.classList.add('reveal-on-scroll');
-                    observer.observe(el);
-                });
-            }
+      function clamp(value, min, max) {
+        if (value < min) {
+          return min;
+        }
+        if (value > max) {
+          return max;
+        }
+        return value;
+      }
 
-            observer = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.14,
-                rootMargin: '0px 0px -40px 0px'
-            });
+      function setActiveScreen(index) {
+        var i;
+        for (i = 0; i < screens.length; i++) {
+          if (i === index) {
+            screens[i].className = screens[i].className.replace(' active', '') + ' active';
+          } else {
+            screens[i].className = screens[i].className.replace(' active', '');
+          }
+        }
 
-            document.addEventListener('DOMContentLoaded', function () {
-                registerReveal(document);
+        for (i = 0; i < sections.length; i++) {
+          if (i === index) {
+            sections[i].className = sections[i].className.replace(' active', '') + ' active';
+          } else {
+            sections[i].className = sections[i].className.replace(' active', '');
+          }
+        }
+      }
 
-                var mutationObserver = new MutationObserver(function (mutations) {
-                    mutations.forEach(function (mutation) {
-                        mutation.addedNodes.forEach(function (node) {
-                            if (node.nodeType !== 1) return;
-                            if (node.matches && (node.matches('.product-card, .brand-tile, .delivery-card, .about-card, .feature, .social-btn') || node.hasAttribute('data-animate'))) {
-                                registerReveal(node.parentNode || document);
-                            } else if (node.querySelectorAll) {
-                                registerReveal(node);
-                            }
-                        });
-                    });
-                });
+      function updateOnScroll() {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+        var showcaseTop = showcase.offsetTop;
+        var showcaseHeight = showcase.offsetHeight;
+        var start = showcaseTop - window.innerHeight * 0.28;
+        var end = showcaseTop + showcaseHeight - window.innerHeight * 0.72;
+        var progress = clamp((scrollTop - start) / (end - start), 0, 1);
+        var rotateY = -24 + progress * 48;
+        var rotateX = 8 - progress * 16;
+        var lift = Math.sin(progress * Math.PI) * 18;
+        var activeIndex = Math.min(Math.floor(progress * 3), 2);
+        var mouseTiltX = ((mouseY / window.innerHeight) - 0.5) * -3.2;
+        var mouseTiltY = ((mouseX / window.innerWidth) - 0.5) * 4.2;
+        var i;
 
-                mutationObserver.observe(document.body, { childList: true, subtree: true });
+        phoneWrapper.style.transform = 'perspective(1400px) rotateY(' + (rotateY + mouseTiltY) + 'deg) rotateX(' + (rotateX + mouseTiltX) + 'deg) translateY(' + (-lift) + 'px)';
+        setActiveScreen(activeIndex);
 
-                var navbar = document.getElementById('navbar');
-                var lastScrollY = window.scrollY;
-                var ticking = false;
+        if (scrollTop > 12) {
+          siteNav.className = 'site-nav scrolled';
+        } else {
+          siteNav.className = 'site-nav';
+        }
 
-                function updateNavbar() {
-                    if (!navbar) return;
-                    if (window.innerWidth <= 768) {
-                        var currentScrollY = window.scrollY;
-                        if (currentScrollY > lastScrollY && currentScrollY > 120) {
-                            navbar.classList.add('nav-hidden');
-                        } else {
-                            navbar.classList.remove('nav-hidden');
-                        }
-                        lastScrollY = currentScrollY;
-                    } else {
-                        navbar.classList.remove('nav-hidden');
-                    }
-                    ticking = false;
-                }
+        for (i = 0; i < shapes.length; i++) {
+          var depth = parseFloat(shapes[i].getAttribute('data-depth')) || 0.1;
+          var moveY = scrollTop * depth;
+          var moveX = ((mouseX / window.innerWidth) - 0.5) * 30 * depth;
+          shapes[i].style.transform = 'translate3d(' + moveX + 'px, ' + (-moveY) + 'px, 0) rotate(' + (scrollTop * depth * 0.06) + 'deg)';
+        }
 
-                window.addEventListener('scroll', function () {
-                    if (!ticking) {
-                        window.requestAnimationFrame(updateNavbar);
-                        ticking = true;
-                    }
-                }, { passive: true });
+        if (glow) {
+          glow.style.transform = 'translate3d(' + (mouseX - 160) + 'px, ' + (mouseY - 160 + scrollTop * 0.02) + 'px, 0)';
+          glow.style.opacity = scrollTop > 20 ? '0.68' : '0.42';
+        }
 
-                window.addEventListener('resize', function () {
-                    if (window.innerWidth > 768 && navbar) {
-                        navbar.classList.remove('nav-hidden');
-                    }
-                });
-            });
-        }());
-    </script>
+        ticking = false;
+      }
+
+      function requestTick() {
+        if (!ticking) {
+          window.requestAnimationFrame(updateOnScroll);
+          ticking = true;
+        }
+      }
+
+      document.addEventListener('scroll', requestTick);
+      window.addEventListener('resize', requestTick);
+      document.addEventListener('mousemove', function (event) {
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+        requestTick();
+      });
+
+      window.addEventListener('load', function () {
+        window.setTimeout(function () {
+          body.className = body.className ? body.className + ' loaded' : 'loaded';
+          requestTick();
+        }, 120);
+      });
+
+      requestTick();
+    }());
+  </script>
 </body>
 </html>
